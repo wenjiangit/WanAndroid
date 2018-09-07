@@ -25,9 +25,9 @@ abstract class BaseFragment : Fragment() {
     @LayoutRes
     abstract fun getLayoutId(): Int
 
-    var viewInitiated: Boolean = false
-    var dataInitiated: Boolean = false
-    var forceUpdate: Boolean = false
+    private var viewInitiated: Boolean = false
+    private var dataInitiated: Boolean = false
+    private var forceUpdate: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(getLayoutId(), container, false)

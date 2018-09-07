@@ -20,14 +20,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ProgressBar
-        android:id="@+id/pbLoading"
-        android:layout_width="match_parent"
-        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-        android:visibility="gone"
-        android:max="100"
-        android:layout_marginTop="47dp"
-        android:layout_height="3dp" />
+
 
     <WebView
         android:id="@+id/webView"
@@ -36,6 +29,15 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     </WebView>
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_width="match_parent"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+        android:max="100"
+        android:visibility="gone"
+        android:layout_marginTop="47dp"
+        android:layout_height="3dp" />
 
 
 </android.support.design.widget.CoordinatorLayout>
