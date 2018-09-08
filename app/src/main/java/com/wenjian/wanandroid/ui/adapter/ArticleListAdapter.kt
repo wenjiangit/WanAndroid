@@ -17,17 +17,20 @@ import com.wenjian.wanandroid.ui.web.WebActivity
 class ArticleListAdapter : BaseQuickAdapter<Article, BaseViewHolder>(R.layout.rv_item_article_list) {
     override fun convert(helper: BaseViewHolder?, item: Article?) {
         helper?.apply {
+
             item?.let {
-                setText(R.id.tv_category, it.chapterName)
-                setText(R.id.tv_title, it.title)
-                setText(R.id.tv_name, it.author)
-                setText(R.id.tv_date, it.niceDate)
+                setText(R.id.tv_category, "${it.chapterName?.trim()}/${it.superChapterName?.trim()}")
+                setText(R.id.tv_title, it.title?.trim())
+                setText(R.id.tv_name, it.author?.trim())
+                setText(R.id.tv_date, it.niceDate?.trim())
                 getView<ImageView>(R.id.iv_image).loadUrl(it.envelopePic)
+
+                itemView.setOnClickListener {
+                    WebActivity.start(it.context, item.link)
+                }
             }
 
-            itemView.setOnClickListener {
-                WebActivity.start(it.context,item?.link)
-            }
+
         }
     }
 

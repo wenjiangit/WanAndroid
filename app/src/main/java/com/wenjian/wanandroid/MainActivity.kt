@@ -5,11 +5,15 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
+import android.view.Menu
+import android.view.MenuItem
 import com.wenjian.wanandroid.base.BaseActivity
+import com.wenjian.wanandroid.extension.setupActionBar
 import com.wenjian.wanandroid.ui.home.HomeFragment
-import com.wenjian.wanandroid.ui.knowledge.KnowledgeFragment
+import com.wenjian.wanandroid.ui.knowledge.TreeFragment
 import com.wenjian.wanandroid.ui.mine.MineFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.toast
 
 class MainActivity : BaseActivity() {
 
@@ -21,13 +25,15 @@ class MainActivity : BaseActivity() {
         val TAG = MainActivity::class.java.simpleName!!
 
         val fragments: List<Fragment> = listOf(HomeFragment.newInstance(),
-                KnowledgeFragment.newInstance(),
+                TreeFragment.newInstance(),
                 MineFragment.newInstance())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        setupActionBar(R.drawable.ic_menu)
 
         homePager.adapter = mAdapter
 
@@ -67,6 +73,19 @@ class MainActivity : BaseActivity() {
             }
         }
 
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
+        R.id.action_search -> {
+            toast("search")
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.common_search, menu)
+        return true
     }
 
 

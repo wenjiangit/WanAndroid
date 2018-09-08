@@ -62,6 +62,7 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun subscribeUi() {
+        //首次加载数据
         mHomeModel.homeData.observe(this, Observer {
             showContentWithStatus(it) {
                 val bannerData = it.first
@@ -73,8 +74,9 @@ class HomeFragment : BaseFragment() {
             }
         })
 
+        //加载更多
         mHomeModel.articles.observe(this, Observer {
-            showContentWithStatus(it, false) {
+            showContentWithStatus(it) {
                 if (it.isEmpty()) {
                     mArticleAdapter.loadMoreEnd()
                 } else {

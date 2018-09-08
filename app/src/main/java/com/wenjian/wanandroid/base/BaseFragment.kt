@@ -76,7 +76,7 @@ abstract class BaseFragment : Fragment() {
 
     }
 
-    open fun <T> showContentWithStatus(it: Resource<T>?, refresh: Boolean = true, render: (T) -> Unit) {
+    open fun <T> showContentWithStatus(it: Resource<T>?, render: (T) -> Unit) {
         it?.let {
             when (it.status) {
                 Resource.STATUS.SUCCESS -> {
@@ -84,9 +84,7 @@ abstract class BaseFragment : Fragment() {
                     render(it.data!!)
                 }
                 Resource.STATUS.LOADING -> {
-                    if (refresh) {
-                        showLoading()
-                    }
+                    showLoading()
                     return
                 }
                 Resource.STATUS.FAIL -> {

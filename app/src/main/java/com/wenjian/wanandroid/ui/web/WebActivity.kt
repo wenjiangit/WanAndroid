@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.webkit.*
 import com.wenjian.wanandroid.R
@@ -50,6 +52,36 @@ class WebActivity : BaseActivity() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.web_share,menu)
+        return true
+    }
+
+
+    override fun onBackPressed() {
+        if(webView.canGoBack()){
+            webView.goBack()
+        }else{
+            super.onBackPressed()
+        }
+    }
+
+
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when(item?.itemId){
+            R.id.action_share ->{
+                val intent = Intent(Intent.ACTION_SEND).apply {
+                    putExtra(Intent.EXTRA_TEXT, loadUrl)
+                    type = "text/plain"
+                }
+                startActivity(Intent.createChooser(intent,"分享到"))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     private fun initWebSetting() {
         webView.settings?.apply {
@@ -68,7 +100,12 @@ class WebActivity : BaseActivity() {
 
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
-                pbLoading.progress = newProgress
+                if(newProgress == 100){
+                    pbLoading.visibility = View.GONE
+                }else{
+                    pbLoading.progress = newProgress
+                }
+
             }
         }
 
