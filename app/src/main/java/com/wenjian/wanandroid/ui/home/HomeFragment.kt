@@ -2,6 +2,7 @@ package com.wenjian.wanandroid.ui.home
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseFragment
 import com.wenjian.wanandroid.di.Injector
 import com.wenjian.wanandroid.entity.Banner
+import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.loadUrl
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
 import com.wenjian.wanandroid.ui.web.WebActivity
@@ -28,9 +30,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
  */
 class HomeFragment : BaseFragment() {
 
-    private val mHomeModel: HomeModel by lazy {
-        ViewModelProviders.of(this, Injector.provideHomeModelFactory()).get(HomeModel::class.java)
-    }
+    private val mHomeModel: HomeModel by apiModelDelegate(HomeModel::class.java)
 
     private val mArticleAdapter: ArticleListAdapter by lazy {
         ArticleListAdapter()
@@ -43,7 +43,10 @@ class HomeFragment : BaseFragment() {
     override fun initViews() {
         articleRecycler.adapter = mArticleAdapter
         articleRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        articleRecycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        val itemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
+            setDrawable(ContextCompat.getDrawable(context!!, R.drawable.divider_tree)!!)
+        }
+        articleRecycler.addItemDecoration(itemDecoration)
 
         mBanner = LayoutInflater.from(context).inflate(R.layout.lay_banner, articleRecycler, false) as ConvenientBanner<Banner>
 

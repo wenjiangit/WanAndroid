@@ -10,5 +10,7 @@
     <color name="white">#FFFFFF</color>
 
     <color name="second_text">#8C8C8C</color>
-    <color name="primary_text">#191919</color>
+    <color name="primary_text">#333333</color>
+
+    <color name="web_color">#333333</color>
 </resources>

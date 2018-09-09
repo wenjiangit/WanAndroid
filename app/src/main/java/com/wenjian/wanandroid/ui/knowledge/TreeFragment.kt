@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseFragment
 import com.wenjian.wanandroid.di.Injector
+import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.setupToolBar
 import com.wenjian.wanandroid.extension.viewModelDelegate
 import com.wenjian.wanandroid.ui.adapter.TreeAdapter
@@ -23,8 +24,7 @@ class TreeFragment : BaseFragment() {
         fun newInstance() = TreeFragment()
     }
 
-    private val mTreeModel: TreeModel by viewModelDelegate(Injector.provideTreeModelFactory(),
-            TreeModel::class.java)
+    private val mTreeModel: TreeModel by apiModelDelegate(TreeModel::class.java)
 
     private val mTreeAdapter: TreeAdapter by lazy {
         TreeAdapter()

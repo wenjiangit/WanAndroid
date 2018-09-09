@@ -12,6 +12,7 @@ import com.wenjian.wanandroid.extension.setupActionBar
 import com.wenjian.wanandroid.ui.home.HomeFragment
 import com.wenjian.wanandroid.ui.knowledge.TreeFragment
 import com.wenjian.wanandroid.ui.mine.MineFragment
+import com.wenjian.wanandroid.ui.search.SearchActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.toast
 
@@ -24,7 +25,8 @@ class MainActivity : BaseActivity() {
     companion object {
         val TAG = MainActivity::class.java.simpleName!!
 
-        val fragments: List<Fragment> = listOf(HomeFragment.newInstance(),
+        val fragments: List<Fragment> = listOf(
+                HomeFragment.newInstance(),
                 TreeFragment.newInstance(),
                 MineFragment.newInstance())
     }
@@ -77,7 +79,7 @@ class MainActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
         R.id.action_search -> {
-            toast("search")
+            SearchActivity.start(this)
             true
         }
         else -> super.onOptionsItemSelected(item)

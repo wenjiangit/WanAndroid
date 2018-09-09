@@ -28,9 +28,15 @@ fun Fragment.setupToolBar(@StringRes resId: Int = -1, title: String = "") {
 }
 
 
-fun AppCompatActivity.setupActionBar(@DrawableRes resId: Int = -1, title: String? = null) {
+fun AppCompatActivity.setupActionBar(@DrawableRes resId: Int = -1,
+                                     title: String = getString(R.string.app_name),
+                                     listener: () -> Unit = {}) {
     findViewById<Toolbar>(R.id.toolBar)?.let {
         setSupportActionBar(it)
+
+        it.setNavigationOnClickListener {
+            listener()
+        }
 
         supportActionBar?.let {
             it.setDisplayHomeAsUpEnabled(true)
@@ -38,10 +44,7 @@ fun AppCompatActivity.setupActionBar(@DrawableRes resId: Int = -1, title: String
             if (resId != -1) {
                 it.setHomeAsUpIndicator(resId)
             }
-
-            title?.let {
-                supportActionBar?.title = title
-            }
+            supportActionBar?.title = title
         }
 
 

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -9,10 +9,25 @@
     </style>
 
 
-    <style name="Toolbar_Theme" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textSize">14sp</item>
+    <style name="ToolbarTheme" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">15sp</item>
         <item name="actionMenuTextColor">@color/white</item>
 
     </style>
+
+    <style name="WebToolbarText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">15sp</item>
+        <item name="actionMenuTextColor">#666666</item>
+
+    </style>
+
+
+    <style name="WebActTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="android:colorPrimaryDark">#c6c6c6</item>
+        <!--<item name="android:windowLightStatusBar" tools:targetApi="m">true</item>-->
+
+    </style>
+
 
 </resources>

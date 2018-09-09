@@ -15,4 +15,10 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
     }
+
+    override fun onNavigateUp(): Boolean {
+        finish()
+        return super.onNavigateUp()
+    }
+
 }

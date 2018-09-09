@@ -53,29 +53,28 @@ class WebActivity : BaseActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.web_share,menu)
+        menuInflater.inflate(R.menu.web_share, menu)
         return true
     }
 
 
     override fun onBackPressed() {
-        if(webView.canGoBack()){
+        if (webView.canGoBack()) {
             webView.goBack()
-        }else{
+        } else {
             super.onBackPressed()
         }
     }
 
 
-
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when(item?.itemId){
-            R.id.action_share ->{
+        return when (item?.itemId) {
+            R.id.action_share -> {
                 val intent = Intent(Intent.ACTION_SEND).apply {
                     putExtra(Intent.EXTRA_TEXT, loadUrl)
                     type = "text/plain"
                 }
-                startActivity(Intent.createChooser(intent,"分享到"))
+                startActivity(Intent.createChooser(intent, "分享给好友"))
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -100,18 +99,19 @@ class WebActivity : BaseActivity() {
 
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
-                if(newProgress == 100){
-                    pbLoading.visibility = View.GONE
-                }else{
-                    pbLoading.progress = newProgress
-                }
+//                if (newProgress == 100) {
+//                    pbLoading.visibility = View.GONE
+//                } else {
+//                    pbLoading.progress = newProgress
+//                }
 
             }
         }
 
         webView.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                pbLoading.visibility = View.VISIBLE
+//                pbLoading.visibility = View.VISIBLE
+                toolBar?.title = "载入中..."
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
@@ -119,7 +119,8 @@ class WebActivity : BaseActivity() {
             }
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                webView.loadUrl(request?.url?.toString())
+                val url = request?.url?.toString()
+                webView.loadUrl(url)
                 return true
             }
         }

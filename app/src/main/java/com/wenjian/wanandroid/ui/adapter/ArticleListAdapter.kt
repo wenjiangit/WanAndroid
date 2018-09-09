@@ -1,5 +1,7 @@
 package com.wenjian.wanandroid.ui.adapter
 
+import android.text.Html
+import android.view.View
 import android.widget.ImageView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -19,17 +21,25 @@ class ArticleListAdapter : BaseQuickAdapter<Article, BaseViewHolder>(R.layout.rv
         helper?.apply {
 
             item?.let {
-                setText(R.id.tv_category, "${it.chapterName?.trim()}/${it.superChapterName?.trim()}")
-                setText(R.id.tv_title, it.title?.trim())
+                if (it.chapterName.isNullOrBlank()) {
+                    setText(R.id.tv_category, "")
+                } else {
+                    setText(R.id.tv_category, "${it.chapterName?.trim()}/${it.superChapterName?.trim()}")
+                }
+                setText(R.id.tv_title, Html.fromHtml(it.title?.trim()))
                 setText(R.id.tv_name, it.author?.trim())
                 setText(R.id.tv_date, it.niceDate?.trim())
-                getView<ImageView>(R.id.iv_image).loadUrl(it.envelopePic)
-
+                val imageView = getView<ImageView>(R.id.iv_image)
+                if (!it.envelopePic.isNullOrBlank()) {
+                    imageView.loadUrl(it.envelopePic)
+                    imageView.visibility = View.VISIBLE
+                } else {
+                    imageView.visibility = View.GONE
+                }
                 itemView.setOnClickListener {
                     WebActivity.start(it.context, item.link)
                 }
             }
-
 
         }
     }

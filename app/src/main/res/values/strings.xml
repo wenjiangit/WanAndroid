@@ -7,6 +7,9 @@
     <string name="title_home">首页</string>
     <string name="title_knowledge">体系</string>
     <string name="title_mine">我的</string>
+    <string name="hint_search">搜索</string>
+    <string name="menu_open_browser">浏览器打开</string>
+    <string name="menu_copy_link">复制链接</string>
 
 
 </resources>

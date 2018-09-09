@@ -1,4 +1,4 @@
-package com.wenjian.wanandroid.ui.knowledge
+package com.wenjian.wanandroid.ui.factory
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
@@ -7,14 +7,15 @@ import com.wenjian.wanandroid.net.ApiService
 /**
  * Description ${name}
  *
- * Date 2018/9/8
+ * Date 2018/9/9
  * @author wenjianes@163.com
  */
 
-class TreeModelFactory(private val service: ApiService) : ViewModelProvider.NewInstanceFactory() {
+class CommonApiModelFactory(private val service: ApiService) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return TreeModel(service) as T
+        val constructor = modelClass.getConstructor(ApiService::class.java)
+        return constructor.newInstance(service)
     }
 }
