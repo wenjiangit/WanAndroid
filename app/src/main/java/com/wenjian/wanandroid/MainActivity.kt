@@ -14,7 +14,6 @@ import com.wenjian.wanandroid.ui.knowledge.TreeFragment
 import com.wenjian.wanandroid.ui.mine.MineFragment
 import com.wenjian.wanandroid.ui.search.SearchActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import tech.linjiang.pandora.Pandora
 
 class MainActivity : BaseActivity() {
 
@@ -36,7 +35,7 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
 
         setupActionBar(R.drawable.ic_menu) {
-            Pandora.get().open()
+//            Pandora.get().open()
         }
 
         homePager.adapter = mAdapter

@@ -39,11 +39,7 @@ class TreeModel(private val service: ApiService) : BaseViewModel() {
                 .subscribe(ApiSubscriber(articles, disposables) {
                     @Suppress("UNCHECKED_CAST")
                     val data: ArticlesResp = it as ArticlesResp
-                    if (data.over) {
-                        articles.value = Resource.success(emptyList())
-                    } else {
-                        articles.value = Resource.success(data.datas)
-                    }
+                    articles.value = Resource.success(data.datas)
                 })
     }
 

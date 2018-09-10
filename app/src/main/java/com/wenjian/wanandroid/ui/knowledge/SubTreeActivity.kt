@@ -46,8 +46,8 @@ class SubTreeActivity : BaseActivity() {
             }
             val fragments = it.map { ArticleListFragment.newInstance(it.id) }
             treePager.adapter = CommonPagerAdapter(supportFragmentManager,fragments)
-            treePager.offscreenPageLimit = 3
-            tabLayout.setupWithViewPager(treePager)
+//            treePager.offscreenPageLimit = 3
+            tabLayout.setupWithViewPager(treePager,false)
         }
     }
 

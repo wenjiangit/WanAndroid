@@ -38,7 +38,7 @@ fun <T> extraDelegate(key: String, default: T? = null) = ExtraDelegate(key, defa
 
 class ViewModelDelegate<T : ViewModel>(private val factory: ViewModelProvider.Factory? = null,
                                        private val clz: Class<T>) {
-    operator fun getValue(thisRef: Fragment, property: KProperty<*>): T {
+    operator fun getValue(thisRef: Fragment, property: KProperty<*>): T{
         Log.i("wj", "getValue")
         factory?.run {
             ViewModelProviders.of(thisRef, factory).get(clz)
