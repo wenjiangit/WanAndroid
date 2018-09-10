@@ -12,7 +12,7 @@ import io.reactivex.disposables.Disposable
  */
 open class BaseViewModel : ViewModel() {
 
-    private val disposables: CompositeDisposable = CompositeDisposable()
+    open val disposables: CompositeDisposable = CompositeDisposable()
 
 
     open fun addDisposable(disposable: Disposable) {

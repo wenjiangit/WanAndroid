@@ -29,8 +29,8 @@ fun Fragment.setupToolBar(@StringRes resId: Int = -1, title: String = "") {
 
 
 fun AppCompatActivity.setupActionBar(@DrawableRes resId: Int = -1,
-                                     title: String = getString(R.string.app_name),
-                                     listener: () -> Unit = {}) {
+                                     title: String? = getString(R.string.app_name),
+                                     listener: () -> Unit = { finish() }) {
     findViewById<Toolbar>(R.id.toolBar)?.let {
         setSupportActionBar(it)
 

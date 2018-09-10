@@ -1,11 +1,13 @@
 package com.wenjian.wanandroid.ui.knowledge
 
 import android.arch.lifecycle.MutableLiveData
-import android.util.Log
 import com.wenjian.wanandroid.base.BaseViewModel
+import com.wenjian.wanandroid.entity.Article
+import com.wenjian.wanandroid.entity.ArticlesResp
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.entity.TreeEntry
 import com.wenjian.wanandroid.extension.io2Main
+import com.wenjian.wanandroid.model.ApiSubscriber
 import com.wenjian.wanandroid.net.ApiService
 
 /**
@@ -16,25 +18,32 @@ import com.wenjian.wanandroid.net.ApiService
  */
 class TreeModel(private val service: ApiService) : BaseViewModel() {
 
-
     val tree: MutableLiveData<Resource<List<TreeEntry>>> = MutableLiveData()
+
+    val articles: MutableLiveData<Resource<List<Article>>> = MutableLiveData()
 
     fun getTree() {
         service.loadTree()
                 .io2Main()
-                .doOnSubscribe {
-                    addDisposable(it)
-                    tree.value = Resource.loading()
-                }
-                .subscribe({
-                    if (it.success()) {
-                        tree.value = Resource.success(it.data)
+                .subscribe(ApiSubscriber(tree, disposables) {
+                    @Suppress("UNCHECKED_CAST")
+                    val data: List<TreeEntry> = it as List<TreeEntry>
+                    tree.value = Resource.success(data)
+                })
+    }
+
+
+    fun laodArticles(cid: Int, page: Int = 0) {
+        service.loadTreeArticles(page, cid)
+                .io2Main()
+                .subscribe(ApiSubscriber(articles, disposables) {
+                    @Suppress("UNCHECKED_CAST")
+                    val data: ArticlesResp = it as ArticlesResp
+                    if (data.over) {
+                        articles.value = Resource.success(emptyList())
                     } else {
-                        tree.value = Resource.fail(it.errorMsg)
+                        articles.value = Resource.success(data.datas)
                     }
-                }, {
-                    Log.e("wj", "getTree error:", it)
-                    tree.value = Resource.fail()
                 })
     }
 

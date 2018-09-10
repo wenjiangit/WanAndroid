@@ -11,5 +11,7 @@
     <string name="menu_open_browser">浏览器打开</string>
     <string name="menu_copy_link">复制链接</string>
 
+    <string name="copy_success">复制成功</string>
+
 
 </resources>

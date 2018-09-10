@@ -6,9 +6,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.View
 import com.wenjian.wanandroid.di.Injector
-import java.util.prefs.PreferencesFactory
 import kotlin.reflect.KProperty
 
 /**
@@ -21,14 +19,16 @@ class ExtraDelegate<T>(private val key: String, private val default: T) {
 
     private var extra: T? = null
 
+    @Suppress("UNCHECKED_CAST")
     operator fun getValue(thisRef: AppCompatActivity, property: KProperty<*>): T {
-        extra = thisRef.intent.extras.get(key) as T?
-        return extra ?: default
+        val temp = extra ?: thisRef.intent?.extras?.get(key) as T?
+        return temp ?: default
     }
 
+    @Suppress("UNCHECKED_CAST")
     operator fun getValue(thisRef: Fragment, property: KProperty<*>): T {
-        extra = thisRef.arguments?.get(key) as T?
-        return extra ?: default
+        val temp = extra ?: thisRef.arguments?.get(key) as T?
+        return temp ?: default
     }
 
 }
@@ -52,8 +52,6 @@ class ViewModelDelegate<T : ViewModel>(private val factory: ViewModelProvider.Fa
         }
         return ViewModelProviders.of(thisRef).get(clz)
     }
-
-
 }
 
 

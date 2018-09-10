@@ -55,7 +55,6 @@ class TreeFragment : BaseFragment() {
             showContentWithStatus(it) {
                 mTreeAdapter.setNewData(it)
             }
-
         })
 
 

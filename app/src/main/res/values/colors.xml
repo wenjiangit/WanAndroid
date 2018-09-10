@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#000000</color>
-    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorPrimary">@color/weixin_black</color>
+    <color name="colorPrimaryDark">@color/weixin_black</color>
     <color name="colorAccent">#FF4081</color>
     <color name="black_50">#6e000000</color>
     
@@ -13,4 +13,6 @@
     <color name="primary_text">#333333</color>
 
     <color name="web_color">#333333</color>
+
+    <color name="weixin_black">#303030</color>
 </resources>

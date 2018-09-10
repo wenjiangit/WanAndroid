@@ -8,6 +8,7 @@ import com.wenjian.wanandroid.entity.ArticlesResp
 import com.wenjian.wanandroid.entity.Banner
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.extension.io2Main
+import com.wenjian.wanandroid.model.ApiSubscriber
 import com.wenjian.wanandroid.net.ApiService
 import com.wenjian.wanandroid.net.Resp
 import io.reactivex.Observable
@@ -58,20 +59,14 @@ class HomeModel(private val service: ApiService) : BaseViewModel() {
     fun loadMoreArticles() {
         service.loadArticles(++curPage)
                 .io2Main()
-                .doOnSubscribe {
-                    addDisposable(it)
-                }.subscribe({
-                    if (it.success()) {
-                        val data = it.data
-                        if (data.over) {
-                            articles.value = Resource.success(emptyList())
-                        } else {
-                            articles.value = Resource.success(data.datas)
-                        }
+                .subscribe(ApiSubscriber(articles, disposables) {
+                    @Suppress("UNCHECKED_CAST")
+                    val data: ArticlesResp = it as ArticlesResp
+                    if (data.over) {
+                        articles.value = Resource.success(emptyList())
+                    } else {
+                        articles.value = Resource.success(data.datas)
                     }
-                },{
-                    Log.e(TAG, "loadMoreArticles error:", it)
-                    articles.value = Resource.fail()
                 })
     }
 

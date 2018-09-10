@@ -16,7 +16,6 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/white"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:layout_scrollFlags="scroll|enterAlways"
             app:titleTextAppearance="@style/WebToolbarText"
             app:titleTextColor="@color/web_color">
 
@@ -24,7 +23,8 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/layRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -36,8 +36,13 @@
 
         </WebView>
 
-    </android.support.v4.widget.NestedScrollView>
+        <ViewStub
+            android:id="@+id/vsError"
+            android:layout="@layout/web_loading_error"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <ProgressBar
         android:id="@+id/pbLoading"
@@ -59,6 +64,5 @@
         android:tint="@color/white"
         app:elevation="5dp"
         app:rippleColor="@color/second_text" />
-
 
 </android.support.design.widget.CoordinatorLayout>

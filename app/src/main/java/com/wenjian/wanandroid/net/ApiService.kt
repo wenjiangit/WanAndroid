@@ -27,4 +27,7 @@ interface ApiService {
     @POST("/article/query/{page}/json")
     fun search(@Field("k") k: String, @Path("page") page: Int): Observable<Resp<ArticlesResp>>
 
+    @GET("/article/list/{pager}/json")
+    fun loadTreeArticles(@Path("pager") pager: Int, @Query("cid") cid: Int): Observable<Resp<ArticlesResp>>
+
 }

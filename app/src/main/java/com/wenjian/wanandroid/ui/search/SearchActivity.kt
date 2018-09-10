@@ -30,9 +30,7 @@ class SearchActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        setupActionBar {
-            finish()
-        }
+        setupActionBar()
 
         addFragments()
     }

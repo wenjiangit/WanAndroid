@@ -10,7 +10,6 @@
 
     </item>
 
-
     <item
         android:id="@+id/open_browser"
         android:title="@string/menu_open_browser"
