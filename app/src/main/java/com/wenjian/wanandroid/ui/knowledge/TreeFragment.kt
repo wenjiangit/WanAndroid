@@ -4,10 +4,8 @@ import android.arch.lifecycle.Observer
 import android.support.v7.widget.LinearLayoutManager
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseFragment
-import com.wenjian.wanandroid.di.Injector
 import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.setupToolBar
-import com.wenjian.wanandroid.extension.viewModelDelegate
 import com.wenjian.wanandroid.ui.adapter.TreeAdapter
 import kotlinx.android.synthetic.main.fragment_knowledge.*
 
@@ -62,7 +60,7 @@ class TreeFragment : BaseFragment() {
 
     override fun onLazyLoad() {
         super.onLazyLoad()
-        mTreeModel.getTree()
+        mTreeModel.loadTree()
     }
 
 }

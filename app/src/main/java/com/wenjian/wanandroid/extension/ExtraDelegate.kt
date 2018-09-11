@@ -38,19 +38,30 @@ fun <T> extraDelegate(key: String, default: T? = null) = ExtraDelegate(key, defa
 
 class ViewModelDelegate<T : ViewModel>(private val factory: ViewModelProvider.Factory? = null,
                                        private val clz: Class<T>) {
-    operator fun getValue(thisRef: Fragment, property: KProperty<*>): T{
+
+    private var model: T? = null
+
+    operator fun getValue(thisRef: Fragment, property: KProperty<*>): T {
         Log.i("wj", "getValue")
-        factory?.run {
-            ViewModelProviders.of(thisRef, factory).get(clz)
+        if (model == null) {
+            model = if (factory != null) {
+                ViewModelProviders.of(thisRef, factory).get(clz)
+            } else {
+                ViewModelProviders.of(thisRef).get(clz)
+            }
         }
-        return ViewModelProviders.of(thisRef).get(clz)
+        return model!!
     }
 
     operator fun getValue(thisRef: AppCompatActivity, property: KProperty<*>): T {
-        factory?.run {
-            ViewModelProviders.of(thisRef, factory).get(clz)
+        if (model == null) {
+            model = if (factory != null) {
+                ViewModelProviders.of(thisRef, factory).get(clz)
+            } else {
+                ViewModelProviders.of(thisRef).get(clz)
+            }
         }
-        return ViewModelProviders.of(thisRef).get(clz)
+        return model!!
     }
 }
 

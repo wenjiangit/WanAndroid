@@ -11,9 +11,14 @@ import com.wenjian.wanandroid.base.BaseActivity
 import com.wenjian.wanandroid.entity.SubTree
 import com.wenjian.wanandroid.extension.extraDelegate
 import com.wenjian.wanandroid.extension.setupActionBar
-import com.wenjian.wanandroid.ui.adapter.CommonPagerAdapter
 import kotlinx.android.synthetic.main.activity_sub_tree.*
 
+/**
+ * Description: SubTreeActivity
+ * Date: 2018/9/6
+ *
+ * @author jian.wen@ubtrobot.com
+ */
 class SubTreeActivity : BaseActivity() {
 
     private val mTitle: String? by extraDelegate(EXTRA_TITLE)
@@ -41,13 +46,26 @@ class SubTreeActivity : BaseActivity() {
         setupActionBar(title = mTitle)
 
         subTrees?.let {
-            it.forEach {
-                tabLayout.addTab(tabLayout.newTab().setText(it.name))
-            }
-            val fragments = it.map { ArticleListFragment.newInstance(it.id) }
-            treePager.adapter = CommonPagerAdapter(supportFragmentManager,fragments)
-//            treePager.offscreenPageLimit = 3
-            tabLayout.setupWithViewPager(treePager,false)
+            treePager.adapter = SubTreeAdapter(supportFragmentManager,it)
+            tabLayout.setupWithViewPager(treePager)
+        }
+    }
+
+
+    class SubTreeAdapter(fm: FragmentManager, val list: List<SubTree>) : FragmentPagerAdapter(fm) {
+
+        private val fragments: List<Fragment>
+
+        init {
+            fragments = list.map { ArticleListFragment.newInstance(it.id) }
+        }
+
+        override fun getItem(position: Int): Fragment = fragments[position]
+
+        override fun getCount(): Int = fragments.size
+
+        override fun getPageTitle(position: Int): CharSequence? {
+            return list[position].name
         }
     }
 

@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import com.wenjian.wanandroid.base.BaseViewModel
 import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.entity.ArticlesResp
+import com.wenjian.wanandroid.entity.HotWord
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.extension.io2Main
 import com.wenjian.wanandroid.model.ApiSubscriber
@@ -19,10 +20,21 @@ class SearchModel(private val service: ApiService) : BaseViewModel() {
 
     val articles: MutableLiveData<Resource<List<Article>>> = MutableLiveData()
 
+    val hotWords: MutableLiveData<Resource<List<HotWord>>> = MutableLiveData()
+
     private var lastQuery: String? = null
 
     private var count: Int = 0
 
+    fun loadHotWords() {
+        service.loadHotWords()
+                .io2Main()
+                .subscribe(ApiSubscriber(hotWords, disposables) {
+                    @Suppress("UNCHECKED_CAST")
+                    val data: List<HotWord> = it as List<HotWord>
+                    hotWords.value = Resource.success(data)
+                })
+    }
 
     fun loadMode() {
         lastQuery?.let {

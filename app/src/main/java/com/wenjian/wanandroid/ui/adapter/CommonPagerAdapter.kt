@@ -13,4 +13,6 @@ import android.support.v4.app.FragmentPagerAdapter
 class CommonPagerAdapter(fm: FragmentManager, private val fragments: List<Fragment>) : FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment = fragments[position]
     override fun getCount(): Int = fragments.size
+
+
 }

@@ -11,7 +11,9 @@
     <string name="menu_open_browser">浏览器打开</string>
     <string name="menu_copy_link">复制链接</string>
 
-    <string name="copy_success">复制成功</string>
+    <string name="copy_success">已复制到剪贴板</string>
+    <string name="hot_search">热搜</string>
+    <string name="history_search">历史搜索</string>
 
 
 </resources>

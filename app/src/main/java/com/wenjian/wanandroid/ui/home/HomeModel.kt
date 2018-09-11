@@ -33,6 +33,8 @@ class HomeModel(private val service: ApiService) : BaseViewModel() {
 
     private var curPage: Int = 0
 
+    private var isOver: Boolean = false
+
     fun loadHomeData() {
         val loadBanners = service.loadBanners()
         val loadArticles = service.loadArticles(0)
@@ -57,16 +59,18 @@ class HomeModel(private val service: ApiService) : BaseViewModel() {
 
 
     fun loadMoreArticles() {
+        if (isOver) {
+            articles.value = Resource.success(emptyList())
+            return
+        }
         service.loadArticles(++curPage)
                 .io2Main()
                 .subscribe(ApiSubscriber(articles, disposables) {
                     @Suppress("UNCHECKED_CAST")
                     val data: ArticlesResp = it as ArticlesResp
-                    if (data.over) {
-                        articles.value = Resource.success(emptyList())
-                    } else {
-                        articles.value = Resource.success(data.datas)
-                    }
+                    isOver = data.over
+                    curPage = data.curPage
+                    articles.value = Resource.success(data.datas)
                 })
     }
 

@@ -16,6 +16,7 @@ import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseFragment
 import com.wenjian.wanandroid.di.Injector
 import com.wenjian.wanandroid.entity.Banner
+import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.loadUrl
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
@@ -38,15 +39,14 @@ class HomeFragment : BaseFragment() {
 
     private lateinit var mBanner: ConvenientBanner<Banner>
 
+    private var isLoadMore:Boolean = false
+
     override fun getLayoutId(): Int = R.layout.fragment_home
 
     override fun initViews() {
         articleRecycler.adapter = mArticleAdapter
         articleRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        val itemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
-            setDrawable(ContextCompat.getDrawable(context!!, R.drawable.divider_tree)!!)
-        }
-        articleRecycler.addItemDecoration(itemDecoration)
+        articleRecycler.addCustomDecoration(drawable = R.drawable.divider_tree)
 
         mBanner = LayoutInflater.from(context).inflate(R.layout.lay_banner, articleRecycler, false) as ConvenientBanner<Banner>
 
@@ -55,6 +55,7 @@ class HomeFragment : BaseFragment() {
         mArticleAdapter.openLoadAnimation()
         mArticleAdapter.setEnableLoadMore(true)
         mArticleAdapter.setOnLoadMoreListener({
+            isLoadMore = true
             mHomeModel.loadMoreArticles()
         }, articleRecycler)
 
@@ -91,7 +92,9 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun showLoading() {
-        swipeRefresh.isRefreshing = true
+        if (!isLoadMore) {
+            swipeRefresh.isRefreshing = true
+        }
     }
 
     override fun hideLoading() {
@@ -106,6 +109,7 @@ class HomeFragment : BaseFragment() {
 
     override fun onLazyLoad() {
         super.onLazyLoad()
+        isLoadMore = false
         mHomeModel.loadHomeData()
     }
 

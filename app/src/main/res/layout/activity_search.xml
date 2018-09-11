@@ -22,14 +22,80 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
     <FrameLayout
         android:id="@+id/layContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
 
     </FrameLayout>
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/hotPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/shallow_bg"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+        <co.lujun.androidtagview.TagContainerLayout
+            android:id="@+id/hotwordsContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:container_background_color="@android:color/transparent"
+            app:container_border_color="@android:color/transparent"
+            app:horizontal_interval="10dp"
+            app:tag_clickable="true"
+            app:tag_theme="random"
+            app:vertical_interval="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+        </co.lujun.androidtagview.TagContainerLayout>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/hot_search"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/history_search"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/hotwordsContainer" />
+
+        <co.lujun.androidtagview.TagContainerLayout
+            android:id="@+id/historyContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:container_background_color="@android:color/transparent"
+            app:container_border_color="@android:color/transparent"
+            app:horizontal_interval="10dp"
+            app:tag_clickable="true"
+            app:tag_theme="random"
+            app:vertical_interval="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+        </co.lujun.androidtagview.TagContainerLayout>
+
+
+    </android.support.constraint.ConstraintLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

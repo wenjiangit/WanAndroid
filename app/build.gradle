@@ -38,6 +38,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     implementation "com.android.support:design:$support_version"
     implementation "com.github.bumptech.glide:glide:$glide_version"
+    implementation 'androidx.core:core-ktx:0.3'
     //RecyclerAdapter简化
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.40'
     implementation 'com.bigkoo:ConvenientBanner:2.1.4'

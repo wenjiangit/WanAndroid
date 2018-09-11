@@ -22,7 +22,11 @@ class TreeModel(private val service: ApiService) : BaseViewModel() {
 
     val articles: MutableLiveData<Resource<List<Article>>> = MutableLiveData()
 
-    fun getTree() {
+    private var isOver: Boolean = false
+    private var pageCount: Int = 0
+    private var cid: Int = -1
+
+    fun loadTree() {
         service.loadTree()
                 .io2Main()
                 .subscribe(ApiSubscriber(tree, disposables) {
@@ -33,14 +37,27 @@ class TreeModel(private val service: ApiService) : BaseViewModel() {
     }
 
 
-    fun laodArticles(cid: Int, page: Int = 0) {
+    fun loadArticles(cid: Int, page: Int = 0) {
+        if (this.cid == -1) {
+            this.cid = cid
+        }
         service.loadTreeArticles(page, cid)
                 .io2Main()
                 .subscribe(ApiSubscriber(articles, disposables) {
                     @Suppress("UNCHECKED_CAST")
                     val data: ArticlesResp = it as ArticlesResp
+                    isOver = data.over
+                    pageCount = data.curPage
                     articles.value = Resource.success(data.datas)
                 })
+    }
+
+    fun loadMore() {
+        if (isOver) {
+            articles.value = Resource.success(emptyList())
+            return
+        }
+        loadArticles(cid, ++pageCount)
     }
 
 

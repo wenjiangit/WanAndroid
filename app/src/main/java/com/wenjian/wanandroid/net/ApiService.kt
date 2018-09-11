@@ -2,6 +2,7 @@ package com.wenjian.wanandroid.net
 
 import com.wenjian.wanandroid.entity.ArticlesResp
 import com.wenjian.wanandroid.entity.Banner
+import com.wenjian.wanandroid.entity.HotWord
 import com.wenjian.wanandroid.entity.TreeEntry
 import io.reactivex.Observable
 import retrofit2.http.*
@@ -29,5 +30,9 @@ interface ApiService {
 
     @GET("/article/list/{pager}/json")
     fun loadTreeArticles(@Path("pager") pager: Int, @Query("cid") cid: Int): Observable<Resp<ArticlesResp>>
+
+    @GET("/hotkey/json")
+    fun loadHotWords(): Observable<Resp<List<HotWord>>>
+
 
 }

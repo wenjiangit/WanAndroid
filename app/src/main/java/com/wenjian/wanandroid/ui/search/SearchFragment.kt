@@ -7,6 +7,7 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseFragment
+import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
 import kotlinx.android.synthetic.main.fragment_serch.*
@@ -49,7 +50,7 @@ class SearchFragment : BaseFragment() {
         searchRecycler.setHasFixedSize(true)
         searchRecycler.layoutManager = LinearLayoutManager(context,
                 LinearLayoutManager.VERTICAL, false)
-        searchRecycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        searchRecycler.addCustomDecoration()
         searchRecycler.adapter = mAdapter
 
         mAdapter.setEnableLoadMore(true)
@@ -81,6 +82,7 @@ class SearchFragment : BaseFragment() {
     }
 
     fun search(input: String) {
+        mAdapter.setNewData(null)
         if (!input.isBlank()) {
             isLoadMore = false
             mSearchModel.doSearch(input)
