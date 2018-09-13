@@ -3,14 +3,15 @@ package com.wenjian.wanandroid.ui.search
 
 import android.arch.lifecycle.Observer
 import android.support.v4.app.Fragment
-import android.support.v7.widget.DividerItemDecoration
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.view.View
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseFragment
 import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
-import kotlinx.android.synthetic.main.fragment_serch.*
 
 
 /**
@@ -21,11 +22,10 @@ class SearchFragment : BaseFragment() {
 
     private val mSearchModel: SearchModel by apiModelDelegate(SearchModel::class.java)
 
-    companion object {
-        val TAG: String = SearchFragment::class.java.simpleName
-    }
-
     private var isLoadMore: Boolean = false
+
+    private lateinit var swipeRefresh: SwipeRefreshLayout
+    private lateinit var searchRecycler: RecyclerView
 
     private val mAdapter: ArticleListAdapter by lazy {
         ArticleListAdapter()
@@ -42,9 +42,13 @@ class SearchFragment : BaseFragment() {
         swipeRefresh.isRefreshing = false
     }
 
+    override fun findViews(mRoot: View) {
+        swipeRefresh = mRoot.findViewById(R.id.swipeRefresh)
+        searchRecycler = mRoot.findViewById(R.id.searchRecycler)
+    }
+
     override fun initViews() {
         super.initViews()
-
         swipeRefresh.isEnabled = false
 
         searchRecycler.setHasFixedSize(true)
@@ -53,6 +57,7 @@ class SearchFragment : BaseFragment() {
         searchRecycler.addCustomDecoration()
         searchRecycler.adapter = mAdapter
 
+        mAdapter.isUseEmpty(true)
         mAdapter.setEnableLoadMore(true)
         mAdapter.setOnLoadMoreListener({
             isLoadMore = true
@@ -77,7 +82,6 @@ class SearchFragment : BaseFragment() {
                     mAdapter.setNewData(it)
                 }
             }
-
         })
     }
 

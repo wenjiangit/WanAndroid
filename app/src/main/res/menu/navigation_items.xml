@@ -12,6 +12,11 @@
         android:icon="@drawable/ic_widgets"
         android:title="@string/title_knowledge" />
 
+   <item
+        android:id="@+id/project"
+        android:icon="@drawable/ic_android"
+        android:title="@string/tab_project" />
+
     <item
         android:id="@+id/mine"
         android:icon="@drawable/ic_person"

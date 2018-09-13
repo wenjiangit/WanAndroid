@@ -14,6 +14,7 @@
     <string name="copy_success">已复制到剪贴板</string>
     <string name="hot_search">热搜</string>
     <string name="history_search">历史搜索</string>
+    <string name="tab_project">项目</string>
 
 
 </resources>

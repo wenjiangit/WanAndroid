@@ -1,10 +1,9 @@
 package com.wenjian.wanandroid.ui.home
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.DividerItemDecoration
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -14,14 +13,12 @@ import com.bigkoo.convenientbanner.holder.CBViewHolderCreator
 import com.bigkoo.convenientbanner.holder.Holder
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseFragment
-import com.wenjian.wanandroid.di.Injector
 import com.wenjian.wanandroid.entity.Banner
 import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.loadUrl
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
 import com.wenjian.wanandroid.ui.web.WebActivity
-import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
  * Description: HomeFragment
@@ -36,19 +33,25 @@ class HomeFragment : BaseFragment() {
     private val mArticleAdapter: ArticleListAdapter by lazy {
         ArticleListAdapter()
     }
-
+    private lateinit var mArticleRecycler: RecyclerView
     private lateinit var mBanner: ConvenientBanner<Banner>
+    private lateinit var mSwipeRefresh: SwipeRefreshLayout
 
-    private var isLoadMore:Boolean = false
+    private var isLoadMore: Boolean = false
 
     override fun getLayoutId(): Int = R.layout.fragment_home
 
-    override fun initViews() {
-        articleRecycler.adapter = mArticleAdapter
-        articleRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        articleRecycler.addCustomDecoration(drawable = R.drawable.divider_tree)
+    override fun findViews(mRoot: View) {
+        mArticleRecycler = mRoot.findViewById(R.id.articleRecycler)
+        mSwipeRefresh = mRoot.findViewById(R.id.swipeRefresh)
+    }
 
-        mBanner = LayoutInflater.from(context).inflate(R.layout.lay_banner, articleRecycler, false) as ConvenientBanner<Banner>
+    override fun initViews() {
+        mArticleRecycler.adapter = mArticleAdapter
+        mArticleRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        mArticleRecycler.addCustomDecoration(drawable = R.drawable.divider_tree)
+
+        mBanner = LayoutInflater.from(context).inflate(R.layout.lay_banner, mArticleRecycler, false) as ConvenientBanner<Banner>
 
         mArticleAdapter.addHeaderView(mBanner)
 
@@ -57,10 +60,10 @@ class HomeFragment : BaseFragment() {
         mArticleAdapter.setOnLoadMoreListener({
             isLoadMore = true
             mHomeModel.loadMoreArticles()
-        }, articleRecycler)
+        }, mArticleRecycler)
 
-        swipeRefresh.setColorSchemeResources(R.color.colorPrimary)
-        swipeRefresh.setOnRefreshListener {
+        mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary)
+        mSwipeRefresh.setOnRefreshListener {
             refresh()
         }
     }
@@ -93,12 +96,12 @@ class HomeFragment : BaseFragment() {
 
     override fun showLoading() {
         if (!isLoadMore) {
-            swipeRefresh.isRefreshing = true
+            mSwipeRefresh.isRefreshing = true
         }
     }
 
     override fun hideLoading() {
-        swipeRefresh.isRefreshing = false
+        mSwipeRefresh.isRefreshing = false
     }
 
     override fun onStart() {

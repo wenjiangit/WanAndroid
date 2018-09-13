@@ -8,10 +8,12 @@ import android.support.v4.view.ViewPager
 import android.view.Menu
 import android.view.MenuItem
 import com.wenjian.wanandroid.base.BaseActivity
+import com.wenjian.wanandroid.extension.disableShiftMode
 import com.wenjian.wanandroid.extension.setupActionBar
 import com.wenjian.wanandroid.ui.home.HomeFragment
 import com.wenjian.wanandroid.ui.knowledge.TreeFragment
 import com.wenjian.wanandroid.ui.mine.MineFragment
+import com.wenjian.wanandroid.ui.project.ProjectFragment
 import com.wenjian.wanandroid.ui.search.SearchActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -27,6 +29,7 @@ class MainActivity : BaseActivity() {
         val fragments: List<Fragment> = listOf(
                 HomeFragment.newInstance(),
                 TreeFragment.newInstance(),
+                ProjectFragment.newInstance(),
                 MineFragment.newInstance())
     }
 
@@ -34,12 +37,9 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setupActionBar(R.drawable.ic_menu) {
-//            Pandora.get().open()
-        }
+        setupActionBar(show = false)
 
         homePager.adapter = mAdapter
-        homePager.offscreenPageLimit = 2
         homePager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }
@@ -51,7 +51,8 @@ class MainActivity : BaseActivity() {
                 when (position) {
                     0 -> navigation.selectedItemId = R.id.home
                     1 -> navigation.selectedItemId = R.id.knowledge
-                    2 -> navigation.selectedItemId = R.id.mine
+                    2 -> navigation.selectedItemId = R.id.project
+                    3 -> navigation.selectedItemId = R.id.mine
                 }
             }
         })
@@ -66,14 +67,20 @@ class MainActivity : BaseActivity() {
                     homePager.currentItem = 1
                     true
                 }
-                R.id.mine -> {
+                R.id.project -> {
                     homePager.currentItem = 2
+                    true
+                }
+
+                R.id.mine -> {
+                    homePager.currentItem = 3
                     true
                 }
                 else -> false
             }
         }
 
+        navigation.disableShiftMode()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {

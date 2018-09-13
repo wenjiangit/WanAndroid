@@ -1,9 +1,6 @@
 package com.wenjian.wanandroid.net
 
-import com.wenjian.wanandroid.entity.ArticlesResp
-import com.wenjian.wanandroid.entity.Banner
-import com.wenjian.wanandroid.entity.HotWord
-import com.wenjian.wanandroid.entity.TreeEntry
+import com.wenjian.wanandroid.entity.*
 import io.reactivex.Observable
 import retrofit2.http.*
 
@@ -33,6 +30,10 @@ interface ApiService {
 
     @GET("/hotkey/json")
     fun loadHotWords(): Observable<Resp<List<HotWord>>>
+
+    @GET("/project/tree/json")
+    fun loadProjectTree():Observable<Resp<List<ProjectTree>>>
+
 
 
 }

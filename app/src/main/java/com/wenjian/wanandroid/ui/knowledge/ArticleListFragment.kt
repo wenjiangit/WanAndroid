@@ -3,15 +3,16 @@ package com.wenjian.wanandroid.ui.knowledge
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.view.View
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseFragment
 import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.extraDelegate
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
-import kotlinx.android.synthetic.main.fragment_article_list.*
 
 /**
  * Description: ArticleListFragment
@@ -30,6 +31,8 @@ class ArticleListFragment : BaseFragment() {
     private val cid: Int? by extraDelegate(ARG_ID)
 
     private var loadMore: Boolean = false
+    private lateinit var subRecycler:RecyclerView
+    private lateinit var layRefresh:SwipeRefreshLayout
 
     companion object {
         private const val ARG_ID = "category_id"
@@ -41,6 +44,11 @@ class ArticleListFragment : BaseFragment() {
     }
 
     override fun getLayoutId(): Int = R.layout.fragment_article_list
+
+    override fun findViews(mRoot: View) {
+        subRecycler = mRoot.findViewById(R.id.subRecycler)
+        layRefresh = mRoot.findViewById(R.id.layRefresh)
+    }
 
     override fun initViews() {
         super.initViews()

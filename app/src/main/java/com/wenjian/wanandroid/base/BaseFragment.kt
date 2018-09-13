@@ -18,9 +18,9 @@ import org.jetbrains.anko.support.v4.toast
  */
 abstract class BaseFragment : Fragment() {
 
-    companion object {
-        const val TAG = "wj"
-    }
+    open val TAG: String = this::class.java.simpleName
+
+    private var mRoot: View? = null
 
     @LayoutRes
     abstract fun getLayoutId(): Int
@@ -30,8 +30,22 @@ abstract class BaseFragment : Fragment() {
     private var forceUpdate: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(getLayoutId(), container, false)
+        Log.i(TAG, "onCreateView")
+        if (mRoot == null) {
+            mRoot = inflater.inflate(getLayoutId(), container, false)
+            Log.i(TAG, "inflate")
+            findViews(mRoot!!)
+            initViews()
+        }
+        return mRoot
     }
+
+    /**
+     * fragment中还是老老实实findViewById吧,可以避免许多坑
+     * 当然也可以在onViewCreated中进行view的初始化,但是onViewCreated会被调用多次
+     * 尤其是与viewPager共同使用时,会导致许多问题
+     */
+    abstract fun findViews(mRoot: View)
 
     open fun subscribeUi() {
 
@@ -39,9 +53,9 @@ abstract class BaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViews()
-        subscribeUi()
+        Log.i(TAG, "onViewCreated")
         viewInitiated = true
+        subscribeUi()
         tryLoadData()
     }
 
