@@ -10,6 +10,8 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.widget.ImageView
+import com.chad.library.adapter.base.BaseViewHolder
 import com.wenjian.wanandroid.R
 
 
@@ -86,4 +88,9 @@ fun BottomNavigationView.disableShiftMode() {
     } catch (e: IllegalStateException) {
         Log.e("wj", "Unable to change value of shift mode", e)
     }
+}
+
+
+fun BaseViewHolder.setImageUrl(resId: Int, url: String) {
+    getView<ImageView>(resId).loadUrl(url)
 }

@@ -4,7 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import com.wenjian.wanandroid.base.BaseViewModel
 import com.wenjian.wanandroid.entity.Article
-import com.wenjian.wanandroid.entity.ArticlesResp
+import com.wenjian.wanandroid.entity.ListResp
 import com.wenjian.wanandroid.entity.Banner
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.extension.io2Main
@@ -38,7 +38,7 @@ class HomeModel(private val service: ApiService) : BaseViewModel() {
     fun loadHomeData() {
         val loadBanners = service.loadBanners()
         val loadArticles = service.loadArticles(0)
-        Observable.zip(loadBanners, loadArticles, BiFunction { t1: Resp<List<Banner>>, t2: Resp<ArticlesResp> -> Pair(t1, t2) })
+        Observable.zip(loadBanners, loadArticles, BiFunction { t1: Resp<List<Banner>>, t2: Resp<ListResp<Article>> -> Pair(t1, t2) })
                 .io2Main()
                 .doOnSubscribe {
                     addDisposable(it)
@@ -67,7 +67,7 @@ class HomeModel(private val service: ApiService) : BaseViewModel() {
                 .io2Main()
                 .subscribe(ApiSubscriber(articles, disposables) {
                     @Suppress("UNCHECKED_CAST")
-                    val data: ArticlesResp = it as ArticlesResp
+                    val data: ListResp<Article> = it as ListResp<Article>
                     isOver = data.over
                     curPage = data.curPage
                     articles.value = Resource.success(data.datas)

@@ -1,6 +1,7 @@
 package com.wenjian.wanandroid.ui.project
 
 
+import android.arch.lifecycle.Observer
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -40,7 +41,12 @@ class ProjectFragment : BaseFragment() {
     }
 
     override fun subscribeUi() {
-
+        mProjectModel.projectTrees.observe(this, Observer {
+            showContentWithStatus(it){
+                mViewPager.adapter = ProjectPagerAdapter(fragmentManager!!, it)
+                mTabLayout.setupWithViewPager(mViewPager)
+            }
+        })
     }
 
     override fun onLazyLoad() {
@@ -48,12 +54,20 @@ class ProjectFragment : BaseFragment() {
         mProjectModel.loadProjectTree()
     }
 
-    class ProjectPagerAdapter(fm: FragmentManager, data: List<ProjectTree>) : FragmentStatePagerAdapter(fm) {
-        override fun getItem(position: Int): Fragment {
+    class ProjectPagerAdapter(fm: FragmentManager, val data: List<ProjectTree>) : FragmentStatePagerAdapter(fm) {
 
+        private val fragments: List<Fragment>
+
+        init {
+            fragments = data.map { ProjectListFragment.newInstance(it.id) }
         }
 
-        override fun getCount(): Int {
+        override fun getItem(position: Int): Fragment = fragments[position]
+
+        override fun getCount(): Int = fragments.size
+
+        override fun getPageTitle(position: Int): CharSequence? {
+            return data[position].name
         }
 
     }

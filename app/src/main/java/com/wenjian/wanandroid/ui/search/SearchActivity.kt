@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : BaseActivity() {
 
-    lateinit var searchFragment: SearchFragment
+    private lateinit var searchFragment: SearchFragment
 
     private val mSearchModel: SearchModel by apiModelDelegate(SearchModel::class.java)
 
