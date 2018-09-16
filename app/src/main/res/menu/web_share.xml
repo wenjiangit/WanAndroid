@@ -12,11 +12,13 @@
 
     <item
         android:id="@+id/open_browser"
+        android:icon="@drawable/ic_explore"
         android:title="@string/menu_open_browser"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/copy_link"
+        android:icon="@drawable/ic_content_copy"
         android:title="@string/menu_copy_link"
         app:showAsAction="never" />
 

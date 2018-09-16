@@ -36,6 +36,10 @@ abstract class BaseFragment : Fragment() {
             Log.i(TAG, "inflate")
             findViews(mRoot!!)
             initViews()
+        } else {
+            mRoot?.parent?.let {
+                (it as ViewGroup).removeView(mRoot)
+            }
         }
         return mRoot
     }

@@ -16,8 +16,11 @@ import com.wenjian.wanandroid.ui.mine.MineFragment
 import com.wenjian.wanandroid.ui.project.ProjectFragment
 import com.wenjian.wanandroid.ui.search.SearchActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.toast
 
 class MainActivity : BaseActivity() {
+
+    private var lastBack: Long = 0
 
     private val mAdapter: MainPagerAdapter by lazy {
         MainPagerAdapter(supportFragmentManager)
@@ -104,6 +107,32 @@ class MainActivity : BaseActivity() {
         }
 
         override fun getCount(): Int = fragments.size
+
+    }
+
+    override fun onMenuOpened(featureId: Int, menu: Menu?): Boolean {
+        if (menu != null) {
+            if (menu::class.java.simpleName == "MenuBuilder") {
+                try {
+                    val method = menu::class.java.getDeclaredMethod("setOptionalIconsVisible", Boolean::class.java)
+                    method.isAccessible = true
+                    method.invoke(menu, true)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        return super.onMenuOpened(featureId, menu)
+    }
+
+    override fun onBackPressed() {
+        val current = System.currentTimeMillis()
+        if (current - lastBack > 2000) {
+            toast("再按一次退出" + getString(R.string.app_name))
+        } else {
+            super.onBackPressed()
+        }
+        lastBack = current
 
     }
 }

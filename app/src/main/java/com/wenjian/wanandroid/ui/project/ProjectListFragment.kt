@@ -35,7 +35,16 @@ class ProjectListFragment : BaseListFragment<Project>() {
         super.subscribeUi()
         mProjectModel.projects.observe(this, Observer {
             showContentWithStatus(it) {
-                mAdapter.setNewData(it)
+                if (isLoadMore) {
+                    if (it.isEmpty()) {
+                        mAdapter.loadMoreEnd()
+                    } else {
+                        mAdapter.addData(it)
+                        mAdapter.loadMoreComplete()
+                    }
+                } else {
+                    mAdapter.setNewData(it)
+                }
             }
         })
     }
@@ -43,6 +52,11 @@ class ProjectListFragment : BaseListFragment<Project>() {
     override fun onLazyLoad() {
         super.onLazyLoad()
         mProjectModel.loadProjects(cid!!)
+    }
+
+    override fun onLoadMore() {
+        super.onLoadMore()
+        mProjectModel.loadMore()
     }
 
 }

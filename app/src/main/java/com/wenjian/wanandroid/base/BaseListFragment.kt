@@ -19,7 +19,7 @@ abstract class BaseListFragment<T> : BaseFragment() {
     private lateinit var mLayRefresh: SwipeRefreshLayout
     open lateinit var mAdapter: BaseRecyclerAdapter<T>
 
-    private var isLoadMore: Boolean = false
+    open var isLoadMore: Boolean = false
 
     override fun getLayoutId(): Int = R.layout.fragment_base_list
 

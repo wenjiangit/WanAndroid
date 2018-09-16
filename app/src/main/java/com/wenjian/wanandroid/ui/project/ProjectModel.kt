@@ -21,6 +21,10 @@ class ProjectModel(private val service: ApiService) : BaseViewModel() {
     val projectTrees: MutableLiveData<Resource<List<ProjectTree>>> = MutableLiveData()
     val projects: MutableLiveData<Resource<List<Project>>> = MutableLiveData()
 
+    var isOver: Boolean = false
+    var curPage: Int = 1
+    var cid:Int = -1
+
     fun loadProjectTree() {
         service.loadProjectTree()
                 .io2Main()
@@ -33,13 +37,26 @@ class ProjectModel(private val service: ApiService) : BaseViewModel() {
 
 
     fun loadProjects(cid: Int, page: Int = 1) {
+        if (this.cid == -1) {
+            this.cid = cid
+        }
         service.loadProjects(page, cid)
                 .io2Main()
                 .subscribe(ApiSubscriber(projects, disposables) {
                     @Suppress("UNCHECKED_CAST")
                     val data: ListResp<Project> = it as ListResp<Project>
+                    curPage = data.curPage
+                    isOver = data.over
                     projects.value = Resource.success(data.datas)
                 })
+    }
 
+
+    fun loadMore() {
+        if (isOver) {
+            projects.value = Resource.success(emptyList())
+            return
+        }
+        loadProjects(cid, ++curPage)
     }
 }
