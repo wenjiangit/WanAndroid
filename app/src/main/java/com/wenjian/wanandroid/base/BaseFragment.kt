@@ -18,6 +18,7 @@ import org.jetbrains.anko.support.v4.toast
  */
 abstract class BaseFragment : Fragment() {
 
+    @Suppress("LeakingThis", "PropertyName")
     open val TAG: String = this::class.java.simpleName
 
     private var mRoot: View? = null

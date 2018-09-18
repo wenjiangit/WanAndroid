@@ -3,7 +3,7 @@ package com.wenjian.wanandroid.ui.search
 import android.arch.lifecycle.MutableLiveData
 import com.wenjian.wanandroid.base.BaseViewModel
 import com.wenjian.wanandroid.entity.Article
-import com.wenjian.wanandroid.entity.ListResp
+import com.wenjian.wanandroid.entity.ListContract
 import com.wenjian.wanandroid.entity.HotWord
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.extension.io2Main
@@ -48,7 +48,7 @@ class SearchModel(private val service: ApiService) : BaseViewModel() {
                 .io2Main()
                 .subscribe(ApiSubscriber(articles, disposables) {
                     @Suppress("UNCHECKED_CAST")
-                    val data: ListResp<Article> = it as ListResp<Article>
+                    val data: ListContract<Article> = it as ListContract<Article>
                     count = data.curPage
                     if (data.over && loadMore) {
                         articles.value = Resource.success(emptyList())

@@ -3,7 +3,7 @@ package com.wenjian.wanandroid.ui.knowledge
 import android.arch.lifecycle.MutableLiveData
 import com.wenjian.wanandroid.base.BaseViewModel
 import com.wenjian.wanandroid.entity.Article
-import com.wenjian.wanandroid.entity.ListResp
+import com.wenjian.wanandroid.entity.ListContract
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.entity.TreeEntry
 import com.wenjian.wanandroid.extension.io2Main
@@ -45,7 +45,7 @@ class TreeModel(private val service: ApiService) : BaseViewModel() {
                 .io2Main()
                 .subscribe(ApiSubscriber(articles, disposables) {
                     @Suppress("UNCHECKED_CAST")
-                    val data: ListResp<Article> = it as ListResp<Article>
+                    val data: ListContract<Article> = it as ListContract<Article>
                     isOver = data.over
                     pageCount = data.curPage
                     articles.value = Resource.success(data.datas)

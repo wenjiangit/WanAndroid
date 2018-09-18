@@ -12,7 +12,6 @@ import com.wenjian.wanandroid.ui.home.HomeModelFactory
  */
 object Injector {
 
-    fun provideHomeModelFactory() = HomeModelFactory(RetrofitManager.service)
     fun provideApiModelFactory() = CommonApiModelFactory(RetrofitManager.service)
 
 }

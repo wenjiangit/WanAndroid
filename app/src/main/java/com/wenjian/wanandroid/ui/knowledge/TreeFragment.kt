@@ -42,8 +42,7 @@ class TreeFragment : BaseFragment() {
         setupToolBar(R.string.title_knowledge)
 
         mTreeRecycler.setHasFixedSize(true)
-        mTreeRecycler.layoutManager = LinearLayoutManager(context,
-                LinearLayoutManager.VERTICAL, false)
+        mTreeRecycler.layoutManager = LinearLayoutManager(context)
         mTreeRecycler.adapter = mTreeAdapter
 
     }

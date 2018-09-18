@@ -27,7 +27,7 @@ class MainActivity : BaseActivity() {
     }
 
     companion object {
-        val TAG = MainActivity::class.java.simpleName!!
+        val TAG: String = MainActivity::class.java.simpleName
 
         val fragments: List<Fragment> = listOf(
                 HomeFragment.newInstance(),

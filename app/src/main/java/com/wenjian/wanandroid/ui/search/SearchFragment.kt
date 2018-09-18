@@ -52,8 +52,7 @@ class SearchFragment : BaseFragment() {
         swipeRefresh.isEnabled = false
 
         searchRecycler.setHasFixedSize(true)
-        searchRecycler.layoutManager = LinearLayoutManager(context,
-                LinearLayoutManager.VERTICAL, false)
+        searchRecycler.layoutManager = LinearLayoutManager(context)
         searchRecycler.addCustomDecoration()
         searchRecycler.adapter = mAdapter
 
@@ -69,7 +68,7 @@ class SearchFragment : BaseFragment() {
 
     override fun subscribeUi() {
         super.subscribeUi()
-        mSearchModel.articles.observe(this, Observer {
+        mSearchModel.articles.observe(this, Observer { it ->
             showContentWithStatus(it) {
                 if (isLoadMore) {
                     if (it.isEmpty()) {

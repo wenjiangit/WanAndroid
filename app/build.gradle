@@ -34,7 +34,7 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     implementation "org.jetbrains.anko:anko:$anko_version"
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     implementation "com.android.support:design:$support_version"
     implementation "com.github.bumptech.glide:glide:$glide_version"
@@ -47,6 +47,10 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     releaseImplementation 'com.github.whataa:pandora-no-op:v1.1.0'
     implementation 'co.lujun:androidtagview:1.1.4'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+    // Optional, if you use support library fragments:
+    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

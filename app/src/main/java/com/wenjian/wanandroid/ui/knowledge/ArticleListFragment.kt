@@ -53,8 +53,7 @@ class ArticleListFragment : BaseFragment() {
     override fun initViews() {
         super.initViews()
         subRecycler.setHasFixedSize(true)
-        subRecycler.layoutManager = LinearLayoutManager(context,
-                LinearLayoutManager.VERTICAL, false)
+        subRecycler.layoutManager = LinearLayoutManager(context)
         subRecycler.addCustomDecoration()
         subRecycler.adapter = mAdapter
         mAdapter.apply {

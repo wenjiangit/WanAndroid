@@ -1,25 +1,13 @@
 package com.wenjian.wanandroid.entity
 
-import java.util.*
+import com.wenjian.wanandroid.net.Resp
 
 /**
  * Description: ListResp
- * Date: 2018/9/6
+ * Date: 2018/9/17
  *
  * @author jian.wen@ubtrobot.com
  */
-class ListResp<T> {
-
-    var curPage: Int = 0
-    var datas: List<T> = ArrayList()
-    var offset: Int = 0
-    var over: Boolean = false
-    var pageCount: Int = 0
-    var size: Int = 0
-    var total: Int = 0
-    override fun toString(): String {
-        return "ListResp(curPage=$curPage, datas=$datas, offset=$offset, over=$over, pageCount=$pageCount, size=$size, total=$total)"
-    }
-
+class ListResp<T>(data: ListContract<T>, errorCode: Int, msg: String) : Resp<ListContract<T>>(data, errorCode, msg) {
 
 }

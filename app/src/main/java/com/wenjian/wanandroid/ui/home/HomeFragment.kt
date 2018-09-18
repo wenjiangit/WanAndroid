@@ -48,7 +48,7 @@ class HomeFragment : BaseFragment() {
 
     override fun initViews() {
         mArticleRecycler.adapter = mArticleAdapter
-        mArticleRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        mArticleRecycler.layoutManager = LinearLayoutManager(context)
         mArticleRecycler.addCustomDecoration(drawable = R.drawable.divider_tree)
 
         mBanner = LayoutInflater.from(context).inflate(R.layout.lay_banner, mArticleRecycler, false) as ConvenientBanner<Banner>

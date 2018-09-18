@@ -60,9 +60,9 @@ class SearchActivity : BaseActivity() {
     }
 
     private fun subscribeUi() {
-        mSearchModel.hotWords.observe(this, Observer {
-            it?.data?.let {
-                hotwordsContainer.tags = it.map { it.name }
+        mSearchModel.hotWords.observe(this, Observer { it ->
+            it?.data?.apply {
+                hotwordsContainer.tags = this.map { it.name }
             }
         })
     }

@@ -2,6 +2,7 @@ package com.wenjian.wanandroid.model
 
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
+import com.wenjian.wanandroid.entity.ListResp
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.net.Resp
 import io.reactivex.Observer

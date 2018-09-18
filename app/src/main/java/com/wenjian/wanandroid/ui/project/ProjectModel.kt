@@ -2,7 +2,7 @@ package com.wenjian.wanandroid.ui.project
 
 import android.arch.lifecycle.MutableLiveData
 import com.wenjian.wanandroid.base.BaseViewModel
-import com.wenjian.wanandroid.entity.ListResp
+import com.wenjian.wanandroid.entity.ListContract
 import com.wenjian.wanandroid.entity.Project
 import com.wenjian.wanandroid.entity.ProjectTree
 import com.wenjian.wanandroid.entity.Resource
@@ -21,9 +21,9 @@ class ProjectModel(private val service: ApiService) : BaseViewModel() {
     val projectTrees: MutableLiveData<Resource<List<ProjectTree>>> = MutableLiveData()
     val projects: MutableLiveData<Resource<List<Project>>> = MutableLiveData()
 
-    var isOver: Boolean = false
-    var curPage: Int = 1
-    var cid:Int = -1
+    private var isOver: Boolean = false
+    private var curPage: Int = 1
+    private var cid:Int = -1
 
     fun loadProjectTree() {
         service.loadProjectTree()
@@ -44,7 +44,7 @@ class ProjectModel(private val service: ApiService) : BaseViewModel() {
                 .io2Main()
                 .subscribe(ApiSubscriber(projects, disposables) {
                     @Suppress("UNCHECKED_CAST")
-                    val data: ListResp<Project> = it as ListResp<Project>
+                    val data: ListContract<Project> = it as ListContract<Project>
                     curPage = data.curPage
                     isOver = data.over
                     projects.value = Resource.success(data.datas)

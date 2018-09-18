@@ -1,6 +1,7 @@
 package com.wenjian.wanandroid
 
 import android.app.Application
+import com.squareup.leakcanary.LeakCanary
 import kotlin.properties.Delegates
 
 /**
@@ -18,6 +19,10 @@ class WanAndroidApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return
+        }
+        LeakCanary.install(this)
         instance = this
     }
 }

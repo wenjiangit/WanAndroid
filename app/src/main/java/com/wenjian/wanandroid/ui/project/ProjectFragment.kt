@@ -41,7 +41,7 @@ class ProjectFragment : BaseFragment() {
     }
 
     override fun subscribeUi() {
-        mProjectModel.projectTrees.observe(this, Observer {
+        mProjectModel.projectTrees.observe(this, Observer { it ->
             showContentWithStatus(it){
                 mViewPager.adapter = ProjectPagerAdapter(fragmentManager!!, it)
                 mTabLayout.setupWithViewPager(mViewPager)

@@ -33,7 +33,7 @@ abstract class BaseListFragment<T> : BaseFragment() {
     override fun initViews() {
         mRecycler.apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(context)
             addCustomDecoration()
             mAdapter = createAdapter()
             mRecycler.adapter = mAdapter
@@ -42,6 +42,7 @@ abstract class BaseListFragment<T> : BaseFragment() {
         mAdapter.apply {
             openLoadAnimation()
             setEnableLoadMore(true)
+            isUseEmpty(true)
             setOnLoadMoreListener({
                 isLoadMore = true
                 onLoadMore()

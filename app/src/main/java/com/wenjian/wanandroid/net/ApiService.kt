@@ -16,17 +16,17 @@ interface ApiService {
     fun loadBanners(): Observable<Resp<List<Banner>>>
 
     @GET("/article/list/{pager}/json")
-    fun loadArticles(@Path("pager") pager: Int): Observable<Resp<ListResp<Article>>>
+    fun loadArticles(@Path("pager") pager: Int): Observable<ListResp<Article>>
 
     @GET("/tree/json")
     fun loadTree(): Observable<Resp<List<TreeEntry>>>
 
     @FormUrlEncoded
     @POST("/article/query/{page}/json")
-    fun search(@Field("k") k: String, @Path("page") page: Int): Observable<Resp<ListResp<Article>>>
+    fun search(@Field("k") k: String, @Path("page") page: Int): Observable<ListResp<Article>>
 
     @GET("/article/list/{pager}/json")
-    fun loadTreeArticles(@Path("pager") pager: Int, @Query("cid") cid: Int): Observable<Resp<ListResp<Article>>>
+    fun loadTreeArticles(@Path("pager") pager: Int, @Query("cid") cid: Int): Observable<ListResp<Article>>
 
     @GET("/hotkey/json")
     fun loadHotWords(): Observable<Resp<List<HotWord>>>
@@ -35,7 +35,7 @@ interface ApiService {
     fun loadProjectTree(): Observable<Resp<List<ProjectTree>>>
 
     @GET("/project/list/{page}/json")
-    fun loadProjects(@Path("page") pager: Int, @Query("cid") cid: Int):Observable<Resp<ListResp<Project>>>
+    fun loadProjects(@Path("page") pager: Int, @Query("cid") cid: Int): Observable<ListResp<Project>>
 
 
 }
