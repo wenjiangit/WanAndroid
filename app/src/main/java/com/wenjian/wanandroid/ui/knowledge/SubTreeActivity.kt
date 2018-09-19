@@ -2,7 +2,9 @@ package com.wenjian.wanandroid.ui.knowledge
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
@@ -10,7 +12,9 @@ import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseActivity
 import com.wenjian.wanandroid.entity.SubTree
 import com.wenjian.wanandroid.extension.extraDelegate
+import com.wenjian.wanandroid.extension.setSystemBarColor
 import com.wenjian.wanandroid.extension.setupActionBar
+import com.wenjian.wanandroid.utils.MaterialColor
 import kotlinx.android.synthetic.main.activity_sub_tree.*
 
 /**
@@ -44,10 +48,30 @@ class SubTreeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sub_tree)
         setupActionBar(title = mTitle)
-
+        transformColor(0)
         subTrees?.let {
-            treePager.adapter = SubTreeAdapter(supportFragmentManager,it)
+            treePager.adapter = SubTreeAdapter(supportFragmentManager, it)
             tabLayout.setupWithViewPager(treePager)
+            tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabReselected(tab: TabLayout.Tab) {
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab) {
+                }
+
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    //设置状态栏和appbar的背景颜色
+                    transformColor(tab.position)
+                }
+            })
+        }
+    }
+
+    fun transformColor(index: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val color = MaterialColor.getColor(this, index)
+            layAppBar.setBackgroundColor(color)
+            setSystemBarColor(colorInt = color)
         }
     }
 

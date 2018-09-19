@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:background="@color/shallow_bg">
+
+    <com.wenjian.wanandroid.widget.MaterialLoadingView
+        android:id="@+id/lay_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.wenjian.wanandroid.widget.MaterialLoadingView>
+
+
+    <TextView
+        android:id="@+id/lay_load_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/second_text"
+        android:layout_gravity="center"
+        android:text="@string/label_no_more"
+        android:textSize="12sp" />
+
+
+    <TextView
+        android:id="@+id/lay_load_error"
+        android:layout_gravity="center"
+        android:text="@string/load_more_error"
+        android:textSize="14sp"
+        android:drawableStart="@drawable/ic_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</FrameLayout>

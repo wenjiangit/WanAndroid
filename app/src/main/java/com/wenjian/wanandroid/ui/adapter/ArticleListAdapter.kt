@@ -6,6 +6,7 @@ import android.widget.ImageView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wenjian.wanandroid.R
+import com.wenjian.wanandroid.base.BaseRecyclerAdapter
 import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.extension.loadUrl
 import com.wenjian.wanandroid.ui.web.WebActivity
@@ -16,11 +17,11 @@ import com.wenjian.wanandroid.ui.web.WebActivity
  *
  * @author jian.wen@ubtrobot.com
  */
-class ArticleListAdapter : BaseQuickAdapter<Article, BaseViewHolder>(R.layout.rv_item_article_list) {
+class ArticleListAdapter : BaseRecyclerAdapter<Article>(R.layout.rv_item_article_list) {
     override fun convert(helper: BaseViewHolder?, item: Article?) {
         helper?.apply {
 
-            item?.let {
+            item?.let { it ->
                 if (it.chapterName.isNullOrBlank()) {
                     setText(R.id.tv_category, "")
                 } else {

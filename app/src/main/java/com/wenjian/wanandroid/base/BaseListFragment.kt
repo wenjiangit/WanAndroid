@@ -1,11 +1,12 @@
 package com.wenjian.wanandroid.base
 
+import android.support.annotation.CallSuper
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.wenjian.wanandroid.R
-import com.wenjian.wanandroid.extension.addCustomDecoration
+import com.wenjian.wanandroid.widget.MyLoadMoreView
 
 /**
  * Description: BaseListFragment
@@ -15,8 +16,8 @@ import com.wenjian.wanandroid.extension.addCustomDecoration
  */
 abstract class BaseListFragment<T> : BaseFragment() {
 
-    private lateinit var mRecycler: RecyclerView
-    private lateinit var mLayRefresh: SwipeRefreshLayout
+    open lateinit var mRecycler: RecyclerView
+    open lateinit var mLayRefresh: SwipeRefreshLayout
     open lateinit var mAdapter: BaseRecyclerAdapter<T>
 
     open var isLoadMore: Boolean = false
@@ -30,28 +31,35 @@ abstract class BaseListFragment<T> : BaseFragment() {
 
     abstract fun createAdapter(): BaseRecyclerAdapter<T>
 
+    @CallSuper
     override fun initViews() {
         mRecycler.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            addCustomDecoration()
             mAdapter = createAdapter()
             mRecycler.adapter = mAdapter
         }
 
         mAdapter.apply {
             openLoadAnimation()
-            setEnableLoadMore(true)
             isUseEmpty(true)
-            setOnLoadMoreListener({
-                isLoadMore = true
-                onLoadMore()
-            }, mRecycler)
+            if (loadMoreEnable()) {
+                setLoadMoreView(MyLoadMoreView())
+                setEnableLoadMore(true)
+                setOnLoadMoreListener({
+                    isLoadMore = true
+                    onLoadMore()
+                }, mRecycler)
+            }
         }
 
         mLayRefresh.setOnRefreshListener {
             refresh()
         }
+    }
+
+    open fun loadMoreEnable(): Boolean {
+        return true
     }
 
     override fun showLoading() {
@@ -66,9 +74,11 @@ abstract class BaseListFragment<T> : BaseFragment() {
         }
     }
 
+    @CallSuper
     override fun onLazyLoad() {
         isLoadMore = false
     }
+
 
     open fun onLoadMore() {
 

@@ -1,12 +1,14 @@
 package com.wenjian.wanandroid.ui.web
 
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -46,6 +48,7 @@ class WebActivity : BaseActivity() {
         }
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_web)
@@ -55,12 +58,36 @@ class WebActivity : BaseActivity() {
             webView.reload()
             //1秒后自动隐藏
             layRefresh.postDelayed({
-                    layRefresh.isRefreshing = false
+                layRefresh.isRefreshing = false
             }, 1000)
         }
 
+        initWebListener()
+
         initWebSetting()
         webView.loadUrl(mOriginalUrl)
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private fun initWebListener() {
+        webView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+            if (scrollY < oldScrollY) {//up
+                animateFbt(false)
+            }
+
+            if (scrollY > oldScrollY) {//down
+                animateFbt(true)
+            }
+        }
+    }
+
+    private var isFbtHide: Boolean = false
+
+    private fun animateFbt(hide: Boolean) {
+        if ((isFbtHide && hide) || (!isFbtHide && !hide)) return
+        isFbtHide = hide
+        val moveY = if (hide) 2 * btCollect.height else 0
+        btCollect.animate().translationY(moveY.toFloat()).setStartDelay(100).start()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

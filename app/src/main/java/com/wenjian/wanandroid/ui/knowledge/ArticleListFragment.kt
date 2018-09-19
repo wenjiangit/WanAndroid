@@ -3,12 +3,9 @@ package com.wenjian.wanandroid.ui.knowledge
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.view.View
-import com.wenjian.wanandroid.R
-import com.wenjian.wanandroid.base.BaseFragment
+import com.wenjian.wanandroid.base.BaseListFragment
+import com.wenjian.wanandroid.base.BaseRecyclerAdapter
+import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.extraDelegate
@@ -20,19 +17,13 @@ import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
  *
  * @author jian.wen@ubtrobot.com
  */
-class ArticleListFragment : BaseFragment() {
-
-    private val mAdapter: ArticleListAdapter by lazy {
-        ArticleListAdapter()
-    }
+class ArticleListFragment : BaseListFragment<Article>() {
+    override fun createAdapter(): BaseRecyclerAdapter<Article> = ArticleListAdapter()
 
     private val mTreeModel: TreeModel by apiModelDelegate(TreeModel::class.java)
 
     private val cid: Int? by extraDelegate(ARG_ID)
 
-    private var loadMore: Boolean = false
-    private lateinit var subRecycler:RecyclerView
-    private lateinit var layRefresh:SwipeRefreshLayout
 
     companion object {
         private const val ARG_ID = "category_id"
@@ -43,39 +34,16 @@ class ArticleListFragment : BaseFragment() {
         }
     }
 
-    override fun getLayoutId(): Int = R.layout.fragment_article_list
-
-    override fun findViews(mRoot: View) {
-        subRecycler = mRoot.findViewById(R.id.subRecycler)
-        layRefresh = mRoot.findViewById(R.id.layRefresh)
-    }
-
     override fun initViews() {
         super.initViews()
-        subRecycler.setHasFixedSize(true)
-        subRecycler.layoutManager = LinearLayoutManager(context)
-        subRecycler.addCustomDecoration()
-        subRecycler.adapter = mAdapter
-        mAdapter.apply {
-            setEnableLoadMore(true)
-            openLoadAnimation()
-            setOnLoadMoreListener({
-                loadMore = true
-                mTreeModel.loadMore()
-            }, subRecycler)
-        }
-
-        layRefresh.setOnRefreshListener {
-            refresh()
-        }
-
+        mRecycler.addCustomDecoration()
     }
 
     override fun subscribeUi() {
         super.subscribeUi()
-        mTreeModel.articles.observe(this, Observer {
+        mTreeModel.articles.observe(this, Observer { it ->
             showContentWithStatus(it) {
-                if (loadMore) {
+                if (isLoadMore) {
                     if (it.isEmpty()) {
                         mAdapter.loadMoreEnd()
                     } else {
@@ -91,16 +59,10 @@ class ArticleListFragment : BaseFragment() {
 
     override fun onLazyLoad() {
         super.onLazyLoad()
-        loadMore = false
         mTreeModel.loadArticles(cid!!)
     }
 
-    override fun showLoading() {
-        layRefresh.isRefreshing = true
+    override fun onLoadMore() {
+        mTreeModel.loadMore()
     }
-
-    override fun hideLoading() {
-        layRefresh.isRefreshing = false
-    }
-
 }

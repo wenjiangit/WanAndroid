@@ -13,6 +13,9 @@ import com.bigkoo.convenientbanner.holder.CBViewHolderCreator
 import com.bigkoo.convenientbanner.holder.Holder
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseFragment
+import com.wenjian.wanandroid.base.BaseListFragment
+import com.wenjian.wanandroid.base.BaseRecyclerAdapter
+import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.entity.Banner
 import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.apiModelDelegate
@@ -26,82 +29,45 @@ import com.wenjian.wanandroid.ui.web.WebActivity
  *
  * @author jian.wen@ubtrobot.com
  */
-class HomeFragment : BaseFragment() {
+class HomeFragment : BaseListFragment<Article>() {
+
+    override fun createAdapter(): BaseRecyclerAdapter<Article> = ArticleListAdapter()
 
     private val mHomeModel: HomeModel by apiModelDelegate(HomeModel::class.java)
 
-    private val mArticleAdapter: ArticleListAdapter by lazy {
-        ArticleListAdapter()
-    }
-    private lateinit var mArticleRecycler: RecyclerView
     private lateinit var mBanner: ConvenientBanner<Banner>
-    private lateinit var mSwipeRefresh: SwipeRefreshLayout
-
-    private var isLoadMore: Boolean = false
-
-    override fun getLayoutId(): Int = R.layout.fragment_home
-
-    override fun findViews(mRoot: View) {
-        mArticleRecycler = mRoot.findViewById(R.id.articleRecycler)
-        mSwipeRefresh = mRoot.findViewById(R.id.swipeRefresh)
-    }
 
     override fun initViews() {
-        mArticleRecycler.adapter = mArticleAdapter
-        mArticleRecycler.layoutManager = LinearLayoutManager(context)
-        mArticleRecycler.addCustomDecoration(drawable = R.drawable.divider_tree)
-
-        mBanner = LayoutInflater.from(context).inflate(R.layout.lay_banner, mArticleRecycler, false) as ConvenientBanner<Banner>
-
-        mArticleAdapter.addHeaderView(mBanner)
-
-        mArticleAdapter.openLoadAnimation()
-        mArticleAdapter.setEnableLoadMore(true)
-        mArticleAdapter.setOnLoadMoreListener({
-            isLoadMore = true
-            mHomeModel.loadMoreArticles()
-        }, mArticleRecycler)
-
-        mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary)
-        mSwipeRefresh.setOnRefreshListener {
-            refresh()
-        }
+        super.initViews()
+        mRecycler.addCustomDecoration(drawable = R.drawable.divider_tree)
+        mBanner = LayoutInflater.from(context).inflate(R.layout.lay_banner, mRecycler, false) as ConvenientBanner<Banner>
+        mAdapter.addHeaderView(mBanner)
     }
 
     override fun subscribeUi() {
         //首次加载数据
-        mHomeModel.homeData.observe(this, Observer {
-            showContentWithStatus(it) {
-                val bannerData = it.first
+        mHomeModel.homeData.observe(this, Observer { it ->
+            showContentWithStatus(it) { data ->
+                val bannerData = data.first
                 mBanner.setPages(HolderCreator(), bannerData)
                         .setOnItemClickListener {
                             WebActivity.start(context, bannerData[it].url)
                         }
-                mArticleAdapter.setNewData(it.second)
+                mAdapter.setNewData(data.second)
             }
         })
 
         //加载更多
-        mHomeModel.articles.observe(this, Observer {
+        mHomeModel.articles.observe(this, Observer { it ->
             showContentWithStatus(it) {
                 if (it.isEmpty()) {
-                    mArticleAdapter.loadMoreEnd()
+                    mAdapter.loadMoreEnd()
                 } else {
-                    mArticleAdapter.addData(it)
-                    mArticleAdapter.loadMoreComplete()
+                    mAdapter.addData(it)
+                    mAdapter.loadMoreComplete()
                 }
             }
         })
-    }
-
-    override fun showLoading() {
-        if (!isLoadMore) {
-            mSwipeRefresh.isRefreshing = true
-        }
-    }
-
-    override fun hideLoading() {
-        mSwipeRefresh.isRefreshing = false
     }
 
     override fun onStart() {
@@ -109,10 +75,13 @@ class HomeFragment : BaseFragment() {
         mBanner.startTurning()
     }
 
+    override fun onLoadMore() {
+        mHomeModel.loadMoreArticles()
+    }
+
 
     override fun onLazyLoad() {
         super.onLazyLoad()
-        isLoadMore = false
         mHomeModel.loadHomeData()
     }
 

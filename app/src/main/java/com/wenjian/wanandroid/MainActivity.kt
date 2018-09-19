@@ -26,16 +26,6 @@ class MainActivity : BaseActivity() {
         MainPagerAdapter(supportFragmentManager)
     }
 
-    companion object {
-        val TAG: String = MainActivity::class.java.simpleName
-
-        val fragments: List<Fragment> = listOf(
-                HomeFragment.newInstance(),
-                TreeFragment.newInstance(),
-                ProjectFragment.newInstance(),
-                MineFragment.newInstance())
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -101,6 +91,15 @@ class MainActivity : BaseActivity() {
 
 
     class MainPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+        private val fragments: List<Fragment>
+
+        init {
+            fragments = listOf(
+                    HomeFragment.newInstance(),
+                    TreeFragment.newInstance(),
+                    ProjectFragment.newInstance(),
+                    MineFragment.newInstance())
+        }
 
         override fun getItem(position: Int): Fragment {
             return fragments[position]

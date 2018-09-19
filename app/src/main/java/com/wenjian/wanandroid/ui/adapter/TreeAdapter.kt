@@ -5,6 +5,7 @@ import co.lujun.androidtagview.TagContainerLayout
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wenjian.wanandroid.R
+import com.wenjian.wanandroid.base.BaseRecyclerAdapter
 import com.wenjian.wanandroid.entity.SubTree
 import com.wenjian.wanandroid.entity.TreeEntry
 import com.wenjian.wanandroid.ui.knowledge.SubTreeActivity
@@ -15,7 +16,7 @@ import com.wenjian.wanandroid.ui.knowledge.SubTreeActivity
  * Date 2018/9/8
  * @author wenjianes@163.com
  */
-class TreeAdapter : BaseQuickAdapter<TreeEntry, BaseViewHolder>(R.layout.rv_item_tree) {
+class TreeAdapter : BaseRecyclerAdapter<TreeEntry>(R.layout.rv_item_tree) {
     override fun convert(helper: BaseViewHolder?, item: TreeEntry?) {
 
         helper?.apply {

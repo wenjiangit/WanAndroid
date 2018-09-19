@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.wenjian.wanandroid.base.BaseListFragment
 import com.wenjian.wanandroid.base.BaseRecyclerAdapter
 import com.wenjian.wanandroid.entity.Project
+import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.extraDelegate
 import com.wenjian.wanandroid.ui.adapter.ProjectListAdapter
@@ -33,7 +34,7 @@ class ProjectListFragment : BaseListFragment<Project>() {
 
     override fun subscribeUi() {
         super.subscribeUi()
-        mProjectModel.projects.observe(this, Observer {
+        mProjectModel.projects.observe(this, Observer { it ->
             showContentWithStatus(it) {
                 if (isLoadMore) {
                     if (it.isEmpty()) {
@@ -47,6 +48,11 @@ class ProjectListFragment : BaseListFragment<Project>() {
                 }
             }
         })
+    }
+
+    override fun initViews() {
+        super.initViews()
+        mRecycler.addCustomDecoration()
     }
 
     override fun onLazyLoad() {

@@ -4,6 +4,8 @@ import android.support.annotation.DrawableRes
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
+import android.widget.ImageView
+import com.chad.library.adapter.base.BaseViewHolder
 import com.wenjian.wanandroid.widget.NoLastDecoration
 
 /**
@@ -23,4 +25,10 @@ fun RecyclerView.addCustomDecoration(direction: Int = DividerItemDecoration.VERT
         }
     }
     addItemDecoration(noLastDecoration)
+}
+
+
+
+fun BaseViewHolder.setImageUrl(resId: Int, url: String) {
+    getView<ImageView>(resId).loadUrl(url)
 }

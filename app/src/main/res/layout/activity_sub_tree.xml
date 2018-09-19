@@ -7,6 +7,7 @@
     tools:context=".ui.knowledge.SubTreeActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/layAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -24,8 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabMode="scrollable"
-            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
             app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/grey_300"
             app:tabIndicatorColor="@color/white"
             >
 
