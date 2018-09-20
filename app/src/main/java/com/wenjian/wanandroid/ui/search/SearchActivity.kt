@@ -15,7 +15,9 @@ import co.lujun.androidtagview.TagView
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseActivity
 import com.wenjian.wanandroid.extension.apiModelDelegate
+import com.wenjian.wanandroid.extension.setSystemBarColor
 import com.wenjian.wanandroid.extension.setupActionBar
+import com.wenjian.wanandroid.utils.Tools
 import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : BaseActivity() {
@@ -38,6 +40,7 @@ class SearchActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         setupActionBar()
+        setSystemBarColor(R.color.light_status_bar)
         addFragments()
         initEvents()
         subscribeUi()

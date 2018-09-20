@@ -13,6 +13,9 @@ import android.util.Log
  * @author jian.wen@ubtrobot.com
  */
 
+
+
+
 @SuppressLint("RestrictedApi")
 fun BottomNavigationView.disableShiftMode() {
     val menuView = getChildAt(0) as BottomNavigationMenuView

@@ -4,11 +4,13 @@ import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.utils.Tools
+import org.jetbrains.anko.contentView
 
 
 /**
@@ -37,13 +39,22 @@ fun AppCompatActivity.setSystemBarColor(@ColorRes resId: Int = -1, @ColorInt col
     Tools.setSystemBarColor(this, resId, colorInt)
 }
 
+fun Fragment.snak(text: CharSequence) {
+    Snackbar.make(this.view!!, text, Snackbar.LENGTH_SHORT).show()
+}
+
+
+fun AppCompatActivity.snak(text: CharSequence) {
+    Snackbar.make(this.contentView!!, text, Snackbar.LENGTH_SHORT).show()
+}
+
 fun AppCompatActivity.setupActionBar(@DrawableRes resId: Int = -1,
                                      title: String? = getString(R.string.app_name),
                                      show: Boolean = true,
                                      listener: () -> Unit = { finish() }) {
 
 
-    findViewById<Toolbar>(R.id.toolBar)?.let { it ->
+    findViewById<Toolbar>(R.id.toolBar)!!.let { it ->
         setSupportActionBar(it)
         if (!show) {
             return
@@ -60,6 +71,5 @@ fun AppCompatActivity.setupActionBar(@DrawableRes resId: Int = -1,
             }
             supportActionBar?.title = title
         }
-
     }
 }

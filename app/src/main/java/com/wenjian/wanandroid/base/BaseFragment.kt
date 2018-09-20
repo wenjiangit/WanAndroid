@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wenjian.wanandroid.entity.Resource
-import org.jetbrains.anko.support.v4.toast
+import com.wenjian.wanandroid.extension.snak
 
 /**
  * Description: BaseFragment
@@ -96,11 +96,11 @@ abstract class BaseFragment : Fragment() {
     }
 
     open fun <T> showContentWithStatus(it: Resource<T>?, render: (T) -> Unit) {
-        it?.let {
-            when (it.status) {
+        it?.let { res ->
+            when (res.status) {
                 Resource.STATUS.SUCCESS -> {
                     hideLoading()
-                    render(it.data!!)
+                    render(res.data!!)
                 }
                 Resource.STATUS.LOADING -> {
                     showLoading()
@@ -108,8 +108,8 @@ abstract class BaseFragment : Fragment() {
                 }
                 Resource.STATUS.FAIL -> {
                     hideLoading()
-                    it.msg?.let {
-                        toast(it)
+                    res.msg?.let {
+                        snak(it)
                     }
                 }
             }

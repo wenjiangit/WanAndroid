@@ -6,15 +6,15 @@
     <color name="black_50">#6e000000</color>
     
     <color name="shallow_bg">#EBEBEB</color>
-
     <color name="white">#FFFFFF</color>
 
     <color name="second_text">#8C8C8C</color>
     <color name="primary_text">#333333</color>
 
     <color name="web_color">#333333</color>
-
     <color name="weixin_black">#303030</color>
+    //浅的状态栏颜色
+    <color name="light_status_bar">#C6C6C6</color>
 
     <color name="red_50">#FFEBEE</color>
     <color name="red_100">#FFCDD2</color>
@@ -279,6 +279,14 @@
     <color name="orange_A400">#FF9100</color>
     <color name="orange_A700">#FF6D00</color>
 
+    <color name="grey_3">#f7f7f7</color>
+    <color name="grey_5">#f2f2f2</color>
+    <color name="grey_10">#e6e6e6</color>
+    <color name="grey_20">#cccccc</color>
+    <color name="grey_40">#999999</color>
+    <color name="grey_60">#666666</color>
+    <color name="grey_80">#37474F</color>
+    <color name="grey_90">#263238</color>
     <color name="grey_50">#FAFAFA</color>
     <color name="grey_100">#F5F5F5</color>
     <color name="grey_200">#EEEEEE</color>

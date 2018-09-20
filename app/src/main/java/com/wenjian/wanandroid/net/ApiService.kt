@@ -37,5 +37,18 @@ interface ApiService {
     @GET("/project/list/{page}/json")
     fun loadProjects(@Path("page") pager: Int, @Query("cid") cid: Int): Observable<ListResp<Project>>
 
+    @FormUrlEncoded
+    @POST("/user/login")
+    fun login(@Field("username") username: String, @Field("password") password: String): Observable<Resp<UserInfo>>
+
+    @FormUrlEncoded
+    @POST("/user/register")
+    fun register(@Field("username") username: String,
+                 @Field("password") password: String,
+                 @Field("repassword") repassword: String)
+
+    @GET("/lg/collect/list/{page}/json")
+    fun loadCollects(@Path("page") pager: Int)
+
 
 }

@@ -17,7 +17,7 @@ import com.wenjian.wanandroid.widget.MyLoadMoreView
 abstract class BaseListFragment<T> : BaseFragment() {
 
     open lateinit var mRecycler: RecyclerView
-    open lateinit var mLayRefresh: SwipeRefreshLayout
+    private lateinit var mLayRefresh: SwipeRefreshLayout
     open lateinit var mAdapter: BaseRecyclerAdapter<T>
 
     open var isLoadMore: Boolean = false
@@ -42,6 +42,7 @@ abstract class BaseListFragment<T> : BaseFragment() {
 
         mAdapter.apply {
             openLoadAnimation()
+//            setEmptyView(R.layout.list_content_empty, mRecycler)
             isUseEmpty(true)
             if (loadMoreEnable()) {
                 setLoadMoreView(MyLoadMoreView())

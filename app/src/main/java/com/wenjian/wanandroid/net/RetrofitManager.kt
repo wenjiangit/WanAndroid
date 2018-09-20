@@ -1,5 +1,9 @@
 package com.wenjian.wanandroid.net
 
+import android.util.Log
+import okhttp3.Cookie
+import okhttp3.CookieJar
+import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -32,6 +36,19 @@ object RetrofitManager {
                 .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .writeTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .addInterceptor(loggingIntercept)
+                .cookieJar(object : CookieJar {
+                    private val cookieStore: HashMap<String, MutableList<Cookie>> = HashMap()
+
+                    override fun saveFromResponse(url: HttpUrl, cookies: MutableList<Cookie>) {
+                        Log.i("wj", "receive cookie ${url.host()} >>> $cookies")
+                        cookieStore[url.host()] = cookies
+                    }
+
+                    override fun loadForRequest(url: HttpUrl): MutableList<Cookie> {
+                        val list = cookieStore[url.host()]
+                        return list ?: arrayListOf()
+                    }
+                })
                 .build()
 
 
