@@ -36,7 +36,7 @@ class SearchModel(private val service: ApiService) : BaseViewModel() {
                 })
     }
 
-    fun loadMode() {
+    fun loadMore() {
         lastQuery?.let {
             doSearch(it, ++count, true)
         }

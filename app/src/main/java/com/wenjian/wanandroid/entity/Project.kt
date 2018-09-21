@@ -68,7 +68,10 @@ data class Project(
         val userId: Int,
         val visible: Int,
         val zan: Int
-)
+) {
+
+    fun buildWebModel() = WebModel(id, link, collect)
+}
 
 data class Tag(
         val name: String,

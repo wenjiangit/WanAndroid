@@ -17,9 +17,13 @@ import android.view.View
 import android.webkit.*
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseActivity
+import com.wenjian.wanandroid.entity.WebModel
 import com.wenjian.wanandroid.extension.extraDelegate
+import com.wenjian.wanandroid.extension.io2Main
 import com.wenjian.wanandroid.extension.setupActionBar
+import com.wenjian.wanandroid.net.RetrofitManager
 import com.wenjian.wanandroid.utils.NetUtil
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_web.*
 import org.jetbrains.anko.toast
 
@@ -31,17 +35,18 @@ import org.jetbrains.anko.toast
  */
 class WebActivity : BaseActivity() {
 
-    private val mOriginalUrl: String? by extraDelegate(EXTRA_URL)
-    private var mTempUrl: String? = mOriginalUrl
+    private val mWebModel: WebModel? by extraDelegate(EXTRA_MODEL)
     private var mTitle: String? = null
     private var mErrorView: View? = null
 
+    private var mDisposable:Disposable? = null
+
     companion object {
-        const val EXTRA_URL = "web_url"
+        private const val EXTRA_MODEL = "web_model"
         val TAG: String = WebActivity::class.java.simpleName
-        fun start(context: Context?, url: String?) {
+        fun start(context: Context?, model: WebModel) {
             Intent(context, WebActivity::class.java).apply {
-                putExtra(WebActivity.EXTRA_URL, url)
+                putExtra(EXTRA_MODEL, model)
             }.let {
                 context?.startActivity(it)
             }
@@ -62,10 +67,18 @@ class WebActivity : BaseActivity() {
             }, 1000)
         }
 
+        val isCollect = mWebModel?.collect ?: false
+        if (isCollect) {
+            btCollect.setImageResource(R.drawable.ic_favorite)
+        } else {
+            btCollect.setImageResource(R.drawable.ic_favorite_border)
+        }
+        btCollect.tag = isCollect
+
         initWebListener()
 
         initWebSetting()
-        webView.loadUrl(mOriginalUrl)
+        webView.loadUrl(mWebModel?.link)
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -79,6 +92,28 @@ class WebActivity : BaseActivity() {
                 animateFbt(true)
             }
         }
+
+        btCollect.setOnClickListener { _ ->
+            val collect = btCollect.tag as Boolean
+            if (collect) {
+                toast("已经收藏,请勿重复操作")
+                return@setOnClickListener
+            }
+
+            mDisposable = RetrofitManager.service.collect(mWebModel?.id!!)
+                    .io2Main()
+                    .subscribe {
+                        if (it.success()) {
+                            btCollect.tag = true
+                            btCollect.setImageResource(R.drawable.ic_favorite)
+                            toast("收藏成功")
+                        } else {
+                            btCollect.tag = false
+                            toast("收藏失败")
+                        }
+                    }
+        }
+
     }
 
     private var isFbtHide: Boolean = false
@@ -109,7 +144,7 @@ class WebActivity : BaseActivity() {
         return when (item?.itemId) {
             R.id.action_share -> {
                 val intent = Intent(Intent.ACTION_SEND).apply {
-                    putExtra(Intent.EXTRA_TEXT, mOriginalUrl)
+                    putExtra(Intent.EXTRA_TEXT, mWebModel?.link)
                     type = "text/plain"
                 }
                 startActivity(Intent.createChooser(intent, "分享给好友"))
@@ -129,7 +164,7 @@ class WebActivity : BaseActivity() {
 
     private fun openBrowser() {
         val intent = Intent(Intent.ACTION_VIEW).apply {
-            val parse = Uri.parse(mOriginalUrl)
+            val parse = Uri.parse(mWebModel?.link)
             data = parse
         }
         startActivity(intent)
@@ -137,7 +172,7 @@ class WebActivity : BaseActivity() {
 
     private fun copy2Clipboard() {
         val cbm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        cbm.primaryClip = ClipData.newPlainText(null, mOriginalUrl)
+        cbm.primaryClip = ClipData.newPlainText(null, mWebModel?.link)
         toast(getString(R.string.copy_success))
     }
 
@@ -201,7 +236,6 @@ class WebActivity : BaseActivity() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 val url = request?.url?.toString()
                 webView.loadUrl(url)
-                mTempUrl = url
                 return true
             }
 
@@ -238,5 +272,6 @@ class WebActivity : BaseActivity() {
         super.onDestroy()
         webView.removeAllViews()
         webView.destroy()
+        mDisposable?.dispose()
     }
 }

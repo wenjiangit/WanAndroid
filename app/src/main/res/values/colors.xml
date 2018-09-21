@@ -16,6 +16,16 @@
     //浅的状态栏颜色
     <color name="light_status_bar">#C6C6C6</color>
 
+    <color name="overlay_dark_10">#1A000000</color>
+    <color name="overlay_dark_20">#33000000</color>
+    <color name="overlay_dark_30">#4D000000</color>
+    <color name="overlay_dark_40">#66000000</color>
+    <color name="overlay_dark_50">#80000000</color>
+    <color name="overlay_dark_60">#99000000</color>
+    <color name="overlay_dark_70">#B3000000</color>
+    <color name="overlay_dark_80">#CC000000</color>
+    <color name="overlay_dark_90">#E6000000</color>
+
     <color name="red_50">#FFEBEE</color>
     <color name="red_100">#FFCDD2</color>
     <color name="red_200">#EF9A9A</color>

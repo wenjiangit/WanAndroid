@@ -38,10 +38,9 @@ class ArticleListAdapter : BaseRecyclerAdapter<Article>(R.layout.rv_item_article
                     imageView.visibility = View.GONE
                 }
                 itemView.setOnClickListener {
-                    WebActivity.start(it.context, item.link)
+                    WebActivity.start(it.context, item.buildWebModel())
                 }
             }
-
         }
     }
 

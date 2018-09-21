@@ -15,6 +15,7 @@ import com.wenjian.wanandroid.base.BaseFragment
 import com.wenjian.wanandroid.consts.IntentActions
 import com.wenjian.wanandroid.extension.loadAvatar
 import com.wenjian.wanandroid.helper.UserHelper
+import com.wenjian.wanandroid.ui.collect.CollectActivity
 import com.wenjian.wanandroid.ui.login.LoginActivity
 import com.wenjian.wanandroid.ui.profile.ProfileActivity
 import de.hdodenhof.circleimageview.CircleImageView
@@ -49,6 +50,10 @@ class MineFragment : BaseFragment() {
                 }
         mTvUser = mRoot.findViewById(R.id.tv_username)
         mIvAvatar = mRoot.findViewById(R.id.iv_avatar)
+        mRoot.findViewById<TextView>(R.id.tv_collect)
+                .setOnClickListener {
+                    startActivity(Intent(context, CollectActivity::class.java))
+                }
     }
 
     override fun initViews() {

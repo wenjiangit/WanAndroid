@@ -10,7 +10,7 @@ import com.wenjian.wanandroid.WanAndroidApp
  */
 object IntentActions {
 
-    val PKG_NAME: String = WanAndroidApp.instance.packageName
+    private val PKG_NAME: String = WanAndroidApp.instance.packageName
 
     val ACTION_LOGIN: String = PKG_NAME + "action_login"
 

@@ -25,7 +25,7 @@ class ProjectListAdapter : BaseRecyclerAdapter<Project>(R.layout.rv_item_project
                 setImageUrl(R.id.iv_image, envelopePic)
 
                 itemView.setOnClickListener {
-                    WebActivity.start(it.context, link)
+                    WebActivity.start(it.context, item.buildWebModel())
                 }
             }
         }

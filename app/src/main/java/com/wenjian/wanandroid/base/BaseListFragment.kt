@@ -17,7 +17,7 @@ import com.wenjian.wanandroid.widget.MyLoadMoreView
 abstract class BaseListFragment<T> : BaseFragment() {
 
     open lateinit var mRecycler: RecyclerView
-    private lateinit var mLayRefresh: SwipeRefreshLayout
+    open lateinit var mLayRefresh: SwipeRefreshLayout
     open lateinit var mAdapter: BaseRecyclerAdapter<T>
 
     open var isLoadMore: Boolean = false

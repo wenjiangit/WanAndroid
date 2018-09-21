@@ -2,6 +2,7 @@ package com.wenjian.wanandroid.net
 
 import com.wenjian.wanandroid.entity.*
 import io.reactivex.Observable
+import okhttp3.ResponseBody
 import retrofit2.http.*
 
 /**
@@ -48,7 +49,9 @@ interface ApiService {
                  @Field("repassword") repassword: String)
 
     @GET("/lg/collect/list/{page}/json")
-    fun loadCollects(@Path("page") pager: Int)
+    fun loadCollects(@Path("page") pager: Int): Observable<ListResp<Article>>
 
+    @POST("/lg/collect/{id}/json")
+    fun collect(@Path("id") id: Int):Observable<Resp<Any>>
 
 }

@@ -109,7 +109,7 @@ class SearchActivity : BaseActivity() {
         closeBt.setOnClickListener {
             searchView.setQuery("", false)
             searchText.requestFocus()
-            showSoftKeyboard(searchText)
+            showSoftKeyboard()
             hotPanel.visibility = View.VISIBLE
         }
 
@@ -137,9 +137,11 @@ class SearchActivity : BaseActivity() {
         methodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    private fun showSoftKeyboard(view: View) {
-        val methodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        methodManager.showSoftInput(view, 0)
+    private fun showSoftKeyboard() {
+        currentFocus?.let {
+            val methodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            methodManager.showSoftInput(it, 0)
+        }
     }
 
     override fun onBackPressed() {

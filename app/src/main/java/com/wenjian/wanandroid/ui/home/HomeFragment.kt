@@ -1,9 +1,6 @@
 package com.wenjian.wanandroid.ui.home
 
 import android.arch.lifecycle.Observer
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -12,11 +9,11 @@ import com.bigkoo.convenientbanner.ConvenientBanner
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator
 import com.bigkoo.convenientbanner.holder.Holder
 import com.wenjian.wanandroid.R
-import com.wenjian.wanandroid.base.BaseFragment
 import com.wenjian.wanandroid.base.BaseListFragment
 import com.wenjian.wanandroid.base.BaseRecyclerAdapter
 import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.entity.Banner
+import com.wenjian.wanandroid.entity.WebModel
 import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.loadUrl
@@ -51,7 +48,8 @@ class HomeFragment : BaseListFragment<Article>() {
                 val bannerData = data.first
                 mBanner.setPages(HolderCreator(), bannerData)
                         .setOnItemClickListener {
-                            WebActivity.start(context, bannerData[it].url)
+                            val banner = bannerData[it]
+                            WebActivity.start(context, WebModel(banner.id, banner.url, false))
                         }
                 mAdapter.setNewData(data.second)
             }

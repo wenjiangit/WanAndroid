@@ -1,4 +1,4 @@
-package com.wenjian.wanandroid.ui.search
+package com.wenjian.wanandroid.ui.collect
 
 
 import android.arch.lifecycle.Observer
@@ -9,27 +9,30 @@ import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
-
-
 /**
  * A simple [Fragment] subclass.
  *
  */
-class SearchFragment : BaseListFragment<Article>() {
+class CollectFragment : BaseListFragment<Article>() {
+
+    private val mCollectModel:CollectModel by apiModelDelegate(CollectModel::class.java)
+
     override fun createAdapter(): BaseRecyclerAdapter<Article> = ArticleListAdapter()
 
-    private val mSearchModel: SearchModel by apiModelDelegate(SearchModel::class.java)
+    override fun onLazyLoad() {
+        super.onLazyLoad()
+        mCollectModel.loadCollects()
+    }
 
     override fun initViews() {
         super.initViews()
-        mLayRefresh.isEnabled = false
         mRecycler.addCustomDecoration()
     }
 
     override fun subscribeUi() {
         super.subscribeUi()
-        mSearchModel.articles.observe(this, Observer { it ->
-            showContentWithStatus(it) {
+        mCollectModel.collects.observe(this, Observer { res ->
+            showContentWithStatus(res){
                 if (isLoadMore) {
                     if (it.isEmpty()) {
                         mAdapter.loadMoreEnd()
@@ -44,19 +47,11 @@ class SearchFragment : BaseListFragment<Article>() {
         })
     }
 
-    fun search(input: String) {
-        mAdapter.setNewData(null)
-        if (!input.isBlank()) {
-            isLoadMore = false
-            mSearchModel.doSearch(input)
-        }
+    override fun onLoadMore() {
+        mCollectModel.loadMore()
     }
 
-    override fun onLoadMore() {
-        super.onLoadMore()
-        mSearchModel.loadMore()
-    }
+
 
 
 }
-

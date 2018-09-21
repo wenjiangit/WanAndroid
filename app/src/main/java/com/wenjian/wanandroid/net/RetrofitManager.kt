@@ -36,6 +36,7 @@ object RetrofitManager {
                 .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .writeTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .addInterceptor(loggingIntercept)
+                .addInterceptor(CookieInterceptor())
                 .cookieJar(object : CookieJar {
                     private val cookieStore: HashMap<String, MutableList<Cookie>> = HashMap()
 
