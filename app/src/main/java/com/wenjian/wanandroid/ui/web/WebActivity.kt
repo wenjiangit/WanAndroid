@@ -59,13 +59,13 @@ class WebActivity : BaseActivity() {
         setContentView(R.layout.activity_web)
         setupActionBar(R.drawable.ic_close, "")
 
-        layRefresh.setOnRefreshListener {
-            webView.reload()
-            //1秒后自动隐藏
-            layRefresh.postDelayed({
-                layRefresh.isRefreshing = false
-            }, 1000)
-        }
+//        layRefresh.setOnRefreshListener {
+//            webView.reload()
+//            //1秒后自动隐藏
+//            layRefresh.postDelayed({
+//                layRefresh.isRefreshing = false
+//            }, 1000)
+//        }
 
         val isCollect = mWebModel?.collect ?: false
         if (isCollect) {
@@ -83,7 +83,7 @@ class WebActivity : BaseActivity() {
 
     @TargetApi(Build.VERSION_CODES.M)
     private fun initWebListener() {
-        webView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+        scrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
             if (scrollY < oldScrollY) {//up
                 animateFbt(false)
             }
@@ -109,7 +109,7 @@ class WebActivity : BaseActivity() {
                             toast("收藏成功")
                         } else {
                             btCollect.tag = false
-                            toast("收藏失败")
+                            toast(it.errorMsg)
                         }
                     }
         }
@@ -225,9 +225,9 @@ class WebActivity : BaseActivity() {
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 pbLoading.visibility = View.GONE
-                if (layRefresh.isRefreshing) {
-                    layRefresh.isRefreshing = false
-                }
+//                if (layRefresh.isRefreshing) {
+//                    layRefresh.isRefreshing = false
+//                }
                 if (mTitle != null) {
                     toolBar.title = mTitle
                 }

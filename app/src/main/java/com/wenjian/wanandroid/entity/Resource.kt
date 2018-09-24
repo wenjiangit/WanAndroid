@@ -10,12 +10,13 @@ class Resource<T> private constructor(val status: STATUS = STATUS.LOADING, val d
 
     companion object {
         fun <T> success(t: T): Resource<T> = Resource(STATUS.SUCCESS, t)
-        fun <T> fail(msg: String = "小主,你家网络不太给力哦~~"): Resource<T> = Resource(STATUS.FAIL, msg = msg)
+        fun <T> fail(msg: String = "小主,你家网络不太给力哦~~"): Resource<T> = Resource(STATUS.ERROR, msg = msg)
         fun <T> loading(): Resource<T> = Resource()
+        fun <T> hideLoding(): Resource<T> = Resource(STATUS.HIDE_LOADING)
     }
 
     enum class STATUS {
-        LOADING, FAIL, SUCCESS
+        LOADING, ERROR, SUCCESS, HIDE_LOADING
     }
 
 

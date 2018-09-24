@@ -20,7 +20,7 @@ import com.wenjian.wanandroid.extension.apiModelDelegate
  */
 class ProjectFragment : BaseFragment() {
 
-    private lateinit var mTabLayout: TabLayout
+    private var mTabLayout: TabLayout? = null
     private lateinit var mViewPager: ViewPager
 
     private val mProjectModel: ProjectModel by apiModelDelegate(ProjectModel::class.java)
@@ -36,15 +36,11 @@ class ProjectFragment : BaseFragment() {
         mViewPager = mRoot.findViewById(R.id.project_pager)
     }
 
-    override fun initViews() {
-
-    }
-
     override fun subscribeUi() {
         mProjectModel.projectTrees.observe(this, Observer { it ->
-            showContentWithStatus(it){
+            showContentWithStatus(it) {
                 mViewPager.adapter = ProjectPagerAdapter(fragmentManager!!, it)
-                mTabLayout.setupWithViewPager(mViewPager)
+                mTabLayout?.setupWithViewPager(mViewPager)
             }
         })
     }

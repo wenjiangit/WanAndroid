@@ -22,9 +22,7 @@ class MainActivity : BaseActivity() {
 
     private var lastBack: Long = 0
 
-    private val mAdapter: MainPagerAdapter by lazy {
-        MainPagerAdapter(supportFragmentManager)
-    }
+    private val mAdapter: MainPagerAdapter by lazy { MainPagerAdapter(supportFragmentManager) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,21 +105,6 @@ class MainActivity : BaseActivity() {
 
         override fun getCount(): Int = fragments.size
 
-    }
-
-    override fun onMenuOpened(featureId: Int, menu: Menu?): Boolean {
-        if (menu != null) {
-            if (menu::class.java.simpleName == "MenuBuilder") {
-                try {
-                    val method = menu::class.java.getDeclaredMethod("setOptionalIconsVisible", Boolean::class.java)
-                    method.isAccessible = true
-                    method.invoke(menu, true)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-        }
-        return super.onMenuOpened(featureId, menu)
     }
 
     override fun onBackPressed() {

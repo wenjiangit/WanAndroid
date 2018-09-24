@@ -3,11 +3,11 @@ package com.wenjian.wanandroid.ui.search
 import android.arch.lifecycle.MutableLiveData
 import com.wenjian.wanandroid.base.BaseViewModel
 import com.wenjian.wanandroid.entity.Article
-import com.wenjian.wanandroid.entity.ListContract
 import com.wenjian.wanandroid.entity.HotWord
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.extension.io2Main
-import com.wenjian.wanandroid.model.ApiSubscriber
+import com.wenjian.wanandroid.model.ApiObserver
+import com.wenjian.wanandroid.model.PagingObserver
 import com.wenjian.wanandroid.net.ApiService
 
 /**
@@ -19,42 +19,35 @@ import com.wenjian.wanandroid.net.ApiService
 class SearchModel(private val service: ApiService) : BaseViewModel() {
 
     val articles: MutableLiveData<Resource<List<Article>>> = MutableLiveData()
-
     val hotWords: MutableLiveData<Resource<List<HotWord>>> = MutableLiveData()
 
     private var lastQuery: String? = null
-
     private var count: Int = 0
+    private var isOver: Boolean = false
 
     fun loadHotWords() {
         service.loadHotWords()
                 .io2Main()
-                .subscribe(ApiSubscriber(hotWords, disposables) {
-                    @Suppress("UNCHECKED_CAST")
-                    val data: List<HotWord> = it as List<HotWord>
-                    hotWords.value = Resource.success(data)
-                })
+                .subscribe(ApiObserver(hotWords, disposables))
     }
 
     fun loadMore() {
+        if (isOver) {
+            articles.value = Resource.success(emptyList())
+            return
+        }
         lastQuery?.let {
-            doSearch(it, ++count, true)
+            doSearch(it, ++count)
         }
     }
 
-    fun doSearch(query: String, page: Int = 0, loadMore: Boolean = false) {
+    fun doSearch(query: String, page: Int = 0) {
         lastQuery = query
         service.search(query, page)
                 .io2Main()
-                .subscribe(ApiSubscriber(articles, disposables) {
-                    @Suppress("UNCHECKED_CAST")
-                    val data: ListContract<Article> = it as ListContract<Article>
-                    count = data.curPage
-                    if (data.over && loadMore) {
-                        articles.value = Resource.success(emptyList())
-                    } else {
-                        articles.value = Resource.success(data.datas)
-                    }
+                .subscribe(PagingObserver(articles, disposables) {
+                    count = it.curPage
+                    isOver = it.over
                 })
     }
 }

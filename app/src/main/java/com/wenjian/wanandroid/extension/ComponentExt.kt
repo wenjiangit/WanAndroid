@@ -49,27 +49,26 @@ fun AppCompatActivity.snak(text: CharSequence) {
 }
 
 fun AppCompatActivity.setupActionBar(@DrawableRes resId: Int = -1,
-                                     title: String? = getString(R.string.app_name),
+                                     title: String? = "",
                                      show: Boolean = true,
                                      listener: () -> Unit = { finish() }) {
 
 
     findViewById<Toolbar>(R.id.toolBar)!!.let { it ->
         setSupportActionBar(it)
+        supportActionBar?.title = title
         if (!show) {
             return
         }
         it.setNavigationOnClickListener {
             listener()
         }
-
         supportActionBar?.let {
             it.setDisplayHomeAsUpEnabled(true)
             it.setHomeButtonEnabled(true)
             if (resId != -1) {
                 it.setHomeAsUpIndicator(resId)
             }
-            supportActionBar?.title = title
         }
     }
 }

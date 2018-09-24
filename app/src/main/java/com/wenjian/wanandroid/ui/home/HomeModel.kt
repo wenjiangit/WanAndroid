@@ -8,8 +8,10 @@ import com.wenjian.wanandroid.entity.ListContract
 import com.wenjian.wanandroid.entity.Banner
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.extension.io2Main
-import com.wenjian.wanandroid.model.ApiSubscriber
+import com.wenjian.wanandroid.model.ApiObserver
+import com.wenjian.wanandroid.model.PagingObserver
 import com.wenjian.wanandroid.net.ApiService
+import com.wenjian.wanandroid.net.PagingResp
 import com.wenjian.wanandroid.net.Resp
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -24,7 +26,7 @@ import io.reactivex.functions.BiFunction
 class HomeModel(private val service: ApiService) : BaseViewModel() {
 
     companion object {
-        val TAG = HomeModel::class.java.simpleName!!
+        val TAG: String = HomeModel::class.java.simpleName
     }
 
     val articles: MutableLiveData<Resource<List<Article>>> = MutableLiveData()
@@ -38,7 +40,7 @@ class HomeModel(private val service: ApiService) : BaseViewModel() {
     fun loadHomeData() {
         val loadBanners = service.loadBanners()
         val loadArticles = service.loadArticles(0)
-        Observable.zip(loadBanners, loadArticles, BiFunction { t1: Resp<List<Banner>>, t2: Resp<ListContract<Article>> -> Pair(t1, t2) })
+        Observable.zip(loadBanners, loadArticles, BiFunction { t1: Resp<List<Banner>>, t2: PagingResp<List<Article>> -> Pair(t1, t2) })
                 .io2Main()
                 .doOnSubscribe {
                     addDisposable(it)
@@ -54,6 +56,8 @@ class HomeModel(private val service: ApiService) : BaseViewModel() {
                 }, {
                     Log.e(TAG, "loadHomeData error:", it)
                     homeData.value = Resource.fail()
+                }, {
+                    homeData.value = Resource.hideLoding()
                 })
     }
 
@@ -65,12 +69,9 @@ class HomeModel(private val service: ApiService) : BaseViewModel() {
         }
         service.loadArticles(++curPage)
                 .io2Main()
-                .subscribe(ApiSubscriber(articles, disposables) {
-                    @Suppress("UNCHECKED_CAST")
-                    val data: ListContract<Article> = it as ListContract<Article>
-                    isOver = data.over
-                    curPage = data.curPage
-                    articles.value = Resource.success(data.datas)
+                .subscribe(PagingObserver(articles, disposables) {
+                    isOver = it.over
+                    curPage = it.curPage
                 })
     }
 

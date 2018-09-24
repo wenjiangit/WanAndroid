@@ -6,7 +6,7 @@ import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.entity.UserInfo
 import com.wenjian.wanandroid.extension.io2Main
 import com.wenjian.wanandroid.helper.UserHelper
-import com.wenjian.wanandroid.model.ApiSubscriber
+import com.wenjian.wanandroid.model.ApiObserver
 import com.wenjian.wanandroid.net.ApiService
 
 /**
@@ -23,10 +23,8 @@ class UserModel(private val service: ApiService) : BaseViewModel() {
     fun login(username: String, password: String) {
         service.login(username, password)
                 .io2Main()
-                .subscribe(ApiSubscriber(userInfo, disposables) {
-                    val data: UserInfo = it as UserInfo
-                    userInfo.value = Resource.success(data)
-                    UserHelper.saveUserInfo(data)
+                .subscribe(ApiObserver(userInfo, disposables) {
+                    UserHelper.saveUserInfo(it)
                 })
     }
 

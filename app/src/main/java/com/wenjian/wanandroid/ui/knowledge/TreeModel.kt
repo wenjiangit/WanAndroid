@@ -7,7 +7,8 @@ import com.wenjian.wanandroid.entity.ListContract
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.entity.TreeEntry
 import com.wenjian.wanandroid.extension.io2Main
-import com.wenjian.wanandroid.model.ApiSubscriber
+import com.wenjian.wanandroid.model.ApiObserver
+import com.wenjian.wanandroid.model.PagingObserver
 import com.wenjian.wanandroid.net.ApiService
 
 /**
@@ -29,11 +30,7 @@ class TreeModel(private val service: ApiService) : BaseViewModel() {
     fun loadTree() {
         service.loadTree()
                 .io2Main()
-                .subscribe(ApiSubscriber(tree, disposables) {
-                    @Suppress("UNCHECKED_CAST")
-                    val data: List<TreeEntry> = it as List<TreeEntry>
-                    tree.value = Resource.success(data)
-                })
+                .subscribe(ApiObserver(tree, disposables))
     }
 
 
@@ -43,12 +40,9 @@ class TreeModel(private val service: ApiService) : BaseViewModel() {
         }
         service.loadTreeArticles(page, cid)
                 .io2Main()
-                .subscribe(ApiSubscriber(articles, disposables) {
-                    @Suppress("UNCHECKED_CAST")
-                    val data: ListContract<Article> = it as ListContract<Article>
-                    isOver = data.over
-                    pageCount = data.curPage
-                    articles.value = Resource.success(data.datas)
+                .subscribe(PagingObserver(articles, disposables) {
+                    isOver = it.over
+                    pageCount = it.curPage
                 })
     }
 

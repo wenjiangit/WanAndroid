@@ -2,12 +2,12 @@ package com.wenjian.wanandroid.ui.project
 
 import android.arch.lifecycle.MutableLiveData
 import com.wenjian.wanandroid.base.BaseViewModel
-import com.wenjian.wanandroid.entity.ListContract
 import com.wenjian.wanandroid.entity.Project
 import com.wenjian.wanandroid.entity.ProjectTree
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.extension.io2Main
-import com.wenjian.wanandroid.model.ApiSubscriber
+import com.wenjian.wanandroid.model.ApiObserver
+import com.wenjian.wanandroid.model.PagingObserver
 import com.wenjian.wanandroid.net.ApiService
 
 /**
@@ -23,16 +23,12 @@ class ProjectModel(private val service: ApiService) : BaseViewModel() {
 
     private var isOver: Boolean = false
     private var curPage: Int = 1
-    private var cid:Int = -1
+    private var cid: Int = -1
 
     fun loadProjectTree() {
         service.loadProjectTree()
                 .io2Main()
-                .subscribe(ApiSubscriber(projectTrees, disposables) {
-                    @Suppress("UNCHECKED_CAST")
-                    val data: List<ProjectTree> = it as List<ProjectTree>
-                    projectTrees.value = Resource.success(data)
-                })
+                .subscribe(ApiObserver(projectTrees, disposables))
     }
 
 
@@ -42,12 +38,9 @@ class ProjectModel(private val service: ApiService) : BaseViewModel() {
         }
         service.loadProjects(page, cid)
                 .io2Main()
-                .subscribe(ApiSubscriber(projects, disposables) {
-                    @Suppress("UNCHECKED_CAST")
-                    val data: ListContract<Project> = it as ListContract<Project>
+                .subscribe(PagingObserver(projects, disposables) { data ->
                     curPage = data.curPage
                     isOver = data.over
-                    projects.value = Resource.success(data.datas)
                 })
     }
 
