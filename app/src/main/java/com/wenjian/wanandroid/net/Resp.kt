@@ -6,7 +6,7 @@ package com.wenjian.wanandroid.net
  *
  * @author jian.wen@ubtrobot.com
  */
-open class Resp<T>(val data: T, val errorCode: Int, val errorMsg: String) {
+open class Resp<T>(val data: T, private val errorCode: Int, val errorMsg: String) {
 
     fun success() = errorCode == 0
 

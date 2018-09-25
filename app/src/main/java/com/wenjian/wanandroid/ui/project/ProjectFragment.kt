@@ -8,10 +8,13 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
 import android.view.View
+import android.widget.ProgressBar
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseFragment
 import com.wenjian.wanandroid.entity.ProjectTree
 import com.wenjian.wanandroid.extension.apiModelDelegate
+import com.wenjian.wanandroid.extension.gone
+import com.wenjian.wanandroid.extension.visible
 
 
 /**
@@ -22,6 +25,7 @@ class ProjectFragment : BaseFragment() {
 
     private var mTabLayout: TabLayout? = null
     private lateinit var mViewPager: ViewPager
+    private lateinit var mPbLoading: ProgressBar
 
     private val mProjectModel: ProjectModel by apiModelDelegate(ProjectModel::class.java)
 
@@ -34,13 +38,17 @@ class ProjectFragment : BaseFragment() {
     override fun findViews(mRoot: View) {
         mTabLayout = mRoot.findViewById(R.id.tab_layout)
         mViewPager = mRoot.findViewById(R.id.project_pager)
+        mPbLoading = mRoot.findViewById(R.id.pbLoading)
     }
 
     override fun subscribeUi() {
         mProjectModel.projectTrees.observe(this, Observer { it ->
             showContentWithStatus(it) {
-                mViewPager.adapter = ProjectPagerAdapter(fragmentManager!!, it)
+                //fix FragmentManager is already executing transactions
+                //提供给子fragment只能用getChildFragmentManager
+                mViewPager.adapter = ProjectPagerAdapter(childFragmentManager, it)
                 mTabLayout?.setupWithViewPager(mViewPager)
+                mTabLayout?.visible()
             }
         })
     }
@@ -48,6 +56,14 @@ class ProjectFragment : BaseFragment() {
     override fun onLazyLoad() {
         super.onLazyLoad()
         mProjectModel.loadProjectTree()
+    }
+
+    override fun showLoading() {
+        mPbLoading.visible()
+    }
+
+    override fun hideLoading() {
+        mPbLoading.gone()
     }
 
     class ProjectPagerAdapter(fm: FragmentManager, val data: List<ProjectTree>) : FragmentStatePagerAdapter(fm) {

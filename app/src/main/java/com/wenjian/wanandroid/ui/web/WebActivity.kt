@@ -241,7 +241,7 @@ class WebActivity : BaseActivity() {
 
             override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
                 super.onReceivedError(view, request, error)
-                showError()
+//                showError()
             }
 
             @Suppress("OverridingDeprecatedMember")

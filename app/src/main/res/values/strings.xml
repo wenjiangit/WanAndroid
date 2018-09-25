@@ -44,6 +44,7 @@
     <string name="label_forget_password">忘记密码?</string>
     <string name="new_user">新用户?</string>
     <string name="sing_up">注册</string>
+    <string name="web_load_error">出错了,点击空白区域重新加载~~~</string>
 
 
 </resources>

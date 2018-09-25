@@ -4,11 +4,10 @@ import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import com.wenjian.wanandroid.base.BaseViewModel
 import com.wenjian.wanandroid.entity.Article
-import com.wenjian.wanandroid.entity.ListContract
 import com.wenjian.wanandroid.entity.Banner
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.extension.io2Main
-import com.wenjian.wanandroid.model.ApiObserver
+import com.wenjian.wanandroid.helper.ExceptionHelper
 import com.wenjian.wanandroid.model.PagingObserver
 import com.wenjian.wanandroid.net.ApiService
 import com.wenjian.wanandroid.net.PagingResp
@@ -51,13 +50,11 @@ class HomeModel(private val service: ApiService) : BaseViewModel() {
                         this.curPage = second.data.curPage
                         homeData.value = Resource.success(Pair(first.data, second.data.datas))
                     } else {
-                        homeData.value = Resource.fail("${first.errorMsg},${second.errorMsg}")
+                        homeData.value = Resource.error("${first.errorMsg},${second.errorMsg}")
                     }
                 }, {
                     Log.e(TAG, "loadHomeData error:", it)
-                    homeData.value = Resource.fail()
-                }, {
-                    homeData.value = Resource.hideLoding()
+                    homeData.value = Resource.error(ExceptionHelper.getErrorMsg(it))
                 })
     }
 

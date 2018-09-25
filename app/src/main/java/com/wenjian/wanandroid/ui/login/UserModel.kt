@@ -1,6 +1,7 @@
 package com.wenjian.wanandroid.ui.login
 
 import android.arch.lifecycle.MutableLiveData
+import android.util.Log
 import com.wenjian.wanandroid.base.BaseViewModel
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.entity.UserInfo
@@ -21,6 +22,7 @@ class UserModel(private val service: ApiService) : BaseViewModel() {
     val userInfo: MutableLiveData<Resource<UserInfo>> = MutableLiveData()
 
     fun login(username: String, password: String) {
+        Log.i("wj", "$username,$password")
         service.login(username, password)
                 .io2Main()
                 .subscribe(ApiObserver(userInfo, disposables) {

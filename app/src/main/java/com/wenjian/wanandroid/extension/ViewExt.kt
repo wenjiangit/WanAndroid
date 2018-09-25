@@ -5,6 +5,7 @@ import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
 import android.util.Log
+import android.view.View
 
 /**
  * Description: ViewExt
@@ -12,8 +13,6 @@ import android.util.Log
  *
  * @author jian.wen@ubtrobot.com
  */
-
-
 
 
 @SuppressLint("RestrictedApi")
@@ -41,4 +40,12 @@ fun BottomNavigationView.disableShiftMode() {
     } catch (e: IllegalStateException) {
         Log.e("wj", "Unable to change value of shift mode", e)
     }
+}
+
+fun View.visible(visible: Boolean = true) {
+    visibility = if (visible) View.VISIBLE else View.INVISIBLE
+}
+
+fun View.gone() {
+    visibility = View.GONE
 }

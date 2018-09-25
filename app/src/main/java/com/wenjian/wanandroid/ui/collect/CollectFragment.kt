@@ -9,13 +9,14 @@ import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
+
 /**
  * A simple [Fragment] subclass.
  *
  */
 class CollectFragment : BaseListFragment<Article>() {
 
-    private val mCollectModel:CollectModel by apiModelDelegate(CollectModel::class.java)
+    private val mCollectModel: CollectModel by apiModelDelegate(CollectModel::class.java)
 
     override fun createAdapter(): BaseRecyclerAdapter<Article> = ArticleListAdapter()
 
@@ -32,26 +33,13 @@ class CollectFragment : BaseListFragment<Article>() {
     override fun subscribeUi() {
         super.subscribeUi()
         mCollectModel.collects.observe(this, Observer { res ->
-            showContentWithStatus(res){
-                if (isLoadMore) {
-                    if (it.isEmpty()) {
-                        mAdapter.loadMoreEnd()
-                    } else {
-                        mAdapter.addData(it)
-                        mAdapter.loadMoreComplete()
-                    }
-                } else {
-                    mAdapter.setNewData(it)
-                }
-            }
+            showContent(res)
         })
     }
 
     override fun onLoadMore() {
         mCollectModel.loadMore()
     }
-
-
 
 
 }

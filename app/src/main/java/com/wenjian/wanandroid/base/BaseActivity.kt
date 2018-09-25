@@ -2,8 +2,10 @@ package com.wenjian.wanandroid.base
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import androidx.core.widget.toast
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.extension.snak
+import org.jetbrains.anko.support.v4.toast
 
 /**
  * Description: BaseActivity
@@ -26,10 +28,15 @@ abstract class BaseActivity : AppCompatActivity() {
     open fun <T> showContentWithStatus(it: Resource<T>?, render: (T) -> Unit) {
         it?.let { res ->
             when (res.status) {
-                Resource.STATUS.SUCCESS -> render(res.data!!)
+                Resource.STATUS.SUCCESS -> {
+                    hideLoading()
+                    render(res.data!!)
+                }
                 Resource.STATUS.LOADING -> showLoading()
-                Resource.STATUS.ERROR -> res.msg?.let { snak(it) }
-                Resource.STATUS.HIDE_LOADING -> hideLoading()
+                Resource.STATUS.ERROR -> {
+                    hideLoading()
+                    res.msg?.let { toast(it) }
+                }
             }
         }
     }

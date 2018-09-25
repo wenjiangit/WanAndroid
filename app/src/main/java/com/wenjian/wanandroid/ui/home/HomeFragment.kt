@@ -57,14 +57,7 @@ class HomeFragment : BaseListFragment<Article>() {
 
         //加载更多
         mHomeModel.articles.observe(this, Observer { it ->
-            showContentWithStatus(it) {
-                if (it.isEmpty()) {
-                    mAdapter.loadMoreEnd()
-                } else {
-                    mAdapter.addData(it)
-                    mAdapter.loadMoreComplete()
-                }
-            }
+            showContent(it)
         })
     }
 

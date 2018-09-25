@@ -35,18 +35,7 @@ class ProjectListFragment : BaseListFragment<Project>() {
     override fun subscribeUi() {
         super.subscribeUi()
         mProjectModel.projects.observe(this, Observer { it ->
-            showContentWithStatus(it) {
-                if (isLoadMore) {
-                    if (it.isEmpty()) {
-                        mAdapter.loadMoreEnd()
-                    } else {
-                        mAdapter.addData(it)
-                        mAdapter.loadMoreComplete()
-                    }
-                } else {
-                    mAdapter.setNewData(it)
-                }
-            }
+            showContent(it)
         })
     }
 

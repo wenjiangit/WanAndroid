@@ -42,18 +42,7 @@ class ArticleListFragment : BaseListFragment<Article>() {
     override fun subscribeUi() {
         super.subscribeUi()
         mTreeModel.articles.observe(this, Observer { it ->
-            showContentWithStatus(it) {
-                if (isLoadMore) {
-                    if (it.isEmpty()) {
-                        mAdapter.loadMoreEnd()
-                    } else {
-                        mAdapter.addData(it)
-                        mAdapter.loadMoreComplete()
-                    }
-                } else {
-                    mAdapter.setNewData(it)
-                }
-            }
+            showContent(it)
         })
     }
 
