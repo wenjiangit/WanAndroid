@@ -1,18 +1,12 @@
 package com.wenjian.wanandroid.ui.login
 
 import android.arch.lifecycle.Observer
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import com.wenjian.wanandroid.MainActivity
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseActivity
-import com.wenjian.wanandroid.consts.IntentActions
-import com.wenjian.wanandroid.extension.apiModelDelegate
-import com.wenjian.wanandroid.extension.gone
-import com.wenjian.wanandroid.extension.visible
+import com.wenjian.wanandroid.extension.*
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.toast
 
@@ -23,20 +17,15 @@ import org.jetbrains.anko.toast
  * @author jian.wen@ubtrobot.com
  */
 class LoginActivity : BaseActivity(), View.OnClickListener {
-    companion object {
-        fun start(context: Context) {
-            Intent(context, LoginActivity::class.java)
-                    .let {
-                        context.startActivity(it)
-                    }
-        }
-    }
+
+    private var isLogin: Boolean = true
 
     private val mUserModel: UserModel by apiModelDelegate(UserModel::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        setupActionBar(title = "登录")
         initEvents()
         subscribeUi()
     }
@@ -44,24 +33,39 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     private fun subscribeUi() {
         mUserModel.userInfo.observe(this, Observer { res ->
             showContentWithStatus(res) { _ ->
-                toast("登录成功")
-                LocalBroadcastManager.getInstance(this)
-                        .sendBroadcast(Intent(IntentActions.ACTION_LOGIN))
-                startActivity(Intent(this, MainActivity::class.java))
+                toast("${if (isLogin) "登录" else "注册"}成功")
+                launch(MainActivity::class.java)
             }
         })
     }
 
     private fun initEvents() {
-        sign_up.setOnClickListener(this)
+        fab_convert.setOnClickListener(this)
         bt_login.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.sign_up -> onSignUp()
-            R.id.bt_login -> onLogin()
+            R.id.fab_convert -> onConvert()
+            R.id.bt_login -> {
+                if (isLogin) {
+                    onLogin()
+                } else {
+                    onRegister()
+                }
+            }
         }
+    }
+
+    private fun onConvert() {
+        if (isLogin) {
+            collapsing_toolbar.title = "注册"
+            lay_confirm.visible()
+        } else {
+            collapsing_toolbar.title = "登录"
+            lay_confirm.gone()
+        }
+        isLogin = !isLogin
     }
 
     override fun showLoading() {
@@ -88,7 +92,18 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun onSignUp() {
-
+    private fun onRegister() {
+        val user = edit_username.text.trim().toString()
+        val pass = edit_password.text.trim().toString()
+        val repass = edit_repassword.text.trim().toString()
+        when {
+            user.isBlank() -> edit_username.error = "请输入用户名"
+            pass.isBlank() -> edit_password.error = "请输入密码"
+            repass.isBlank() -> edit_repassword.error = "请输入确认密码"
+            user.length < 6 -> edit_username.error = "用户名不合格"
+            pass.length < 6 -> edit_password.error = "密码不合格"
+            pass != repass -> edit_repassword.error = "确认密码不一致"
+            else -> mUserModel.register(user, pass, repass)
+        }
     }
 }

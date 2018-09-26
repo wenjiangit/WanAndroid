@@ -77,7 +77,7 @@ interface ApiService {
     @POST("/user/register")
     fun register(@Field("username") username: String,
                  @Field("password") password: String,
-                 @Field("repassword") repassword: String)
+                 @Field("repassword") repassword: String): Observable<Resp<UserInfo>>
 
     /**
      * 我的收藏

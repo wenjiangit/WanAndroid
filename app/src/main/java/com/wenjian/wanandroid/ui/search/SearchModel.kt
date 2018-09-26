@@ -6,6 +6,7 @@ import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.entity.HotWord
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.extension.io2Main
+import com.wenjian.wanandroid.helper.UserHelper
 import com.wenjian.wanandroid.model.ApiObserver
 import com.wenjian.wanandroid.model.PagingObserver
 import com.wenjian.wanandroid.net.ApiService
@@ -40,6 +41,12 @@ class SearchModel(private val service: ApiService) : BaseViewModel() {
             doSearch(it, ++count)
         }
     }
+
+    fun loadSearchHistory(): Set<String> = UserHelper.loadSearchHistory()
+
+    fun clearHistory() = UserHelper.clearHistory()
+
+    fun saveHistory(history: Set<String>) = UserHelper.saveSearchHistory(history)
 
     fun doSearch(query: String, page: Int = 0) {
         lastQuery = query

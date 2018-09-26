@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.wenjian.wanandroid.base.BaseActivity
 import com.wenjian.wanandroid.extension.disableShiftMode
+import com.wenjian.wanandroid.extension.launch
 import com.wenjian.wanandroid.extension.setupActionBar
 import com.wenjian.wanandroid.ui.home.HomeFragment
 import com.wenjian.wanandroid.ui.knowledge.TreeFragment
@@ -76,7 +77,7 @@ class MainActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
         R.id.action_search -> {
-            SearchActivity.start(this)
+            launch(SearchActivity::class.java)
             true
         }
         else -> super.onOptionsItemSelected(item)

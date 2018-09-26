@@ -2,7 +2,6 @@ package com.wenjian.wanandroid.ui.search
 
 import android.arch.lifecycle.Observer
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.SearchView
@@ -17,24 +16,14 @@ import com.wenjian.wanandroid.base.BaseActivity
 import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.setSystemBarColor
 import com.wenjian.wanandroid.extension.setupActionBar
-import com.wenjian.wanandroid.utils.Tools
 import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : BaseActivity() {
 
     private lateinit var searchFragment: SearchFragment
-
     private val mSearchModel: SearchModel by apiModelDelegate(SearchModel::class.java)
-
+    private val mHistory: MutableSet<String> = hashSetOf()
     private lateinit var mSearchView: SearchView
-
-    companion object {
-        fun start(cxt: Context) {
-            Intent(cxt, SearchActivity::class.java).let {
-                cxt.startActivity(it)
-            }
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,21 +34,38 @@ class SearchActivity : BaseActivity() {
         initEvents()
         subscribeUi()
         mSearchModel.loadHotWords()
+
+        loadHistory()
+    }
+
+    private fun loadHistory() {
+        mSearchModel.loadSearchHistory().apply {
+            historyContainer.tags = this.toList()
+            mHistory.addAll(this)
+        }
     }
 
     private fun initEvents() {
-        hotwordsContainer.setOnTagClickListener(object : TagView.OnTagClickListener {
-            override fun onTagLongClick(position: Int, text: String?) {
+        val tagClickListener:TagView.OnTagClickListener = object :TagView.OnTagClickListener{
+            override fun onTagClick(position: Int, text: String?) {
+                mSearchView.setQuery(text, true)
             }
 
-            override fun onTagClick(position: Int, text: String?) {
-                mSearchView.setQuery(text,true)
+            override fun onTagLongClick(position: Int, text: String?) {
             }
 
             override fun onTagCrossClick(position: Int) {
             }
 
-        })
+        }
+        historyContainer.setOnTagClickListener(tagClickListener)
+        hotwordsContainer.setOnTagClickListener(tagClickListener)
+        //清空历史搜索
+        iv_clear.setOnClickListener {
+            mHistory.clear()
+            historyContainer.removeAllTags()
+            mSearchModel.clearHistory()
+        }
     }
 
     private fun subscribeUi() {
@@ -116,8 +122,9 @@ class SearchActivity : BaseActivity() {
         //添加监听
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (!query.isNullOrEmpty()) {
+                if (!query.isNullOrBlank()) {
                     searchFragment.search(query!!)
+                    addToHistory(query)
                     hideSoftKeyboard(searchView)
                     hotPanel.visibility = View.GONE
                 }
@@ -132,6 +139,12 @@ class SearchActivity : BaseActivity() {
 
     }
 
+    private fun addToHistory(query: String) {
+        if (mHistory.add(query)) {
+            historyContainer.addTag(query)
+        }
+    }
+
     private fun hideSoftKeyboard(view: View) {
         val methodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         methodManager.hideSoftInputFromWindow(view.windowToken, 0)
@@ -144,9 +157,10 @@ class SearchActivity : BaseActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        finish()
-        super.onBackPressed()
+    override fun onPause() {
+        super.onPause()
+        mSearchModel.saveHistory(mHistory)
+        mHistory.clear()
     }
 
 }

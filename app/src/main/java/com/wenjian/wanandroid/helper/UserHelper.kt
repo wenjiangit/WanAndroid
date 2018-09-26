@@ -3,6 +3,7 @@ package com.wenjian.wanandroid.helper
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.wenjian.wanandroid.WanAndroidApp
 import com.wenjian.wanandroid.entity.UserInfo
 
@@ -19,6 +20,7 @@ object UserHelper {
     private val mGson: Gson = Gson()
 
     private const val KEY_USER_INFO = "key_user_info"
+    private const val KEY_SEARCH_HISTORY = "key_search_history"
 
     fun saveUserInfo(userInfo: UserInfo) {
         this.mUserInfo = userInfo
@@ -43,6 +45,40 @@ object UserHelper {
         mPrefs.edit().putString(key, mGson.toJson(any)).apply()
     }
 
+    /**
+     * 保存搜索历史
+     */
+    fun saveSearchHistory(list: Set<String>) {
+        mPrefs.edit().putStringSet(KEY_SEARCH_HISTORY, list).apply()
+    }
+
+    /**
+     * 加载搜素历史
+     */
+    fun loadSearchHistory(): Set<String> {
+        val strings = mPrefs.getStringSet(KEY_SEARCH_HISTORY, null)
+        return strings ?: emptySet()
+    }
+
+    /**
+     * 清空历史
+     */
+    fun clearHistory() {
+        mPrefs.edit().remove(KEY_SEARCH_HISTORY).apply()
+    }
+
+    fun <T> getList(key: String, typeToken: TypeToken<T>): T? {
+        val value = mPrefs.getString(key, null)
+        return if (value != null) {
+            mGson.fromJson(value, typeToken.type)
+        } else {
+            null
+        }
+    }
+
+    fun <T> putList(key: String, list: List<T>) {
+        putAny(key, list)
+    }
 
     private fun <T> getAny(key: String, clz: Class<T>): T? {
         val value = mPrefs.getString(key, null)

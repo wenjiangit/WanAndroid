@@ -42,7 +42,6 @@ class ViewModelDelegate<T : ViewModel>(private val factory: ViewModelProvider.Fa
     private var model: T? = null
 
     operator fun getValue(thisRef: Fragment, property: KProperty<*>): T {
-        Log.i("wj", "getValue")
         if (model == null) {
             model = if (factory != null) {
                 ViewModelProviders.of(thisRef, factory).get(clz)

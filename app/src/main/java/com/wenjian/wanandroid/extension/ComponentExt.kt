@@ -1,5 +1,6 @@
 package com.wenjian.wanandroid.extension
 
+import android.content.Intent
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
@@ -71,4 +72,12 @@ fun AppCompatActivity.setupActionBar(@DrawableRes resId: Int = -1,
             }
         }
     }
+}
+
+fun AppCompatActivity.launch(clz: Class<*>) {
+    startActivity(Intent(this, clz))
+}
+
+fun Fragment.launch(clz: Class<*>) {
+    startActivity(Intent(context, clz))
 }
