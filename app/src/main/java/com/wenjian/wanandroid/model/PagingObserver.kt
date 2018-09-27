@@ -5,6 +5,7 @@ import android.util.Log
 import com.wenjian.wanandroid.entity.ListContract
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.helper.ExceptionHelper
+import com.wenjian.wanandroid.helper.UserHelper
 import com.wenjian.wanandroid.net.PagingResp
 import io.reactivex.Observer
 import io.reactivex.disposables.CompositeDisposable
@@ -36,6 +37,9 @@ class PagingObserver<T>(private val liveData: MutableLiveData<Resource<T>>,
             handler(t.data)
         } else {
             liveData.value = Resource.error(t.errorMsg)
+            if (t.needLogin()) {
+                UserHelper.autoLogin()
+            }
         }
     }
 

@@ -11,4 +11,9 @@ import com.chad.library.adapter.base.BaseViewHolder
  */
 abstract class BaseRecyclerAdapter<T>(resId: Int) : BaseQuickAdapter<T, BaseViewHolder>(resId) {
 
+    open var showLike: Boolean = true
+
+    fun showLike(like: Boolean) {
+        this.showLike = like
+    }
 }

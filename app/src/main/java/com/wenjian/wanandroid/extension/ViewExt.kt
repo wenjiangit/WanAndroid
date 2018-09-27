@@ -26,13 +26,6 @@ fun BottomNavigationView.disableShiftMode() {
         for (i in 0 until menuView.childCount) {
             val item = menuView.getChildAt(i) as BottomNavigationItemView
             item.setShiftingMode(false)
-            // set once again checked value, so view will be updated
-
-            val shiftAmount = item::class.java.getDeclaredField("mShiftAmount")
-            shiftAmount.isAccessible = true
-            shiftAmount.setInt(item, 0)
-            shiftAmount.isAccessible = false
-
             item.setChecked(item.itemData.isChecked)
         }
     } catch (e: NoSuchFieldException) {

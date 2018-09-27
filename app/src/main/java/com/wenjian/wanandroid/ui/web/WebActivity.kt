@@ -2,6 +2,7 @@ package com.wenjian.wanandroid.ui.web
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
+import android.arch.lifecycle.Observer
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -18,12 +19,11 @@ import android.webkit.*
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseActivity
 import com.wenjian.wanandroid.entity.WebModel
+import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.extraDelegate
-import com.wenjian.wanandroid.extension.io2Main
 import com.wenjian.wanandroid.extension.setupActionBar
-import com.wenjian.wanandroid.net.RetrofitManager
+import com.wenjian.wanandroid.ui.collect.CollectModel
 import com.wenjian.wanandroid.utils.NetUtil
-import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_web.*
 import org.jetbrains.anko.toast
 
@@ -39,7 +39,7 @@ class WebActivity : BaseActivity() {
     private var mTitle: String? = null
     private var mErrorView: View? = null
 
-    private var mDisposable:Disposable? = null
+    private val mCollectModel: CollectModel by apiModelDelegate(CollectModel::class.java)
 
     companion object {
         private const val EXTRA_MODEL = "web_model"
@@ -59,14 +59,6 @@ class WebActivity : BaseActivity() {
         setContentView(R.layout.activity_web)
         setupActionBar(R.drawable.ic_close, "")
 
-//        layRefresh.setOnRefreshListener {
-//            webView.reload()
-//            //1秒后自动隐藏
-//            layRefresh.postDelayed({
-//                layRefresh.isRefreshing = false
-//            }, 1000)
-//        }
-
         val isCollect = mWebModel?.collect ?: false
         if (isCollect) {
             btCollect.setImageResource(R.drawable.ic_favorite)
@@ -74,11 +66,37 @@ class WebActivity : BaseActivity() {
             btCollect.setImageResource(R.drawable.ic_favorite_border)
         }
         btCollect.tag = isCollect
-
+        subscribeUi()
         initWebListener()
-
         initWebSetting()
         webView.loadUrl(mWebModel?.link)
+    }
+
+    private fun subscribeUi() {
+        mCollectModel.collect.observe(this, Observer { it ->
+            it?.let {
+                if (it) {
+                    toast("添加收藏成功")
+                    btCollect.setImageResource(R.drawable.ic_favorite)
+                    btCollect.tag = true
+                } else {
+                    toast("添加收藏失败")
+                }
+            }
+        })
+
+        mCollectModel.uncollect.observe(this, Observer { it ->
+            it?.let {
+                if (it) {
+                    toast("已取消收藏")
+                    btCollect.setImageResource(R.drawable.ic_favorite_border)
+                    btCollect.tag = false
+                } else {
+                    toast("取消收藏失败")
+                }
+            }
+        })
+
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -96,22 +114,10 @@ class WebActivity : BaseActivity() {
         btCollect.setOnClickListener { _ ->
             val collect = btCollect.tag as Boolean
             if (collect) {
-                toast("已经收藏,请勿重复操作")
-                return@setOnClickListener
+                mCollectModel.uncollect(mWebModel?.id!!)
+            } else {
+                mCollectModel.collect(mWebModel?.id!!)
             }
-
-            mDisposable = RetrofitManager.service.collect(mWebModel?.id!!)
-                    .io2Main()
-                    .subscribe {
-                        if (it.success()) {
-                            btCollect.tag = true
-                            btCollect.setImageResource(R.drawable.ic_favorite)
-                            toast("收藏成功")
-                        } else {
-                            btCollect.tag = false
-                            toast(it.errorMsg)
-                        }
-                    }
         }
 
     }
@@ -121,8 +127,8 @@ class WebActivity : BaseActivity() {
     private fun animateFbt(hide: Boolean) {
         if ((isFbtHide && hide) || (!isFbtHide && !hide)) return
         isFbtHide = hide
-        val moveY = if (hide) 2 * btCollect.height else 0
-        btCollect.animate().translationY(moveY.toFloat()).setStartDelay(100).start()
+        val scale = if (hide) 0f else 1f
+        btCollect.animate().scaleX(scale).scaleY(scale).setStartDelay(100).start()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -259,6 +265,7 @@ class WebActivity : BaseActivity() {
         if (mErrorView == null) {
             mErrorView = vsError.inflate()
         }
+
         mErrorView!!.apply {
             visibility = View.VISIBLE
             setOnClickListener {
@@ -272,6 +279,5 @@ class WebActivity : BaseActivity() {
         super.onDestroy()
         webView.removeAllViews()
         webView.destroy()
-        mDisposable?.dispose()
     }
 }

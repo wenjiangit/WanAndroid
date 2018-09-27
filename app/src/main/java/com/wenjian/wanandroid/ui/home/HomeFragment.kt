@@ -12,10 +12,11 @@ import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.entity.WebModel
 import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.apiModelDelegate
-import com.wenjian.wanandroid.extension.loadUrl
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
 import com.wenjian.wanandroid.ui.web.WebActivity
 import com.youth.banner.Banner
+import com.youth.banner.BannerConfig
+import com.youth.banner.Transformer
 import com.youth.banner.loader.ImageLoaderInterface
 
 /**
@@ -47,20 +48,16 @@ class HomeFragment : BaseListFragment<Article>() {
                 mBanner.apply {
                     setImages(bannerData.map { it.imagePath })
                     setBannerTitles(bannerData.map { it.title })
-                    setImageLoader(object :ImageLoaderInterface<ImageView>{
-                        override fun createImageView(context: Context?): ImageView {
-                            return ImageView(context)
-                        }
-
-                        override fun displayImage(context: Context?, path: Any?, imageView: ImageView?) {
-                            Glide.with(context!!).load(path).into(imageView!!)
-                        }
-
-                    })
+                    setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE)
+                    setDelayTime(2000)
+                    setImageLoader(GlideImageLoader())
+                    setBannerAnimation(Transformer.Accordion)
                     setOnBannerListener {
                         val banner = bannerData[it]
                         WebActivity.start(context, WebModel(banner.id, banner.url, false))
                     }
+                    setIndicatorGravity(BannerConfig.RIGHT)
+                    start()
                 }
                 mAdapter.setNewData(data.second)
             }
@@ -96,6 +93,17 @@ class HomeFragment : BaseListFragment<Article>() {
     override fun onStop() {
         super.onStop()
         mBanner.stopAutoPlay()
+    }
+
+
+    class GlideImageLoader :ImageLoaderInterface<ImageView>{
+        override fun createImageView(context: Context?): ImageView {
+            return ImageView(context)
+        }
+
+        override fun displayImage(context: Context?, path: Any?, imageView: ImageView?) {
+            Glide.with(context!!).load(path).into(imageView!!)
+        }
     }
 
 }

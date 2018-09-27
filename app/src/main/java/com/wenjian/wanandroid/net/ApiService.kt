@@ -91,4 +91,13 @@ interface ApiService {
     @POST("/lg/collect/{id}/json")
     fun collect(@Path("id") id: Int): Observable<Resp<Any>>
 
+
+    /**
+     * 取消收藏
+     */
+    @FormUrlEncoded
+    @POST("/lg/uncollect/{id}/json")
+    fun unCollect(@Path("id") id: Int, @Field("originId") originId: Int): Observable<Resp<Any>>
+
+
 }

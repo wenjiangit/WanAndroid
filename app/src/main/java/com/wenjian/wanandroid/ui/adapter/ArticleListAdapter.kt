@@ -7,6 +7,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseRecyclerAdapter
 import com.wenjian.wanandroid.entity.Article
+import com.wenjian.wanandroid.extension.gone
 import com.wenjian.wanandroid.extension.loadUrl
 import com.wenjian.wanandroid.ui.web.WebActivity
 
@@ -42,6 +43,16 @@ class ArticleListAdapter : BaseRecyclerAdapter<Article>(R.layout.rv_item_article
                 }
                 itemView.setOnClickListener {
                     WebActivity.start(it.context, buildWebModel())
+                }
+
+                if (showLike) {
+                    if (collect) {
+                        setImageResource(R.id.iv_like, R.drawable.ic_favorite)
+                    } else {
+                        setImageResource(R.id.iv_like, R.drawable.ic_favorite_border)
+                    }
+                } else {
+                    getView<ImageView>(R.id.iv_like).gone()
                 }
             }
         }

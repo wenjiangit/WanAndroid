@@ -2,6 +2,7 @@ package com.wenjian.wanandroid
 
 import android.app.Application
 import com.squareup.leakcanary.LeakCanary
+import com.tencent.bugly.crashreport.CrashReport
 import kotlin.properties.Delegates
 
 /**
@@ -24,5 +25,6 @@ class WanAndroidApp : Application() {
         }
         LeakCanary.install(this)
         instance = this
+        CrashReport.initCrashReport(this)
     }
 }

@@ -2,10 +2,13 @@ package com.wenjian.wanandroid.helper
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.wenjian.wanandroid.WanAndroidApp
 import com.wenjian.wanandroid.entity.UserInfo
+import com.wenjian.wanandroid.extension.io2Main
+import com.wenjian.wanandroid.net.RetrofitManager
 
 /**
  * Description: UserHelper
@@ -86,6 +89,21 @@ object UserHelper {
             mGson.fromJson(value, clz)
         } else {
             null
+        }
+    }
+
+
+    fun autoLogin() {
+        if (isLogin()) {
+            val userInfo = getUserInfo()!!
+            RetrofitManager.service.login(userInfo.username, userInfo.password)
+                    .io2Main()
+                    .subscribe {
+                        if (it.success()) {
+                            saveUserInfo(it.data)
+                            Toast.makeText(WanAndroidApp.instance, "自动登录成功", Toast.LENGTH_SHORT).show()
+                        }
+                    }
         }
     }
 

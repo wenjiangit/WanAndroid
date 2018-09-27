@@ -5,6 +5,7 @@ import android.support.v4.view.ViewCompat
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseActivity
 import com.wenjian.wanandroid.extension.loadAvatar
+import com.wenjian.wanandroid.extension.setSystemBarColor
 import com.wenjian.wanandroid.extension.setupActionBar
 import com.wenjian.wanandroid.helper.UserHelper
 import kotlinx.android.synthetic.main.activity_profile.*

@@ -28,6 +28,7 @@ class CollectFragment : BaseListFragment<Article>() {
     override fun initViews() {
         super.initViews()
         mRecycler.addCustomDecoration()
+        mAdapter.showLike(false)
     }
 
     override fun subscribeUi() {

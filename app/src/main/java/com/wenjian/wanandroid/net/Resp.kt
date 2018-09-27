@@ -10,4 +10,6 @@ open class Resp<T>(val data: T, private val errorCode: Int, val errorMsg: String
 
     fun success() = errorCode == 0
 
+    fun needLogin() = errorCode == -1001
+
 }

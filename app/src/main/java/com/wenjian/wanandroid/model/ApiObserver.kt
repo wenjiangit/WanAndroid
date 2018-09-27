@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.helper.ExceptionHelper
+import com.wenjian.wanandroid.helper.UserHelper
 import com.wenjian.wanandroid.net.Resp
 import io.reactivex.Observer
 import io.reactivex.disposables.CompositeDisposable
@@ -24,6 +25,9 @@ class ApiObserver<T>(private val liveData: MutableLiveData<Resource<T>>,
             handler(t.data)
         } else {
             liveData.value = Resource.error(t.errorMsg)
+            if (t.needLogin()) {
+                UserHelper.autoLogin()
+            }
         }
     }
 
