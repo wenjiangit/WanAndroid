@@ -47,6 +47,7 @@
     <string name="web_load_error">出错了,点击空白区域重新加载~~~</string>
     <string name="label_confirm_pass">确认密码</string>
     <string name="label_logout">退出登录</string>
+    <string name="wanandroid">WanAndroid</string>
 
 
 </resources>

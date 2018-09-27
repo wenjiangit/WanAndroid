@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.ViewPager
 import android.view.Menu
 import android.view.MenuItem
 import com.wenjian.wanandroid.base.BaseActivity
@@ -23,49 +22,33 @@ class MainActivity : BaseActivity() {
 
     private var lastBack: Long = 0
 
-    private val mAdapter: MainPagerAdapter by lazy { MainPagerAdapter(supportFragmentManager) }
+    private var curFragment: Fragment? = null
+
+    private lateinit var mFragments: List<Fragment>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         setupActionBar(show = false)
 
-        homePager.adapter = mAdapter
-        homePager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-            }
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            }
-
-            override fun onPageSelected(position: Int) {
-                when (position) {
-                    0 -> navigation.selectedItemId = R.id.home
-                    1 -> navigation.selectedItemId = R.id.knowledge
-                    2 -> navigation.selectedItemId = R.id.project
-                    3 -> navigation.selectedItemId = R.id.mine
-                }
-            }
-        })
-
+        initFragments()
         navigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> {
-                    homePager.currentItem = 0
+                    doTabSelect(0)
                     true
                 }
                 R.id.knowledge -> {
-                    homePager.currentItem = 1
+                    doTabSelect(1)
                     true
                 }
                 R.id.project -> {
-                    homePager.currentItem = 2
+                    doTabSelect(2)
                     true
                 }
 
                 R.id.mine -> {
-                    homePager.currentItem = 3
+                    doTabSelect(3)
                     true
                 }
                 else -> false
@@ -73,6 +56,39 @@ class MainActivity : BaseActivity() {
         }
 
         navigation.disableShiftMode()
+    }
+
+    private fun initFragments() {
+        mFragments = listOf(
+                HomeFragment.newInstance(),
+                TreeFragment.newInstance(),
+                ProjectFragment.newInstance(),
+                MineFragment.newInstance())
+
+        supportFragmentManager.beginTransaction().apply {
+            for (i in 0 until mFragments.size) {
+                val fragment = mFragments[i]
+                add(R.id.container, fragment)
+                if (i != 0) {
+                    hide(fragment)
+                } else {
+                    show(fragment)
+                    curFragment = fragment
+                }
+            }
+        }.commit()
+    }
+
+    private fun doTabSelect(position: Int) {
+        val fragment = mFragments[position]
+        if (fragment == curFragment) {
+            return
+        }
+        supportFragmentManager.beginTransaction().apply {
+            hide(curFragment)
+            show(fragment)
+        }.commit()
+        curFragment = fragment
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
