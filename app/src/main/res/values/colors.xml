@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/weixin_black</color>
-    <color name="colorPrimaryDark">@color/weixin_black</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#673ab7</color>
+    <color name="colorPrimaryDark">@color/light_status_bar</color>
+    <color name="colorAccent">#673ab7</color>
     <color name="black_50">#6e000000</color>
     
     <color name="shallow_bg">#EBEBEB</color>

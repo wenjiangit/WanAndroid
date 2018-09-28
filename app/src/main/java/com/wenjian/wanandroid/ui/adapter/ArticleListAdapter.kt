@@ -1,5 +1,6 @@
 package com.wenjian.wanandroid.ui.adapter
 
+import android.support.v4.view.ViewCompat
 import android.text.Html
 import android.view.View
 import android.widget.ImageView

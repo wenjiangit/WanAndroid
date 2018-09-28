@@ -3,22 +3,26 @@
 
     <item
         android:id="@+id/home"
-        android:icon="@drawable/ic_home"
         android:checked="true"
+        android:contentDescription="@string/title_home"
+        android:icon="@drawable/ic_home"
         android:title="@string/title_home" />
 
     <item
         android:id="@+id/knowledge"
+        android:contentDescription="@string/title_knowledge"
         android:icon="@drawable/ic_widgets"
         android:title="@string/title_knowledge" />
 
-   <item
+    <item
         android:id="@+id/project"
+        android:contentDescription="@string/tab_project"
         android:icon="@drawable/ic_android"
         android:title="@string/tab_project" />
 
     <item
         android:id="@+id/mine"
+        android:contentDescription="@string/title_mine"
         android:icon="@drawable/ic_person"
         android:title="@string/title_mine" />
 

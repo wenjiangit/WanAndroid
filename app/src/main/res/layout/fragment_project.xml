@@ -13,11 +13,14 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:clipToPadding="false"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorColor="@color/white"
+        app:tabIndicatorColor="@color/colorPrimary"
         app:tabMode="scrollable"
-        app:tabSelectedTextColor="@color/white"
+        android:elevation="4dp"
+        app:tabBackground="@color/white"
+        app:tabSelectedTextColor="@color/colorPrimary"
         app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget">
 
     </android.support.design.widget.TabLayout>

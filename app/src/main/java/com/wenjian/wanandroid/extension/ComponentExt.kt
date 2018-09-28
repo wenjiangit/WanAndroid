@@ -50,7 +50,7 @@ fun AppCompatActivity.snak(text: CharSequence) {
 }
 
 fun AppCompatActivity.setupActionBar(@DrawableRes resId: Int = -1,
-                                     title: String? = "",
+                                     title: String? = getString(R.string.app_name),
                                      show: Boolean = true,
                                      listener: () -> Unit = { finish() }) {
 

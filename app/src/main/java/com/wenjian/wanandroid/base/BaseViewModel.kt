@@ -1,6 +1,7 @@
 package com.wenjian.wanandroid.base
 
-import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.AndroidViewModel
+import com.wenjian.wanandroid.WanAndroidApp
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -10,9 +11,12 @@ import io.reactivex.disposables.Disposable
  *
  * @author jian.wen@ubtrobot.com
  */
-open class BaseViewModel : ViewModel() {
+open class BaseViewModel : AndroidViewModel(WanAndroidApp.instance) {
 
-    open val disposables: CompositeDisposable by lazy { CompositeDisposable() }
+    /**
+     * 不考虑线程安全地延迟初始化
+     */
+    open val disposables: CompositeDisposable by lazy(LazyThreadSafetyMode.NONE) { CompositeDisposable() }
 
     open fun addDisposable(disposable: Disposable) {
         disposables.add(disposable)

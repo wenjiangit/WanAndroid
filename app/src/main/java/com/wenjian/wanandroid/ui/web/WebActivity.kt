@@ -58,7 +58,14 @@ class WebActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_web)
         setupActionBar(R.drawable.ic_close, "")
+        initView()
+        subscribeUi()
+        initWebListener()
+        initWebSetting()
+        webView.loadUrl(mWebModel?.link)
+    }
 
+    private fun initView() {
         val isCollect = mWebModel?.collect ?: false
         if (isCollect) {
             btCollect.setImageResource(R.drawable.ic_favorite)
@@ -66,10 +73,16 @@ class WebActivity : BaseActivity() {
             btCollect.setImageResource(R.drawable.ic_favorite_border)
         }
         btCollect.tag = isCollect
-        subscribeUi()
-        initWebListener()
-        initWebSetting()
-        webView.loadUrl(mWebModel?.link)
+
+        layRefresh.setOnRefreshListener {
+            //1秒后隐藏
+            webView.reload()
+            layRefresh.postDelayed({
+                layRefresh.isRefreshing = false
+            }, 1000)
+        }
+
+
     }
 
     private fun subscribeUi() {
@@ -101,7 +114,7 @@ class WebActivity : BaseActivity() {
 
     @TargetApi(Build.VERSION_CODES.M)
     private fun initWebListener() {
-        scrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+        webView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
             if (scrollY < oldScrollY) {//up
                 animateFbt(false)
             }
@@ -231,9 +244,6 @@ class WebActivity : BaseActivity() {
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 pbLoading.visibility = View.GONE
-//                if (layRefresh.isRefreshing) {
-//                    layRefresh.isRefreshing = false
-//                }
                 if (mTitle != null) {
                     toolBar.title = mTitle
                 }

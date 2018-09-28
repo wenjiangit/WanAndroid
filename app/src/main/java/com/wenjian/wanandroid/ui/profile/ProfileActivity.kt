@@ -17,7 +17,7 @@ class ProfileActivity : BaseActivity() {
         setContentView(R.layout.activity_profile)
         setupActionBar(title = "个人中心")
         initViews()
-        initEvents()
+//        initEvents()
     }
 
     private fun initEvents() {

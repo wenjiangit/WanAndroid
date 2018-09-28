@@ -25,36 +25,29 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/scrollView"
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/layRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!--<android.support.v4.widget.SwipeRefreshLayout-->
-            <!--android:id="@+id/layRefresh"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
+        <com.wenjian.wanandroid.widget.NestedWebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+        </com.wenjian.wanandroid.widget.NestedWebView>
 
-            <WebView
-                android:id="@+id/webView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    </android.support.v4.widget.SwipeRefreshLayout>
 
-            </WebView>
-
-
-
-        <!--</android.support.v4.widget.SwipeRefreshLayout>-->
-
-    </android.support.v4.widget.NestedScrollView>
 
     <ViewStub
         android:id="@+id/vsError"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout="@layout/web_loading_error" />
+
     <ProgressBar
         android:id="@+id/pbLoading"
         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"

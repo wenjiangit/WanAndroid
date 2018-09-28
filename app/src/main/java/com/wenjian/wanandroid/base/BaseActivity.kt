@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import androidx.core.widget.toast
 import com.wenjian.wanandroid.entity.Resource
-import com.wenjian.wanandroid.extension.snak
-import org.jetbrains.anko.support.v4.toast
 
 /**
  * Description: BaseActivity

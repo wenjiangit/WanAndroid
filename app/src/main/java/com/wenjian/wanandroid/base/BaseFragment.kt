@@ -28,7 +28,7 @@ abstract class BaseFragment : Fragment() {
 
     private var viewInitiated: Boolean = false
     private var dataInitiated: Boolean = false
-    private var forceUpdate: Boolean = false
+    open var forceUpdate: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.i(TAG, "onCreateView")

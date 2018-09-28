@@ -40,7 +40,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko:$anko_version"
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     implementation "com.android.support:design:$support_version"
     implementation "com.github.bumptech.glide:glide:$glide_version"
     implementation 'androidx.core:core-ktx:0.3'
@@ -59,4 +59,5 @@ dependencies {
     implementation 'com.youth.banner:banner:1.4.10'
     implementation project(':androidtagview')
     implementation 'com.tencent.bugly:crashreport:2.6.6.1'
+    implementation 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
 }

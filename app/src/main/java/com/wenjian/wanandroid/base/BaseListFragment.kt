@@ -55,6 +55,7 @@ abstract class BaseListFragment<T> : BaseFragment() {
             }
         }
 
+        mLayRefresh.setColorSchemeResources(R.color.colorPrimary)
         mLayRefresh.setOnRefreshListener {
             refresh()
         }
