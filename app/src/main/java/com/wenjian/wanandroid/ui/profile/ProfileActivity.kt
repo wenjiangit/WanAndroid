@@ -1,24 +1,20 @@
 package com.wenjian.wanandroid.ui.profile
 
-import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import com.wenjian.wanandroid.R
-import com.wenjian.wanandroid.base.BaseActivity
+import com.wenjian.wanandroid.base.BaseSkinActivity
 import com.wenjian.wanandroid.extension.loadAvatar
-import com.wenjian.wanandroid.extension.setSystemBarColor
 import com.wenjian.wanandroid.extension.setupActionBar
 import com.wenjian.wanandroid.helper.UserHelper
 import kotlinx.android.synthetic.main.activity_profile.*
 
-class ProfileActivity : BaseActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+class ProfileActivity : BaseSkinActivity() {
+    override fun setup() {
         setContentView(R.layout.activity_profile)
         setupActionBar(title = "个人中心")
         initViews()
-//        initEvents()
     }
+
 
     private fun initEvents() {
         app_bar_layout.addOnOffsetChangedListener { _, verticalOffset ->

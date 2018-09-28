@@ -67,5 +67,38 @@
     </style>
 
 
+    <style name="FloatingActionButton.Base" parent="Widget.Design.FloatingActionButton">
+        <item name="android:tint">@color/colorPrimary</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="fabSize">normal</item>
+
+    </style>
+
+
+    <!--紫色-->
+    <style name="AppSkin.Purple" parent="AppTheme">
+        <item name="colorPrimary">@color/skin_purple</item>
+        <item name="colorPrimaryDark">@color/skin_purple</item>
+        <item name="colorAccent">@color/skin_purple</item>
+    </style>
+    <!--红色-->
+    <style name="AppSkin.Red" parent="AppTheme">
+        <item name="colorPrimary">@color/skin_red</item>
+        <item name="colorPrimaryDark">@color/skin_red</item>
+        <item name="colorAccent">@color/skin_red</item>
+    </style>
+
+    <style name="AppSkin.Blue" parent="AppTheme">
+        <item name="colorPrimary">@color/skin_blue</item>
+        <item name="colorPrimaryDark">@color/skin_blue</item>
+        <item name="colorAccent">@color/skin_blue</item>
+    </style>
+
+    <style name="AppSkin.Green" parent="AppTheme">
+        <item name="colorPrimary">@color/skin_green</item>
+        <item name="colorPrimaryDark">@color/skin_green</item>
+        <item name="colorAccent">@color/skin_green</item>
+    </style>
+
 
 </resources>

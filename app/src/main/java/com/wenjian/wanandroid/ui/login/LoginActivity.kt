@@ -1,11 +1,10 @@
 package com.wenjian.wanandroid.ui.login
 
 import android.arch.lifecycle.Observer
-import android.os.Bundle
 import android.view.View
 import com.wenjian.wanandroid.MainActivity
 import com.wenjian.wanandroid.R
-import com.wenjian.wanandroid.base.BaseActivity
+import com.wenjian.wanandroid.base.BaseSkinActivity
 import com.wenjian.wanandroid.extension.*
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.toast
@@ -16,14 +15,12 @@ import org.jetbrains.anko.toast
  *
  * @author jian.wen@ubtrobot.com
  */
-class LoginActivity : BaseActivity(), View.OnClickListener {
-
+class LoginActivity : BaseSkinActivity(), View.OnClickListener {
     private var isLogin: Boolean = true
 
     private val mUserModel: UserModel by apiModelDelegate(UserModel::class.java)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setup() {
         setContentView(R.layout.activity_login)
         setupActionBar(title = "登录")
         initEvents()

@@ -48,15 +48,13 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_convert"
+        style="@style/FloatingActionButton.Base"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:src="@drawable/ic_swap"
-        app:backgroundTint="@android:color/white"
-        app:fabSize="normal"
         app:layout_anchor="@id/app_bar_scrolling"
-        app:layout_anchorGravity="bottom|end"
-        app:rippleColor="@color/colorAccent" />
+        app:layout_anchorGravity="bottom|end" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -158,7 +156,7 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <RelativeLayout
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -166,23 +164,19 @@
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/bt_login"
+                    style="@style/FloatingActionButton.Base"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:backgroundTint="@android:color/white"
-                    app:fabSize="normal"
-                    app:rippleColor="@color/colorAccent"
                     app:srcCompat="@drawable/ic_arrow_right" />
-
 
                 <ProgressBar
                     android:id="@+id/progress_bar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
                     android:theme="@style/ProgressBar.White"
                     android:visibility="gone" />
 
-            </RelativeLayout>
+            </FrameLayout>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

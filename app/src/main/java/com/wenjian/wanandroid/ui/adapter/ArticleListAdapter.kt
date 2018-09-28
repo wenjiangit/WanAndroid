@@ -1,6 +1,5 @@
 package com.wenjian.wanandroid.ui.adapter
 
-import android.support.v4.view.ViewCompat
 import android.text.Html
 import android.view.View
 import android.widget.ImageView
@@ -46,14 +45,11 @@ class ArticleListAdapter : BaseRecyclerAdapter<Article>(R.layout.rv_item_article
                     WebActivity.start(it.context, buildWebModel())
                 }
 
+                val likeImage = getView<ImageView>(R.id.iv_like)
                 if (showLike) {
-                    if (collect) {
-                        setImageResource(R.id.iv_like, R.drawable.ic_favorite)
-                    } else {
-                        setImageResource(R.id.iv_like, R.drawable.ic_favorite_border)
-                    }
+                    likeImage.isSelected = collect
                 } else {
-                    getView<ImageView>(R.id.iv_like).gone()
+                    likeImage.gone()
                 }
             }
         }

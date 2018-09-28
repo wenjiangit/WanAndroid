@@ -22,6 +22,7 @@
         android:layout_gravity="bottom"
         android:background="@color/white"
         app:elevation="10dp"
+        android:elevation="10dp"
         app:menu="@menu/navigation_items">
 
     </com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx>
