@@ -1,7 +1,6 @@
 package com.wenjian.wanandroid.ui.adapter
 
 import android.text.Html
-import android.view.View
 import android.widget.ImageView
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wenjian.wanandroid.R
@@ -9,6 +8,7 @@ import com.wenjian.wanandroid.base.BaseRecyclerAdapter
 import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.extension.gone
 import com.wenjian.wanandroid.extension.loadUrl
+import com.wenjian.wanandroid.extension.visible
 import com.wenjian.wanandroid.ui.web.WebActivity
 
 /**
@@ -37,9 +37,9 @@ class ArticleListAdapter : BaseRecyclerAdapter<Article>(R.layout.rv_item_article
                 val imageView = getView<ImageView>(R.id.iv_image)
                 if (!envelopePic.isNullOrBlank()) {
                     imageView.loadUrl(envelopePic)
-                    imageView.visibility = View.VISIBLE
+                    imageView.visible()
                 } else {
-                    imageView.visibility = View.GONE
+                    imageView.gone()
                 }
                 itemView.setOnClickListener {
                     WebActivity.start(it.context, buildWebModel())

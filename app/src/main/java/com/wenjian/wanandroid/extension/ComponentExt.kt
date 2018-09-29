@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import com.google.gson.reflect.TypeToken
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.utils.Tools
 import org.jetbrains.anko.contentView
@@ -81,3 +82,5 @@ fun AppCompatActivity.launch(clz: Class<*>) {
 fun Fragment.launch(clz: Class<*>) {
     startActivity(Intent(context, clz))
 }
+
+inline fun <reified T> genericType() = object: TypeToken<T>() {}.type
