@@ -8,12 +8,13 @@
 
     <include layout="@layout/common_title_bar" />
 
-    <FrameLayout
-        android:id="@+id/container"
+    <com.wenjian.wanandroid.widget.ViewPagerView
+        android:id="@+id/mainPager"
+        android:enabled="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    </FrameLayout>
+    </com.wenjian.wanandroid.widget.ViewPagerView>
 
     <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
         android:id="@+id/navigation"
@@ -22,7 +23,6 @@
         android:layout_gravity="bottom"
         android:background="@color/white"
         app:elevation="10dp"
-        android:elevation="10dp"
         app:menu="@menu/navigation_items">
 
     </com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx>

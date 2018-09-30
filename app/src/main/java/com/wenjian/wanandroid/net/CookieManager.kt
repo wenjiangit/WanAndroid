@@ -21,7 +21,7 @@ class CookieManager(val context: Context) {
         private val TAG: String = CookieManager::class.java.simpleName
     }
 
-    private var cookieStore: ConcurrentHashMap<String, ConcurrentHashMap<String, Cookie>?> = ConcurrentHashMap()
+    private val cookieStore: ConcurrentHashMap<String, ConcurrentHashMap<String, Cookie>?> = ConcurrentHashMap()
     private val cookiePrefs: SharedPreferences
     private val gson: Gson = Gson()
 
@@ -56,9 +56,11 @@ class CookieManager(val context: Context) {
         val hashMap = cookieStore[host]
         //及时清理过期数据
         val filter = hashMap?.filter { it.value.expiresAt() > System.currentTimeMillis() }
-        val newMap = ConcurrentHashMap(filter)
-        cookieStore[host] = newMap
-        serialize(host, newMap)
+        filter?.let {
+            val newMap = ConcurrentHashMap(filter)
+            cookieStore[host] = newMap
+            serialize(host, newMap)
+        }
         return filter?.values?.toList() ?: emptyList()
     }
 

@@ -18,11 +18,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = [bugly_debug:"false"]
+            manifestPlaceholders = [bugly_debug: "false"]
         }
 
-        debug{
-            manifestPlaceholders = [bugly_debug:"true"]
+        debug {
+            manifestPlaceholders = [bugly_debug: "true"]
         }
     }
 }
@@ -60,4 +60,5 @@ dependencies {
     implementation project(':androidtagview')
     implementation 'com.tencent.bugly:crashreport:2.6.6.1'
     implementation 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
+    implementation 'com.qmuiteam:qmui:1.1.3'
 }

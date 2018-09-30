@@ -2,6 +2,8 @@ package com.wenjian.wanandroid
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentPagerAdapter
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -20,8 +22,6 @@ import org.jetbrains.anko.toast
 class MainActivity : BaseActivity() {
 
     private var lastBack: Long = 0
-    private var curFragment: Fragment? = null
-    private lateinit var mFragments: List<Fragment>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,36 +68,16 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initFragments() {
-        mFragments = listOf(
+        val mFragments = listOf(
                 HomeFragment.newInstance(),
                 TreeFragment.newInstance(),
                 ProjectFragment.newInstance(),
                 MineFragment.newInstance())
-
-        supportFragmentManager.beginTransaction().apply {
-            for (i in 0 until mFragments.size) {
-                val fragment = mFragments[i]
-                add(R.id.container, fragment)
-                if (i != 0) {
-                    hide(fragment)
-                } else {
-                    show(fragment)
-                    curFragment = fragment
-                }
-            }
-        }.commit()
+        mainPager.adapter = MainPagerAdapter(supportFragmentManager, mFragments)
     }
 
     private fun doTabSelect(position: Int) {
-        val fragment = mFragments[position]
-        if (fragment == curFragment) {
-            return
-        }
-        supportFragmentManager.beginTransaction().apply {
-            hide(curFragment)
-            show(fragment)
-        }.commit()
-        curFragment = fragment
+        mainPager.currentItem = position
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
@@ -123,4 +103,12 @@ class MainActivity : BaseActivity() {
         lastBack = current
 
     }
+
+
+    class MainPagerAdapter(fm: FragmentManager, private val fragments: List<Fragment>) : FragmentPagerAdapter(fm) {
+        override fun getItem(position: Int): Fragment = fragments[position]
+        override fun getCount(): Int = fragments.size
+    }
+
+
 }

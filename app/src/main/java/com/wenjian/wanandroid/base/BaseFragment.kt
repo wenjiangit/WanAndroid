@@ -66,7 +66,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-        Log.i(TAG, "setUserVisibleHint")
+        Log.i(TAG, "setUserVisibleHint==$isVisibleToUser")
         tryLoadData()
     }
 
@@ -95,7 +95,7 @@ abstract class BaseFragment : Fragment() {
 
     }
 
-    open fun <T> showContentWithStatus(it: Resource<T>?, renderError: () -> Unit={}, render: (T) -> Unit) {
+    open fun <T> showContentWithStatus(it: Resource<T>?, renderError: () -> Unit = {}, render: (T) -> Unit) {
         it?.let { res ->
             when (res.status) {
                 Resource.STATUS.SUCCESS -> {
