@@ -41,6 +41,10 @@ fun AppCompatActivity.setSystemBarColor(@ColorRes resId: Int = -1, @ColorInt col
     Tools.setSystemBarColor(this, resId, colorInt)
 }
 
+fun AppCompatActivity.translucentStatubar(){
+    Tools.translucent(this)
+}
+
 fun Fragment.snak(text: CharSequence) {
     Snackbar.make(this.view!!, text, Snackbar.LENGTH_SHORT).show()
 }

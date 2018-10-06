@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.wenjian.wanandroid.base.BaseActivity
@@ -61,7 +60,6 @@ class MainActivity : BaseActivity() {
 
         //导航栏随着appbar做相反运动
         app_bar.addOnOffsetChangedListener { _, verticalOffset ->
-            Log.i("wj", "$verticalOffset")
             navigation.translationY = Math.abs(verticalOffset).toFloat()
         }
 

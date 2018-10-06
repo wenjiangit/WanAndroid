@@ -71,9 +71,10 @@ data class Project(
 ) {
 
     fun buildWebModel() = WebModel(id, link, collect)
-}
 
-data class Tag(
-        val name: String,
-        val url: String
-)
+
+    data class Tag(
+            val name: String,
+            val url: String
+    )
+}

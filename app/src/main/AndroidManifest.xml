@@ -41,12 +41,8 @@
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity
-            android:name=".ui.profile.ProfileActivity"
-            android:theme="@style/AppTheme.Translucent" />
-        <activity
-            android:name=".ui.collect.CollectActivity"
-            android:theme="@style/AppTheme.Translucent" />
+        <activity android:name=".ui.profile.ProfileActivity" />
+        <activity android:name=".ui.collect.CollectActivity" />
         <activity android:name=".ui.setting.SettingActivity" />
         <activity
             android:name=".ui.splash.SplashActivity"

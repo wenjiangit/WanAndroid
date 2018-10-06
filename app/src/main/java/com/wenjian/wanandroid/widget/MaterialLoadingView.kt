@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.v4.widget.CircularProgressDrawable
 import android.util.AttributeSet
 import android.view.Gravity
+import android.view.View
 import android.widget.FrameLayout
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.utils.Tools
@@ -36,13 +37,18 @@ class MaterialLoadingView @JvmOverloads constructor(
         addView(mCircleView, params)
     }
 
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        mProgress?.start()
-    }
-
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        mProgress?.stop()
+        mProgress = null
+    }
+
+    override fun onVisibilityChanged(changedView: View?, visibility: Int) {
+        super.onVisibilityChanged(changedView, visibility)
+        if (visibility == View.VISIBLE) {
+            mProgress?.start()
+        } else {
+            mProgress?.stop()
+        }
+
     }
 }

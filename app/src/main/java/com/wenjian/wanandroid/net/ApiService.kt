@@ -33,6 +33,7 @@ interface ApiService {
     /**
      * 搜索
      */
+    @Headers("${CacheStrategy.CUSTOM_HEADER}: 0")
     @FormUrlEncoded
     @POST("/article/query/{page}/json")
     fun search(@Field("k") k: String, @Path("page") page: Int): Observable<PagingResp<List<Article>>>
@@ -78,6 +79,12 @@ interface ApiService {
     fun register(@Field("username") username: String,
                  @Field("password") password: String,
                  @Field("repassword") repassword: String): Observable<Resp<UserInfo>>
+
+    /**
+     * 登出
+     */
+    @GET("/user/logout/json")
+    fun logout():Observable<Resp<Any>>
 
     /**
      * 我的收藏

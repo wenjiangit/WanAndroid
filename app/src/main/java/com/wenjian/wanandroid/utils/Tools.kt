@@ -1,6 +1,7 @@
 package com.wenjian.wanandroid.utils
 
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -13,13 +14,16 @@ import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.NestedScrollView
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.TypedValue
 import android.view.Menu
 import android.view.View
+import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import com.wenjian.wanandroid.R
+import com.wenjian.wanandroid.base.BaseActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -51,6 +55,15 @@ object Tools {
             if (colorInt != -1) {
                 window.statusBarColor = colorInt
             }
+        }
+    }
+
+    fun translucent(act: Activity) {
+        act.window?.apply {
+            clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            statusBarColor = Color.TRANSPARENT
         }
     }
 
@@ -186,6 +199,46 @@ object Tools {
             index += period
         }
         return builder.toString()
+    }
+
+    /**
+     * 将Toolbar高度填充到状态栏
+     */
+    fun initFullBar(toolbar: Toolbar, activity: AppCompatActivity) {
+        val params = toolbar.layoutParams
+        params.height = getStatusHeight(activity) + getSystemActionBarSize(activity)
+        toolbar.layoutParams = params
+        toolbar.setPadding(
+                toolbar.left,
+                toolbar.top + getStatusHeight(activity),
+                toolbar.right,
+                toolbar.bottom
+        )
+    }
+
+    @SuppressLint("PrivateApi")
+    fun getStatusHeight(context: Context): Int {
+        var statusHeight = -1
+        try {
+            val clazz = Class.forName("com.android.internal.R\$dimen")
+            val `object` = clazz.newInstance()
+            val height = Integer.parseInt(clazz.getField("status_bar_height")
+                    .get(`object`).toString())
+            statusHeight = context.applicationContext.resources.getDimensionPixelSize(height)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return statusHeight
+    }
+
+    fun getSystemActionBarSize(context: Context): Int {
+        val tv = TypedValue()
+        return if (context.theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            TypedValue.complexToDimensionPixelSize(tv.data, context.resources.displayMetrics)
+        } else {
+            dip2px(context, 48f)
+        }
     }
 
 }

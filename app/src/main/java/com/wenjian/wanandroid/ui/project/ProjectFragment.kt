@@ -2,10 +2,11 @@ package com.wenjian.wanandroid.ui.project
 
 
 import android.arch.lifecycle.Observer
+import android.support.design.widget.AppBarLayout
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.view.View
 import android.widget.ProgressBar
@@ -26,6 +27,7 @@ class ProjectFragment : BaseFragment() {
     private var mTabLayout: TabLayout? = null
     private lateinit var mViewPager: ViewPager
     private lateinit var mPbLoading: ProgressBar
+    private var mAppBar: AppBarLayout? = null
 
     private val mProjectModel: ProjectModel by apiModelDelegate(ProjectModel::class.java)
 
@@ -39,6 +41,7 @@ class ProjectFragment : BaseFragment() {
         mTabLayout = mRoot.findViewById(R.id.tab_layout)
         mViewPager = mRoot.findViewById(R.id.project_pager)
         mPbLoading = mRoot.findViewById(R.id.pbLoading)
+        mAppBar = activity?.findViewById(R.id.app_bar)
     }
 
     override fun subscribeUi() {
@@ -66,17 +69,21 @@ class ProjectFragment : BaseFragment() {
         mPbLoading.gone()
     }
 
-    class ProjectPagerAdapter(fm: FragmentManager, val data: List<ProjectTree>) : FragmentStatePagerAdapter(fm) {
-
-        private val fragments: List<Fragment>
-
-        init {
-            fragments = data.map { ProjectListFragment.newInstance(it.id) }
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            mAppBar?.elevation = 0f
+        } else {
+            mAppBar?.elevation = 8f
         }
 
-        override fun getItem(position: Int): Fragment = fragments[position]
+    }
 
-        override fun getCount(): Int = fragments.size
+    class ProjectPagerAdapter(fm: FragmentManager, val data: List<ProjectTree>) : FragmentPagerAdapter(fm) {
+
+        override fun getItem(position: Int): Fragment = ProjectListFragment.newInstance(data[position].id)
+
+        override fun getCount(): Int = data.size
 
         override fun getPageTitle(position: Int): CharSequence? {
             return data[position].name

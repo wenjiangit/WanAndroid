@@ -23,7 +23,7 @@ object ExceptionHelper {
             is UnknownHostException, is ConnectException -> "网络连接不可用,请稍后重试"
             is TimeoutException, is SocketTimeoutException -> "连接超时,请稍后重试"
             is JsonParseException, is JsonSyntaxException -> "数据解析错误"
-            else -> "你家网络不太给力"
+            else -> e.message?:"你家网络不太给力哟～～～"
         }
     }
 
