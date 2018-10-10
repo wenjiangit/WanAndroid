@@ -1,15 +1,13 @@
 package com.wenjian.wanandroid.ui.search
 
-import android.arch.lifecycle.MutableLiveData
-import com.wenjian.wanandroid.base.BaseViewModel
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Transformations
 import com.wenjian.wanandroid.entity.Article
-import com.wenjian.wanandroid.entity.HotWord
-import com.wenjian.wanandroid.entity.Resource
-import com.wenjian.wanandroid.extension.io2Main
 import com.wenjian.wanandroid.helper.UserHelper
-import com.wenjian.wanandroid.model.ApiObserver
-import com.wenjian.wanandroid.model.PagingObserver
-import com.wenjian.wanandroid.net.ApiService
+import com.wenjian.wanandroid.model.DataViewModel
+import com.wenjian.wanandroid.model.SingleLiveEvent
+import com.wenjian.wanandroid.model.ViewState
+import com.wenjian.wanandroid.model.view.ViewCallbackImpl
 
 /**
  * Description ${name}
@@ -17,29 +15,22 @@ import com.wenjian.wanandroid.net.ApiService
  * Date 2018/9/9
  * @author wenjianes@163.com
  */
-class SearchModel(private val service: ApiService) : BaseViewModel() {
-
-    val articles: MutableLiveData<Resource<List<Article>>> = MutableLiveData()
-    val hotWords: MutableLiveData<Resource<List<HotWord>>> = MutableLiveData()
+class SearchModel : DataViewModel() {
 
     private var lastQuery: String? = null
-    private var count: Int = 0
+    private var curPage: Int = 0
     private var isOver: Boolean = false
 
-    fun loadHotWords() {
-        service.loadHotWords()
-                .io2Main()
-                .subscribe(ApiObserver(hotWords, disposables))
-    }
+    private val mPageLive: SingleLiveEvent<Int> = SingleLiveEvent()
+
+    fun loadHotWords() = repository.loadHotWords(ViewCallbackImpl(viewState))
 
     fun loadMore() {
         if (isOver) {
-            articles.value = Resource.success(emptyList())
+            viewState.value = ViewState.empty()
             return
         }
-        lastQuery?.let {
-            doSearch(it, ++count)
-        }
+        mPageLive.value = ++curPage
     }
 
     fun loadSearchHistory(): Set<String> = UserHelper.loadSearchHistory()
@@ -48,13 +39,15 @@ class SearchModel(private val service: ApiService) : BaseViewModel() {
 
     fun saveHistory(history: Set<String>) = UserHelper.saveSearchHistory(history)
 
-    fun doSearch(query: String, page: Int = 0) {
+    fun loadData(): LiveData<List<Article>> = Transformations.switchMap(mPageLive) { page ->
+        repository.search(lastQuery!!, page, ViewCallbackImpl(viewState)) {
+            curPage = it.curPage
+            isOver = it.over
+        }
+    }
+
+    fun doSearch(query: String) {
         lastQuery = query
-        service.search(query, page)
-                .io2Main()
-                .subscribe(PagingObserver(articles, disposables) {
-                    count = it.curPage
-                    isOver = it.over
-                })
+        mPageLive.value = 0
     }
 }

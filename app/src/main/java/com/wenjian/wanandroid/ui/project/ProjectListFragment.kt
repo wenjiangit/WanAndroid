@@ -6,7 +6,6 @@ import com.wenjian.wanandroid.base.BaseListFragment
 import com.wenjian.wanandroid.base.BaseRecyclerAdapter
 import com.wenjian.wanandroid.entity.Project
 import com.wenjian.wanandroid.extension.addCustomDecoration
-import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.extraDelegate
 import com.wenjian.wanandroid.ui.adapter.ProjectListAdapter
 
@@ -16,7 +15,7 @@ import com.wenjian.wanandroid.ui.adapter.ProjectListAdapter
  *
  * @author jian.wen@ubtrobot.com
  */
-class ProjectListFragment : BaseListFragment<Project>() {
+class ProjectListFragment : BaseListFragment<Project, ProjectModel>(ProjectModel::class.java) {
 
     private val cid: Int? by extraDelegate(ARG_CID)
 
@@ -28,14 +27,12 @@ class ProjectListFragment : BaseListFragment<Project>() {
         }
     }
 
-    private val mProjectModel: ProjectModel by apiModelDelegate(ProjectModel::class.java)
-
     override fun createAdapter(): BaseRecyclerAdapter<Project> = ProjectListAdapter()
 
     override fun subscribeUi() {
         super.subscribeUi()
-        mProjectModel.projects.observe(this, Observer { it ->
-            showContent(it)
+        mViewModel.loadProjects().observe(this, Observer { data ->
+            showContent(data)
         })
     }
 
@@ -46,12 +43,12 @@ class ProjectListFragment : BaseListFragment<Project>() {
 
     override fun onLazyLoad() {
         super.onLazyLoad()
-        mProjectModel.loadProjects(cid!!)
+        mViewModel.refresh(cid!!)
     }
 
     override fun onLoadMore() {
         super.onLoadMore()
-        mProjectModel.loadMore()
+        mViewModel.loadMore()
     }
 
 }

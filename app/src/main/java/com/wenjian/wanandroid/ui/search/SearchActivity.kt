@@ -12,16 +12,14 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import co.lujun.androidtagview.TagView
 import com.wenjian.wanandroid.R
-import com.wenjian.wanandroid.base.BaseActivity
-import com.wenjian.wanandroid.extension.apiModelDelegate
+import com.wenjian.wanandroid.base.VMActivity
 import com.wenjian.wanandroid.extension.setSystemBarColor
 import com.wenjian.wanandroid.extension.setupActionBar
 import kotlinx.android.synthetic.main.activity_search.*
 
-class SearchActivity : BaseActivity() {
+class SearchActivity : VMActivity<SearchModel>(SearchModel::class.java) {
 
     private lateinit var searchFragment: SearchFragment
-    private val mSearchModel: SearchModel by apiModelDelegate(SearchModel::class.java)
     private val mHistory: MutableSet<String> = hashSetOf()
     private lateinit var mSearchView: SearchView
 
@@ -33,20 +31,19 @@ class SearchActivity : BaseActivity() {
         addFragments()
         initEvents()
         subscribeUi()
-        mSearchModel.loadHotWords()
-
         loadHistory()
     }
 
     private fun loadHistory() {
-        mSearchModel.loadSearchHistory().apply {
+        mViewModel.loadSearchHistory().apply {
             historyContainer.tags = this.toList()
             mHistory.addAll(this)
         }
+
     }
 
     private fun initEvents() {
-        val tagClickListener:TagView.OnTagClickListener = object :TagView.OnTagClickListener{
+        val tagClickListener: TagView.OnTagClickListener = object : TagView.OnTagClickListener {
             override fun onTagClick(position: Int, text: String?) {
                 mSearchView.setQuery(text, true)
             }
@@ -64,13 +61,13 @@ class SearchActivity : BaseActivity() {
         iv_clear.setOnClickListener {
             mHistory.clear()
             historyContainer.removeAllTags()
-            mSearchModel.clearHistory()
+            mViewModel.clearHistory()
         }
     }
 
     private fun subscribeUi() {
-        mSearchModel.hotWords.observe(this, Observer { it ->
-            it?.data?.apply {
+        mViewModel.loadHotWords().observe(this, Observer { it ->
+            it?.apply {
                 hotwordsContainer.tags = this.map { it.name }
             }
         })
@@ -159,7 +156,7 @@ class SearchActivity : BaseActivity() {
 
     override fun onPause() {
         super.onPause()
-        mSearchModel.saveHistory(mHistory)
+        mViewModel.saveHistory(mHistory)
         mHistory.clear()
     }
 

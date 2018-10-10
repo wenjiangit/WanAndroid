@@ -35,8 +35,8 @@ fun BottomNavigationView.disableShiftMode() {
     }
 }
 
-fun View.visible(visible: Boolean = true) {
-    visibility = if (visible) View.VISIBLE else View.INVISIBLE
+fun View.visible() {
+    visibility = View.VISIBLE
 }
 
 fun View.gone() {

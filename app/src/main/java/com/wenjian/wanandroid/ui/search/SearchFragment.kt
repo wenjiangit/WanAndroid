@@ -15,10 +15,8 @@ import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
  * A simple [Fragment] subclass.
  *
  */
-class SearchFragment : BaseListFragment<Article>() {
+class SearchFragment : BaseListFragment<Article,SearchModel>(SearchModel::class.java) {
     override fun createAdapter(): BaseRecyclerAdapter<Article> = ArticleListAdapter()
-
-    private val mSearchModel: SearchModel by apiModelDelegate(SearchModel::class.java)
 
     override fun initViews() {
         super.initViews()
@@ -28,7 +26,7 @@ class SearchFragment : BaseListFragment<Article>() {
 
     override fun subscribeUi() {
         super.subscribeUi()
-        mSearchModel.articles.observe(this, Observer { it ->
+        mViewModel.loadData().observe(this, Observer { it ->
            showContent(it)
         })
     }
@@ -37,13 +35,13 @@ class SearchFragment : BaseListFragment<Article>() {
         mAdapter.setNewData(null)
         if (!input.isBlank()) {
             isLoadMore = false
-            mSearchModel.doSearch(input)
+            mViewModel.doSearch(input)
         }
     }
 
     override fun onLoadMore() {
         super.onLoadMore()
-        mSearchModel.loadMore()
+        mViewModel.loadMore()
     }
 
 

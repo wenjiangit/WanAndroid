@@ -6,7 +6,6 @@ import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseListFragment
 import com.wenjian.wanandroid.base.BaseRecyclerAdapter
 import com.wenjian.wanandroid.entity.TreeEntry
-import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.setupToolBar
 import com.wenjian.wanandroid.ui.adapter.TreeAdapter
 
@@ -16,14 +15,12 @@ import com.wenjian.wanandroid.ui.adapter.TreeAdapter
  *
  * @author jian.wen@ubtrobot.com
  */
-class TreeFragment : BaseListFragment<TreeEntry>() {
+class TreeFragment : BaseListFragment<TreeEntry, TreeModel>(TreeModel::class.java) {
     override fun createAdapter(): BaseRecyclerAdapter<TreeEntry> = TreeAdapter()
 
     companion object {
         fun newInstance() = TreeFragment()
     }
-
-    private val mTreeModel: TreeModel by apiModelDelegate(TreeModel::class.java)
 
     override fun initViews() {
         super.initViews()
@@ -33,18 +30,14 @@ class TreeFragment : BaseListFragment<TreeEntry>() {
         mRecycler.adapter = mAdapter
     }
 
-    override fun subscribeUi() {
-        super.subscribeUi()
-        mTreeModel.tree.observe(this, Observer { it ->
-            showContentWithStatus(it) {
-                mAdapter.setNewData(it)
-            }
-        })
-    }
-
     override fun onLazyLoad() {
         super.onLazyLoad()
-        mTreeModel.loadTree()
+        mViewModel.loadTree()
+                .observe(this, Observer { data ->
+                    data?.let {
+                        mAdapter.setNewData(it)
+                    }
+                })
     }
 
     override fun loadMoreEnable(): Boolean {

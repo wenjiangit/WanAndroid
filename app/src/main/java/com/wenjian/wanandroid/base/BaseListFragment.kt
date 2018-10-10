@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.wenjian.wanandroid.R
-import com.wenjian.wanandroid.entity.Resource
+import com.wenjian.wanandroid.model.DataViewModel
 import com.wenjian.wanandroid.widget.MyLoadMoreView
 
 /**
@@ -15,7 +15,7 @@ import com.wenjian.wanandroid.widget.MyLoadMoreView
  *
  * @author jian.wen@ubtrobot.com
  */
-abstract class BaseListFragment<T> : BaseFragment() {
+abstract class BaseListFragment<T, VM : DataViewModel>(clz: Class<VM>) : VMFragment<VM>(clz) {
 
     open lateinit var mRecycler: RecyclerView
     open lateinit var mLayRefresh: SwipeRefreshLayout
@@ -61,23 +61,21 @@ abstract class BaseListFragment<T> : BaseFragment() {
         }
     }
 
-    open fun showContent(res: Resource<List<T>>?) {
-        showContentWithStatus(res, {
-            if (isLoadMore) {
-                mAdapter.loadMoreFail()
-            }
-        }, {
-            if (isLoadMore) {
-                if (it.isEmpty()) {
-                    mAdapter.loadMoreEnd()
-                } else {
-                    mAdapter.addData(it)
-                    mAdapter.loadMoreComplete()
-                }
-            } else {
-                mAdapter.setNewData(it)
-            }
-        })
+    override fun showEmpty() {
+        if (isLoadMore) {
+            mAdapter.loadMoreEnd()
+        }
+    }
+
+    open fun showContent(res: List<T>?) {
+       res?.let {
+           if (isLoadMore) {
+               mAdapter.addData(it)
+               mAdapter.loadMoreComplete()
+           } else {
+               mAdapter.setNewData(it)
+           }
+       }
     }
 
 

@@ -2,6 +2,7 @@ package com.wenjian.wanandroid.helper
 
 import com.google.gson.JsonParseException
 import com.google.gson.JsonSyntaxException
+import com.wenjian.wanandroid.extension.logE
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -19,11 +20,12 @@ object ExceptionHelper {
         if (e == null) {
             return "未知错误"
         }
+        logE("net request error: ", e)
         return when (e) {
             is UnknownHostException, is ConnectException -> "网络连接不可用,请稍后重试"
             is TimeoutException, is SocketTimeoutException -> "连接超时,请稍后重试"
             is JsonParseException, is JsonSyntaxException -> "数据解析错误"
-            else -> e.message?:"你家网络不太给力哟～～～"
+            else -> e.message ?: "你家网络不太给力哟～～～"
         }
     }
 

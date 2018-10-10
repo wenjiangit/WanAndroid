@@ -1,15 +1,10 @@
 package com.wenjian.wanandroid.ui.login
 
-import android.arch.lifecycle.MutableLiveData
-import com.wenjian.wanandroid.base.BaseViewModel
-import com.wenjian.wanandroid.entity.Resource
-import com.wenjian.wanandroid.entity.UserInfo
-import com.wenjian.wanandroid.extension.io2Main
 import com.wenjian.wanandroid.helper.UserHelper
-import com.wenjian.wanandroid.model.ApiObserver
+import com.wenjian.wanandroid.model.DataViewModel
 import com.wenjian.wanandroid.model.RxBus
 import com.wenjian.wanandroid.model.UserInfoRefreshEvent
-import com.wenjian.wanandroid.net.ApiService
+import com.wenjian.wanandroid.model.view.ViewCallbackImpl
 
 /**
  * Description: UserModel
@@ -18,26 +13,18 @@ import com.wenjian.wanandroid.net.ApiService
  * @author jian.wen@ubtrobot.com
  */
 
-class UserModel(private val service: ApiService) : BaseViewModel() {
+class UserModel : DataViewModel() {
 
-    val userInfo: MutableLiveData<Resource<UserInfo>> = MutableLiveData()
+    fun login(username: String, password: String) = repository
+            .login(username, password, ViewCallbackImpl(viewState)) {
+                UserHelper.saveUserInfo(it)
+                RxBus.post(UserInfoRefreshEvent())
+            }
 
-    fun login(username: String, password: String) {
-        service.login(username, password)
-                .io2Main()
-                .subscribe(ApiObserver(userInfo, disposables) {
-                    UserHelper.saveUserInfo(it)
-                    RxBus.post(UserInfoRefreshEvent())
-                })
-    }
-
-    fun register(username: String, password: String, repass: String) {
-        service.register(username,password,repass)
-                .io2Main()
-                .subscribe(ApiObserver(userInfo,disposables){
-                    UserHelper.saveUserInfo(it)
-                    RxBus.post(UserInfoRefreshEvent())
-                })
-   }
+    fun register(username: String, password: String, repass: String) = repository
+            .register(username, password, repass, ViewCallbackImpl(viewState)) {
+                UserHelper.saveUserInfo(it)
+                RxBus.post(UserInfoRefreshEvent())
+            }
 
 }

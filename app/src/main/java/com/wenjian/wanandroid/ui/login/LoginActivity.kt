@@ -4,7 +4,7 @@ import android.arch.lifecycle.Observer
 import android.view.View
 import com.wenjian.wanandroid.MainActivity
 import com.wenjian.wanandroid.R
-import com.wenjian.wanandroid.base.BaseSkinActivity
+import com.wenjian.wanandroid.base.VMActivity
 import com.wenjian.wanandroid.extension.*
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.toast
@@ -15,25 +15,13 @@ import org.jetbrains.anko.toast
  *
  * @author jian.wen@ubtrobot.com
  */
-class LoginActivity : BaseSkinActivity(), View.OnClickListener {
+class LoginActivity : VMActivity<UserModel>(UserModel::class.java), View.OnClickListener {
     private var isLogin: Boolean = true
-
-    private val mUserModel: UserModel by apiModelDelegate(UserModel::class.java)
 
     override fun setup() {
         setContentView(R.layout.activity_login)
         setupActionBar(title = "登录")
         initEvents()
-        subscribeUi()
-    }
-
-    private fun subscribeUi() {
-        mUserModel.userInfo.observe(this, Observer { res ->
-            showContentWithStatus(res) { _ ->
-                toast("${if (isLogin) "登录" else "注册"}成功")
-                launch(MainActivity::class.java)
-            }
-        })
     }
 
     private fun initEvents() {
@@ -85,8 +73,16 @@ class LoginActivity : BaseSkinActivity(), View.OnClickListener {
             pass.isBlank() -> edit_password.error = "请输入密码"
             user.length < 6 -> edit_username.error = "用户名不合格"
             pass.length < 6 -> edit_password.error = "密码不合格"
-            else -> mUserModel.login(user, pass)
+            else -> login(user, pass)
         }
+    }
+
+    private fun login(user: String, pass: String) {
+        mViewModel.login(user,pass)
+                .observe(this, Observer {
+                    toast("登录成功")
+                    launch(MainActivity::class.java)
+                })
     }
 
     private fun onRegister() {
@@ -100,7 +96,15 @@ class LoginActivity : BaseSkinActivity(), View.OnClickListener {
             user.length < 6 -> edit_username.error = "用户名不合格"
             pass.length < 6 -> edit_password.error = "密码不合格"
             pass != repass -> edit_repassword.error = "确认密码不一致"
-            else -> mUserModel.register(user, pass, repass)
+            else -> register(user, pass, repass)
         }
+    }
+
+    private fun register(user: String, pass: String, repass: String) {
+        mViewModel.register(user, pass, repass)
+                .observe(this, Observer {
+                    toast("注册成功")
+                    launch(MainActivity::class.java)
+                })
     }
 }

@@ -7,8 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.wenjian.wanandroid.entity.Resource
-import org.jetbrains.anko.support.v4.toast
 
 /**
  * Description: BaseFragment
@@ -16,7 +14,7 @@ import org.jetbrains.anko.support.v4.toast
  *
  * @author jian.wen@ubtrobot.com
  */
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment : Fragment(){
 
     @Suppress("LeakingThis", "PropertyName")
     open val TAG: String = this::class.java.simpleName
@@ -85,30 +83,6 @@ abstract class BaseFragment : Fragment() {
 
     open fun onLazyLoad() {
         Log.i(TAG, "onLazyLoad")
-    }
-
-    open fun showLoading() {
-
-    }
-
-    open fun hideLoading() {
-
-    }
-
-    open fun <T> showContentWithStatus(it: Resource<T>?, renderError: () -> Unit = {}, render: (T) -> Unit) {
-        it?.let { res ->
-            when (res.status) {
-                Resource.STATUS.SUCCESS -> {
-                    hideLoading()
-                    render(res.data!!)
-                }
-                Resource.STATUS.LOADING -> showLoading()
-                Resource.STATUS.ERROR -> {
-                    hideLoading()
-                    res.msg?.let { toast(it) }
-                }
-            }
-        }
     }
 
 

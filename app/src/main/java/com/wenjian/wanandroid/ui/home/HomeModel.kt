@@ -1,19 +1,12 @@
 package com.wenjian.wanandroid.ui.home
 
-import android.arch.lifecycle.MutableLiveData
-import android.util.Log
-import com.wenjian.wanandroid.base.BaseViewModel
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Transformations
 import com.wenjian.wanandroid.entity.Article
-import com.wenjian.wanandroid.entity.Banner
-import com.wenjian.wanandroid.entity.Resource
-import com.wenjian.wanandroid.extension.io2Main
-import com.wenjian.wanandroid.helper.ExceptionHelper
-import com.wenjian.wanandroid.model.PagingObserver
-import com.wenjian.wanandroid.net.ApiService
-import com.wenjian.wanandroid.net.PagingResp
-import com.wenjian.wanandroid.net.Resp
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
+import com.wenjian.wanandroid.model.DataViewModel
+import com.wenjian.wanandroid.model.SingleLiveEvent
+import com.wenjian.wanandroid.model.ViewState
+import com.wenjian.wanandroid.model.view.ViewCallbackImpl
 
 /**
  * Description: HomeModel
@@ -22,54 +15,28 @@ import io.reactivex.functions.BiFunction
  * @author jian.wen@ubtrobot.com
  */
 
-class HomeModel(private val service: ApiService) : BaseViewModel() {
-
-    companion object {
-        val TAG: String = HomeModel::class.java.simpleName
-    }
-
-    val articles: MutableLiveData<Resource<List<Article>>> = MutableLiveData()
-
-    val homeData: MutableLiveData<Resource<Pair<List<Banner>, List<Article>>>> = MutableLiveData()
+class HomeModel : DataViewModel() {
 
     private var curPage: Int = 0
 
     private var isOver: Boolean = false
 
-    fun loadHomeData() {
-        val loadBanners = service.loadBanners()
-        val loadArticles = service.loadArticles(0)
-        Observable.zip(loadBanners, loadArticles, BiFunction { t1: Resp<List<Banner>>, t2: PagingResp<List<Article>> -> Pair(t1, t2) })
-                .io2Main()
-                .doOnSubscribe {
-                    addDisposable(it)
-                    homeData.value = Resource.loading()
-                }.subscribe({
-                    val (first, second) = it
-                    if (first.success() && second.success()) {
-                        this.curPage = second.data.curPage
-                        homeData.value = Resource.success(Pair(first.data, second.data.datas))
-                    } else {
-                        homeData.value = Resource.error("${first.errorMsg},${second.errorMsg}")
-                    }
-                }, {
-                    Log.e(TAG, "loadHomeData error:", it)
-                    homeData.value = Resource.error(ExceptionHelper.getErrorMsg(it))
-                })
+    private val mPageLive: SingleLiveEvent<Int> = SingleLiveEvent()
+
+    fun loadHomeData() = repository.loadHomeData(ViewCallbackImpl(viewState))
+
+    fun loadArticles(): LiveData<List<Article>> = Transformations.switchMap(mPageLive) { page ->
+        repository.loadArticles(page, ViewCallbackImpl(viewState)) {
+            isOver = it.over
+            curPage = it.curPage
+        }
     }
 
-
-    fun loadMoreArticles() {
+    fun loadMore() {
         if (isOver) {
-            articles.value = Resource.success(emptyList())
+            viewState.value = ViewState.empty()
             return
         }
-        service.loadArticles(++curPage)
-                .io2Main()
-                .subscribe(PagingObserver(articles, disposables) {
-                    isOver = it.over
-                    curPage = it.curPage
-                })
+        mPageLive.value = ++curPage
     }
-
 }

@@ -84,7 +84,7 @@ interface ApiService {
      * 登出
      */
     @GET("/user/logout/json")
-    fun logout():Observable<Resp<Any>>
+    fun logout():Observable<Resp<Unit>>
 
     /**
      * 我的收藏
@@ -96,7 +96,7 @@ interface ApiService {
      * 添加收藏
      */
     @POST("/lg/collect/{id}/json")
-    fun collect(@Path("id") id: Int): Observable<Resp<Any>>
+    fun collect(@Path("id") id: Int): Observable<Resp<Unit>>
 
 
     /**
@@ -104,7 +104,7 @@ interface ApiService {
      */
     @FormUrlEncoded
     @POST("/lg/uncollect/{id}/json")
-    fun unCollect(@Path("id") id: Int, @Field("originId") originId: Int): Observable<Resp<Any>>
+    fun unCollect(@Path("id") id: Int, @Field("originId") originId: Int): Observable<Resp<Unit>>
 
 
 }

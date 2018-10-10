@@ -11,11 +11,10 @@ import com.wenjian.wanandroid.net.ApiService
  * @author wenjianes@163.com
  */
 
-class CommonApiModelFactory(private val service: ApiService) : ViewModelProvider.NewInstanceFactory() {
+class CommonApiModelFactory : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        val constructor = modelClass.getConstructor(ApiService::class.java)
-        return constructor.newInstance(service)
+        return modelClass.newInstance()
     }
 }

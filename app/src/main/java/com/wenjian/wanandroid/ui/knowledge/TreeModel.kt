@@ -1,15 +1,15 @@
 package com.wenjian.wanandroid.ui.knowledge
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import com.wenjian.wanandroid.base.BaseViewModel
+import android.arch.lifecycle.Transformations
 import com.wenjian.wanandroid.entity.Article
-import com.wenjian.wanandroid.entity.ListContract
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.entity.TreeEntry
-import com.wenjian.wanandroid.extension.io2Main
-import com.wenjian.wanandroid.model.ApiObserver
-import com.wenjian.wanandroid.model.PagingObserver
-import com.wenjian.wanandroid.net.ApiService
+import com.wenjian.wanandroid.model.DataViewModel
+import com.wenjian.wanandroid.model.SingleLiveEvent
+import com.wenjian.wanandroid.model.ViewState
+import com.wenjian.wanandroid.model.view.ViewCallbackImpl
 
 /**
  * Description TreeModel
@@ -17,42 +17,34 @@ import com.wenjian.wanandroid.net.ApiService
  * Date 2018/9/8
  * @author wenjianes@163.com
  */
-class TreeModel(private val service: ApiService) : BaseViewModel() {
-
-    val tree: MutableLiveData<Resource<List<TreeEntry>>> = MutableLiveData()
-
-    val articles: MutableLiveData<Resource<List<Article>>> = MutableLiveData()
+class TreeModel : DataViewModel() {
 
     private var isOver: Boolean = false
     private var pageCount: Int = 0
     private var cid: Int = -1
 
-    fun loadTree() {
-        service.loadTree()
-                .io2Main()
-                .subscribe(ApiObserver(tree, disposables))
+    private val mPageLive: SingleLiveEvent<Int> = SingleLiveEvent()
+
+    fun loadTree() = repository.loadTree(ViewCallbackImpl(viewState))
+
+    fun loadData(): LiveData<List<Article>> = Transformations.switchMap(mPageLive) { page ->
+        repository.loadTreeArticles(page, cid, ViewCallbackImpl(viewState)) {
+            isOver = it.over
+            pageCount = it.curPage
+        }
     }
 
-
-    fun loadArticles(cid: Int, page: Int = 0) {
-        if (this.cid == -1) {
-            this.cid = cid
-        }
-        service.loadTreeArticles(page, cid)
-                .io2Main()
-                .subscribe(PagingObserver(articles, disposables) {
-                    isOver = it.over
-                    pageCount = it.curPage
-                })
+    fun refresh(cid: Int) {
+        this.cid = cid
+        mPageLive.value = 0
     }
 
     fun loadMore() {
         if (isOver) {
-            articles.value = Resource.success(emptyList())
+            viewState.value = ViewState.empty()
             return
         }
-        loadArticles(cid, ++pageCount)
+        mPageLive.value = ++pageCount
     }
-
 
 }

@@ -17,9 +17,8 @@ import android.view.MenuItem
 import android.view.View
 import android.webkit.*
 import com.wenjian.wanandroid.R
-import com.wenjian.wanandroid.base.BaseActivity
+import com.wenjian.wanandroid.base.VMActivity
 import com.wenjian.wanandroid.entity.WebModel
-import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.extraDelegate
 import com.wenjian.wanandroid.extension.setupActionBar
 import com.wenjian.wanandroid.ui.collect.CollectModel
@@ -33,13 +32,11 @@ import org.jetbrains.anko.toast
  *
  * @author jian.wen@ubtrobot.com
  */
-class WebActivity : BaseActivity() {
+class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
 
     private val mWebModel: WebModel? by extraDelegate(EXTRA_MODEL)
     private var mTitle: String? = null
     private var mErrorView: View? = null
-
-    private val mCollectModel: CollectModel by apiModelDelegate(CollectModel::class.java)
 
     companion object {
         private const val EXTRA_MODEL = "web_model"
@@ -59,7 +56,6 @@ class WebActivity : BaseActivity() {
         setContentView(R.layout.activity_web)
         setupActionBar(R.drawable.ic_close, "")
         initView()
-        subscribeUi()
         initWebListener()
         initWebSetting()
         webView.loadUrl(mWebModel?.link)
@@ -85,33 +81,6 @@ class WebActivity : BaseActivity() {
 
     }
 
-    private fun subscribeUi() {
-        mCollectModel.collect.observe(this, Observer { it ->
-            it?.let {
-                if (it) {
-                    toast("添加收藏成功")
-                    btCollect.setImageResource(R.drawable.ic_favorite)
-                    btCollect.tag = true
-                } else {
-                    toast("添加收藏失败")
-                }
-            }
-        })
-
-        mCollectModel.uncollect.observe(this, Observer { it ->
-            it?.let {
-                if (it) {
-                    toast("已取消收藏")
-                    btCollect.setImageResource(R.drawable.ic_favorite_border)
-                    btCollect.tag = false
-                } else {
-                    toast("取消收藏失败")
-                }
-            }
-        })
-
-    }
-
     @TargetApi(Build.VERSION_CODES.M)
     private fun initWebListener() {
         webView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
@@ -127,13 +96,37 @@ class WebActivity : BaseActivity() {
         btCollect.setOnClickListener { _ ->
             val collect = btCollect.tag as Boolean
             if (collect) {
-                mCollectModel.uncollect(mWebModel?.id!!)
+                collectPost()
             } else {
-                mCollectModel.collect(mWebModel?.id!!)
+                unCollect()
             }
         }
 
     }
+
+    private fun unCollect() {
+        mViewModel.collect(mWebModel?.id!!)
+                .observe(this, Observer {
+                    it?.let {
+                        toast("添加收藏成功")
+                        btCollect.setImageResource(R.drawable.ic_favorite)
+                        btCollect.tag = true
+                    }
+                })
+    }
+
+    private fun collectPost() {
+        mViewModel.uncollect(mWebModel?.id!!)
+                .observe(this, Observer {data->
+                    data?.let {
+                        toast("已取消收藏")
+                        btCollect.setImageResource(R.drawable.ic_favorite_border)
+                        btCollect.tag = false
+                    }
+                })
+    }
+
+
 
     private var isFbtHide: Boolean = false
 

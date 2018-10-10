@@ -11,7 +11,7 @@ import android.support.v4.view.ViewPager
 import android.view.View
 import android.widget.ProgressBar
 import com.wenjian.wanandroid.R
-import com.wenjian.wanandroid.base.BaseFragment
+import com.wenjian.wanandroid.base.VMFragment
 import com.wenjian.wanandroid.entity.ProjectTree
 import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.gone
@@ -22,14 +22,12 @@ import com.wenjian.wanandroid.extension.visible
  * A simple [Fragment] subclass.
  *
  */
-class ProjectFragment : BaseFragment() {
+class ProjectFragment : VMFragment<ProjectModel>(ProjectModel::class.java) {
 
     private var mTabLayout: TabLayout? = null
     private lateinit var mViewPager: ViewPager
     private lateinit var mPbLoading: ProgressBar
     private var mAppBar: AppBarLayout? = null
-
-    private val mProjectModel: ProjectModel by apiModelDelegate(ProjectModel::class.java)
 
     companion object {
         fun newInstance() = ProjectFragment()
@@ -44,21 +42,16 @@ class ProjectFragment : BaseFragment() {
         mAppBar = activity?.findViewById(R.id.app_bar)
     }
 
-    override fun subscribeUi() {
-        mProjectModel.projectTrees.observe(this, Observer { it ->
-            showContentWithStatus(it) {
-                //fix FragmentManager is already executing transactions
-                //提供给子fragment只能用getChildFragmentManager
-                mViewPager.adapter = ProjectPagerAdapter(childFragmentManager, it)
-                mTabLayout?.setupWithViewPager(mViewPager)
-                mTabLayout?.visible()
-            }
-        })
-    }
-
     override fun onLazyLoad() {
         super.onLazyLoad()
-        mProjectModel.loadProjectTree()
+        mViewModel.loadProjectTree()
+                .observe(this, Observer {data->
+                    data?.let {
+                        mViewPager.adapter = ProjectPagerAdapter(childFragmentManager, it)
+                        mTabLayout?.setupWithViewPager(mViewPager)
+                        mTabLayout?.visible()
+                    }
+                })
     }
 
     override fun showLoading() {

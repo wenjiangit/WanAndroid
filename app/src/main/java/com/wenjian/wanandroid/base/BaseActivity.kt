@@ -1,9 +1,9 @@
 package com.wenjian.wanandroid.base
 
-import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import androidx.core.widget.toast
 import com.wenjian.wanandroid.entity.Resource
+import com.wenjian.wanandroid.model.view.ViewFeature
 
 /**
  * Description: BaseActivity
@@ -11,12 +11,8 @@ import com.wenjian.wanandroid.entity.Resource
  *
  * @author jian.wen@ubtrobot.com
  */
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity(), ViewFeature {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onNavigateUp(): Boolean {
         finish()
@@ -33,19 +29,27 @@ abstract class BaseActivity : AppCompatActivity() {
                 Resource.STATUS.LOADING -> showLoading()
                 Resource.STATUS.ERROR -> {
                     hideLoading()
-                    res.msg?.let { toast(it) }
+                    showError(it.msg)
                 }
             }
         }
     }
 
-    open fun showLoading() {
+    override fun showLoading() {
 
     }
 
-    open fun hideLoading() {
+    override fun hideLoading() {
 
+    }
 
+    override fun showError(msg: String?) {
+        msg?.let {
+            toast(msg)
+        }
+    }
+
+    override fun showEmpty() {
     }
 
 }

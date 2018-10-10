@@ -1,6 +1,7 @@
 package com.wenjian.wanandroid.extension
 
 import android.content.Intent
+import android.os.Build
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
@@ -41,8 +42,16 @@ fun AppCompatActivity.setSystemBarColor(@ColorRes resId: Int = -1, @ColorInt col
     Tools.setSystemBarColor(this, resId, colorInt)
 }
 
-fun AppCompatActivity.translucentStatubar(){
-    Tools.translucent(this)
+/**
+ * 设置透明状态栏,并将toolbar扩展到状态栏
+ */
+fun AppCompatActivity.translucentStatusBar() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        Tools.translucent(this)
+        findViewById<Toolbar>(R.id.toolBar)?.let {
+            Tools.initFullBar(it, this)
+        }
+    }
 }
 
 fun Fragment.snak(text: CharSequence) {
@@ -87,4 +96,4 @@ fun Fragment.launch(clz: Class<*>) {
     startActivity(Intent(context, clz))
 }
 
-inline fun <reified T> genericType() = object: TypeToken<T>() {}.type
+inline fun <reified T> genericType() = object : TypeToken<T>() {}.type

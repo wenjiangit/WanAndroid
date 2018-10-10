@@ -11,7 +11,6 @@ import com.wenjian.wanandroid.base.BaseRecyclerAdapter
 import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.entity.WebModel
 import com.wenjian.wanandroid.extension.addCustomDecoration
-import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
 import com.wenjian.wanandroid.ui.web.WebActivity
 import com.youth.banner.Banner
@@ -25,13 +24,11 @@ import com.youth.banner.loader.ImageLoaderInterface
  *
  * @author jian.wen@ubtrobot.com
  */
-class HomeFragment : BaseListFragment<Article>() {
+class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java) {
 
     override fun createAdapter(): BaseRecyclerAdapter<Article> = ArticleListAdapter()
 
-    private val mHomeModel: HomeModel by apiModelDelegate(HomeModel::class.java)
-
-    private lateinit var mBanner:com.youth.banner.Banner
+    private lateinit var mBanner: com.youth.banner.Banner
 
     override fun initViews() {
         super.initViews()
@@ -40,11 +37,31 @@ class HomeFragment : BaseListFragment<Article>() {
         mAdapter.addHeaderView(mBanner)
     }
 
+
+    override fun onStart() {
+        super.onStart()
+        mBanner.startAutoPlay()
+    }
+
     override fun subscribeUi() {
-        //首次加载数据
-        mHomeModel.homeData.observe(this, Observer { it ->
-            showContentWithStatus(it) { data ->
-                val bannerData = data.first
+        super.subscribeUi()
+        mViewModel.loadArticles().observe(this, Observer { data ->
+            data?.let {
+                mAdapter.addData(it)
+                mAdapter.loadMoreComplete()
+            }
+        })
+    }
+
+    override fun onLoadMore() {
+        mViewModel.loadMore()
+    }
+
+    override fun onLazyLoad() {
+        super.onLazyLoad()
+        mViewModel.loadHomeData().observe(this, Observer { data ->
+            data?.let {
+                val (bannerData, second) = it
                 mBanner.apply {
                     setImages(bannerData.map { it.imagePath })
                     setBannerTitles(bannerData.map { it.title })
@@ -52,36 +69,16 @@ class HomeFragment : BaseListFragment<Article>() {
                     setDelayTime(2000)
                     setImageLoader(GlideImageLoader())
                     setBannerAnimation(Transformer.Accordion)
-                    setOnBannerListener {
-                        val banner = bannerData[it]
+                    setOnBannerListener { position ->
+                        val banner = bannerData[position]
                         WebActivity.start(context, WebModel(banner.id, banner.url, false))
                     }
                     setIndicatorGravity(BannerConfig.RIGHT)
                     start()
                 }
-                mAdapter.setNewData(data.second)
+                mAdapter.setNewData(second)
             }
         })
-
-        //加载更多
-        mHomeModel.articles.observe(this, Observer { it ->
-            showContent(it)
-        })
-    }
-
-    override fun onStart() {
-        super.onStart()
-        mBanner.startAutoPlay()
-    }
-
-    override fun onLoadMore() {
-        mHomeModel.loadMoreArticles()
-    }
-
-
-    override fun onLazyLoad() {
-        super.onLazyLoad()
-        mHomeModel.loadHomeData()
     }
 
     companion object {
@@ -96,7 +93,7 @@ class HomeFragment : BaseListFragment<Article>() {
     }
 
 
-    class GlideImageLoader :ImageLoaderInterface<ImageView>{
+    class GlideImageLoader : ImageLoaderInterface<ImageView> {
         override fun createImageView(context: Context?): ImageView {
             return ImageView(context)
         }

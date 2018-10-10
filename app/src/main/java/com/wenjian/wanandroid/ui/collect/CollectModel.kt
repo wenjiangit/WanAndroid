@@ -1,13 +1,12 @@
 package com.wenjian.wanandroid.ui.collect
 
-import android.arch.lifecycle.MutableLiveData
-import com.tencent.bugly.crashreport.BuglyLog
-import com.wenjian.wanandroid.base.BaseViewModel
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Transformations
 import com.wenjian.wanandroid.entity.Article
-import com.wenjian.wanandroid.entity.Resource
-import com.wenjian.wanandroid.extension.io2Main
-import com.wenjian.wanandroid.model.PagingObserver
-import com.wenjian.wanandroid.net.ApiService
+import com.wenjian.wanandroid.model.DataViewModel
+import com.wenjian.wanandroid.model.SingleLiveEvent
+import com.wenjian.wanandroid.model.ViewState
+import com.wenjian.wanandroid.model.view.ViewCallbackImpl
 
 /**
  * Description: CollectModel
@@ -15,59 +14,34 @@ import com.wenjian.wanandroid.net.ApiService
  *
  * @author jian.wen@ubtrobot.com
  */
-class CollectModel(private val service: ApiService) : BaseViewModel() {
+class CollectModel : DataViewModel() {
 
-    val collects: MutableLiveData<Resource<List<Article>>> = MutableLiveData()
-    val collect: MutableLiveData<Boolean> = MutableLiveData()
-    val uncollect: MutableLiveData<Boolean> = MutableLiveData()
-
+    private val mPageLive: SingleLiveEvent<Int> = SingleLiveEvent()
     private var curPage: Int = 0
     private var isOver: Boolean = false
 
-    fun loadCollects(page: Int = 0) {
-        service.loadCollects(page)
-                .io2Main()
-                .subscribe(PagingObserver(collects, disposables) {
-                    curPage = it.curPage
-                    isOver = it.over
-                })
+    fun loadCollects(): LiveData<List<Article>> = Transformations.switchMap(mPageLive) { page ->
+        repository.loadCollects(page, ViewCallbackImpl(viewState)) {
+            curPage = it.curPage
+            isOver = it.over
+        }
+    }
 
-
+    fun refresh() {
+        mPageLive.value = 0
     }
 
 
     fun loadMore() {
         if (isOver) {
-            collects.value = Resource.success(emptyList())
+            viewState.value = ViewState.empty()
             return
         }
-        loadCollects(++curPage)
+        mPageLive.value = ++curPage
     }
 
-    fun collect(id: Int) {
-        service.collect(id)
-                .io2Main()
-                .doOnSubscribe {
-                    addDisposable(it)
-                }
-                .subscribe({
-                    collect.value = it.success()
-                }, {
-                    BuglyLog.e("wj", "collect error", it)
-                })
-    }
+    fun collect(id: Int) = repository.collect(id, ViewCallbackImpl(viewState))
 
-    fun uncollect(id: Int, originId: Int = -1) {
-        service.unCollect(id, originId)
-                .io2Main()
-                .doOnSubscribe {
-                    addDisposable(it)
-                }
-                .subscribe({
-                    uncollect.value = it.success()
-                }, {
-                    BuglyLog.e("wj", "uncollect error", it)
-                })
-    }
+    fun uncollect(id: Int, originId: Int = -1) = repository.unCollect(id, originId, ViewCallbackImpl(viewState))
 
 }

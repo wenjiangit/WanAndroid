@@ -15,6 +15,11 @@ abstract class BaseSkinActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         initTheme()
         setup()
+        bindViewModel()
+    }
+
+    open fun bindViewModel() {
+
     }
 
     private fun initTheme() {

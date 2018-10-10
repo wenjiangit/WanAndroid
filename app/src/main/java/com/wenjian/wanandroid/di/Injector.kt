@@ -1,6 +1,5 @@
 package com.wenjian.wanandroid.di
 
-import com.wenjian.wanandroid.net.RetrofitManager
 import com.wenjian.wanandroid.ui.factory.CommonApiModelFactory
 
 /**
@@ -11,6 +10,6 @@ import com.wenjian.wanandroid.ui.factory.CommonApiModelFactory
  */
 object Injector {
 
-    fun provideApiModelFactory() = CommonApiModelFactory(RetrofitManager.service)
+    fun provideApiModelFactory() = CommonApiModelFactory()
 
 }

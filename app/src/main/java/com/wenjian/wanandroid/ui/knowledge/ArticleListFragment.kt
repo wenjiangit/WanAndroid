@@ -7,7 +7,6 @@ import com.wenjian.wanandroid.base.BaseListFragment
 import com.wenjian.wanandroid.base.BaseRecyclerAdapter
 import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.extension.addCustomDecoration
-import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.extraDelegate
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
 
@@ -17,13 +16,10 @@ import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
  *
  * @author jian.wen@ubtrobot.com
  */
-class ArticleListFragment : BaseListFragment<Article>() {
+class ArticleListFragment : BaseListFragment<Article, TreeModel>(TreeModel::class.java) {
     override fun createAdapter(): BaseRecyclerAdapter<Article> = ArticleListAdapter()
 
-    private val mTreeModel: TreeModel by apiModelDelegate(TreeModel::class.java)
-
     private val cid: Int? by extraDelegate(ARG_ID)
-
 
     companion object {
         private const val ARG_ID = "category_id"
@@ -41,17 +37,17 @@ class ArticleListFragment : BaseListFragment<Article>() {
 
     override fun subscribeUi() {
         super.subscribeUi()
-        mTreeModel.articles.observe(this, Observer { it ->
-            showContent(it)
+        mViewModel.loadData().observe(this, Observer { data ->
+            showContent(data)
         })
     }
 
     override fun onLazyLoad() {
         super.onLazyLoad()
-        mTreeModel.loadArticles(cid!!)
+        mViewModel.refresh(cid!!)
     }
 
     override fun onLoadMore() {
-        mTreeModel.loadMore()
+        mViewModel.loadMore()
     }
 }
