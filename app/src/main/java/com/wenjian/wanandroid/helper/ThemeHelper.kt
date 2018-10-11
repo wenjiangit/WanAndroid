@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.WanAndroidApp
 import com.wenjian.wanandroid.entity.Skin
+import com.wenjian.wanandroid.extension.getCompatColor
 
 /**
  * Description: ThemeHelper
@@ -18,7 +19,7 @@ object ThemeHelper {
     private val SKIN_PREFS: SharedPreferences = WanAndroidApp.instance.getSharedPreferences(NAME, Context.MODE_PRIVATE)
 
     fun loadSkin(): List<Skin> {
-        val ret = arrayListOf<Skin>().apply {
+        return arrayListOf<Skin>().apply {
             add(Skin(R.style.AppSkin_Green, "酷安绿", R.color.skin_green_kuan, false))
             add(Skin(R.style.AppSkin_Red, "姨妈红", R.color.skin_red, false))
             add(Skin(R.style.AppSkin_Pink, "哔哩粉", R.color.skin_pink, false))
@@ -30,13 +31,13 @@ object ThemeHelper {
             add(Skin(R.style.AppSkin_Palm_Gutong, "古铜棕", R.color.skin_gutong, false))
             add(Skin(R.style.AppSkin_Grey, "低调灰", R.color.skin_grey, false))
             add(Skin(R.style.AppSkin_Black, "高端黑", R.color.skin_black, false))
-        }
-        ret.forEach{
-            if (getSkinId() == it.id) {
-                it.select = true
+
+            forEach {
+                if (getSkinId() == it.id) {
+                    it.select = true
+                }
             }
         }
-        return ret
     }
 
     fun setSkin(themeId: Int) {
@@ -46,5 +47,14 @@ object ThemeHelper {
     fun getSkinId(): Int {
         return SKIN_PREFS.getInt(KEY_THEME_ID, -1)
     }
+
+    fun getColorPrimary(context: Context): Int {
+        val arrayOf = intArrayOf(android.R.attr.colorPrimary)
+        val typedArray = context.theme.obtainStyledAttributes(getSkinId(), arrayOf)
+        val color = typedArray.getColor(0, context.getCompatColor(R.color.colorPrimary))
+        typedArray.recycle()
+        return color
+    }
+
 
 }

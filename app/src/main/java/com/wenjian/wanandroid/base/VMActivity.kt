@@ -17,10 +17,6 @@ abstract class VMActivity<VM : DataViewModel>(clz: Class<VM>) : BaseSkinActivity
 
     open val mViewModel: VM by apiModelDelegate(clz)
 
-    override fun setup() {
-
-    }
-
     @CallSuper
     override fun bindViewModel() {
         mViewModel.viewState.observe(this, Observer { state ->

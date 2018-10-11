@@ -8,6 +8,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseRecyclerAdapter
 import com.wenjian.wanandroid.entity.Skin
+import com.wenjian.wanandroid.extension.getCompatColor
 import com.wenjian.wanandroid.extension.gone
 import com.wenjian.wanandroid.extension.visible
 import com.wenjian.wanandroid.utils.Tools
@@ -23,7 +24,7 @@ class ThemeAdapter : BaseRecyclerAdapter<Skin>(R.layout.rv_item_theme) {
 
     override fun convert(helper: BaseViewHolder?, item: Skin) {
         helper?.apply {
-            val themeColor = ContextCompat.getColor(mContext, item.color)
+            val themeColor = mContext.getCompatColor(item.color)
             setTextColor(R.id.tv_name, themeColor)
             setText(R.id.tv_name, item.name)
 
@@ -40,7 +41,7 @@ class ThemeAdapter : BaseRecyclerAdapter<Skin>(R.layout.rv_item_theme) {
                 drawable.setStroke(Tools.dip2px(mContext, 1f), themeColor)
                 checkIv.visible()
             } else {
-                val normal = ContextCompat.getColor(mContext, R.color.text_grey)
+                val normal = mContext.getCompatColor(R.color.text_grey)
                 useTv.text = "使用"
                 useTv.textColor = normal
                 drawable.setStroke(Tools.dip2px(mContext, 1f), normal)

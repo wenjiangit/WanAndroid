@@ -10,3 +10,6 @@ package com.wenjian.wanandroid.model
  * 我的页面用户信息刷新事件
  */
 class UserInfoRefreshEvent
+
+
+class SkinChangeEvent

@@ -19,6 +19,11 @@ import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : VMActivity<SearchModel>(SearchModel::class.java) {
 
+
+    override fun setup() {
+
+    }
+
     private lateinit var searchFragment: SearchFragment
     private val mHistory: MutableSet<String> = hashSetOf()
     private lateinit var mSearchView: SearchView

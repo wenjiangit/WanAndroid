@@ -1,14 +1,15 @@
 package com.wenjian.wanandroid
 
-import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.view.Menu
 import android.view.MenuItem
-import com.wenjian.wanandroid.base.BaseActivity
+import com.wenjian.wanandroid.base.BaseSkinActivity
 import com.wenjian.wanandroid.extension.launch
 import com.wenjian.wanandroid.extension.setupActionBar
+import com.wenjian.wanandroid.model.RxBus
+import com.wenjian.wanandroid.model.SkinChangeEvent
 import com.wenjian.wanandroid.ui.home.HomeFragment
 import com.wenjian.wanandroid.ui.knowledge.TreeFragment
 import com.wenjian.wanandroid.ui.mine.MineFragment
@@ -18,12 +19,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.common_title_bar.*
 import org.jetbrains.anko.toast
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseSkinActivity() {
 
     private var lastBack: Long = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setup() {
         setContentView(R.layout.activity_main)
         setupActionBar(show = false)
         initFragments()
@@ -63,7 +63,15 @@ class MainActivity : BaseActivity() {
             navigation.translationY = Math.abs(verticalOffset).toFloat()
         }
 
+        RxBus.toObservable(SkinChangeEvent::class.java)
+                .subscribe {
+                    recreate()
+                }
+
     }
+
+
+
 
     private fun initFragments() {
         val mFragments = listOf(

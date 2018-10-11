@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import com.wenjian.wanandroid.R
+import com.wenjian.wanandroid.extension.getColorPrimary
 import com.wenjian.wanandroid.utils.Tools
 
 /**
@@ -29,7 +30,7 @@ class MaterialLoadingView @JvmOverloads constructor(
         val mCircleView = CircleImageView(context, CIRCLE_BG_LIGHT.toInt())
         mProgress = CircularProgressDrawable(getContext()).apply {
             setStyle(CircularProgressDrawable.DEFAULT)
-            setColorSchemeColors(R.color.colorAccent)
+            setColorSchemeColors(context.getColorPrimary())
         }
         mCircleView.setImageDrawable(mProgress)
         val params = FrameLayout.LayoutParams(Tools.dip2px(context, 45f),

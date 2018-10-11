@@ -9,6 +9,8 @@ import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.setSystemBarColor
 import com.wenjian.wanandroid.extension.setupActionBar
 import com.wenjian.wanandroid.helper.ThemeHelper
+import com.wenjian.wanandroid.model.RxBus
+import com.wenjian.wanandroid.model.SkinChangeEvent
 import com.wenjian.wanandroid.ui.adapter.ThemeAdapter
 import kotlinx.android.synthetic.main.activity_theme.*
 import kotlinx.android.synthetic.main.fix_title_bar.*
@@ -49,6 +51,11 @@ class ThemeActivity : BaseSkinActivity() {
         setSystemBarColor(colorInt = colorInt)
         toolBar.setBackgroundColor(colorInt)
         ThemeHelper.setSkin(skin.id)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        RxBus.post(SkinChangeEvent())
     }
 
 }

@@ -10,7 +10,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -50,9 +49,7 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
         }
     }
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun setup() {
         setContentView(R.layout.activity_web)
         setupActionBar(R.drawable.ic_close, "")
         initView()
@@ -60,6 +57,7 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
         initWebSetting()
         webView.loadUrl(mWebModel?.link)
     }
+
 
     private fun initView() {
         val isCollect = mWebModel?.collect ?: false

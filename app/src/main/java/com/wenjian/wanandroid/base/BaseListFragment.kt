@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.wenjian.wanandroid.R
+import com.wenjian.wanandroid.extension.getColorPrimary
 import com.wenjian.wanandroid.model.DataViewModel
 import com.wenjian.wanandroid.widget.MyLoadMoreView
 
@@ -55,7 +56,7 @@ abstract class BaseListFragment<T, VM : DataViewModel>(clz: Class<VM>) : VMFragm
             }
         }
 
-        mLayRefresh.setColorSchemeResources(R.color.colorPrimary)
+        mLayRefresh.setColorSchemeColors(context!!.getColorPrimary())
         mLayRefresh.setOnRefreshListener {
             refresh()
         }
