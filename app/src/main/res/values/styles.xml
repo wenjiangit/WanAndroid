@@ -95,29 +95,81 @@
     </style>
 
 
-    <!--紫色-->
-    <style name="AppSkin.Purple" parent="AppTheme">
-        <item name="colorPrimary">@color/skin_purple</item>
-        <item name="colorPrimaryDark">@color/skin_purple</item>
-        <item name="colorAccent">@color/skin_purple</item>
+    <!--酷安绿-->
+    <style name="AppSkin.Green" parent="AppTheme">
+        <item name="colorPrimary">@color/skin_green_kuan</item>
+        <item name="colorPrimaryDark">@color/skin_green_kuan</item>
+        <item name="colorAccent">@color/skin_green_kuan</item>
     </style>
-    <!--红色-->
+
+    <!--姨妈红-->
     <style name="AppSkin.Red" parent="AppTheme">
         <item name="colorPrimary">@color/skin_red</item>
         <item name="colorPrimaryDark">@color/skin_red</item>
         <item name="colorAccent">@color/skin_red</item>
     </style>
 
-    <style name="AppSkin.Blue" parent="AppTheme">
-        <item name="colorPrimary">@color/skin_blue</item>
-        <item name="colorPrimaryDark">@color/skin_blue</item>
-        <item name="colorAccent">@color/skin_blue</item>
+    <!--bili粉-->
+    <style name="AppSkin.Pink" parent="AppTheme">
+        <item name="colorPrimary">@color/skin_pink</item>
+        <item name="colorPrimaryDark">@color/skin_pink</item>
+        <item name="colorAccent">@color/skin_pink</item>
     </style>
 
-    <style name="AppSkin.Green" parent="AppTheme">
-        <item name="colorPrimary">@color/skin_green</item>
-        <item name="colorPrimaryDark">@color/skin_green</item>
-        <item name="colorAccent">@color/skin_green</item>
+    <!--颐提篮-->
+    <style name="AppSkin.Blue.Yiti" parent="AppTheme">
+        <item name="colorPrimary">@color/skin_blue_yiti</item>
+        <item name="colorPrimaryDark">@color/skin_blue_yiti</item>
+        <item name="colorAccent">@color/skin_blue_yiti</item>
+    </style>
+
+    <!--水鸭青-->
+    <style name="AppSkin.Green.Shuiya" parent="AppTheme">
+        <item name="colorPrimary">@color/skin_green_shuiya</item>
+        <item name="colorPrimaryDark">@color/skin_green_shuiya</item>
+        <item name="colorAccent">@color/skin_green_shuiya</item>
+    </style>
+
+    <!--伊藤橙-->
+    <style name="AppSkin.Orange" parent="AppTheme">
+        <item name="colorPrimary">@color/skin_orange_yiteng</item>
+        <item name="colorPrimaryDark">@color/skin_orange_yiteng</item>
+        <item name="colorAccent">@color/skin_orange_yiteng</item>
+    </style>
+
+    <!--基佬紫-->
+    <style name="AppSkin.Purple" parent="AppTheme">
+        <item name="colorPrimary">@color/skin_purple</item>
+        <item name="colorPrimaryDark">@color/skin_purple</item>
+        <item name="colorAccent">@color/skin_purple</item>
+    </style>
+
+    <!--知乎篮-->
+    <style name="AppSkin.Blue.Zhihu" parent="AppTheme">
+        <item name="colorPrimary">@color/skin_blue_zhihu</item>
+        <item name="colorPrimaryDark">@color/skin_blue_zhihu</item>
+        <item name="colorAccent">@color/skin_blue_zhihu</item>
+    </style>
+
+    <!--古铜棕-->
+    <style name="AppSkin.Palm.Gutong" parent="AppTheme">
+        <item name="colorPrimary">@color/skin_gutong</item>
+        <item name="colorPrimaryDark">@color/skin_gutong</item>
+        <item name="colorAccent">@color/skin_gutong</item>
+    </style>
+
+    <!--低调灰-->
+    <style name="AppSkin.Grey" parent="AppTheme">
+        <item name="colorPrimary">@color/skin_grey</item>
+        <item name="colorPrimaryDark">@color/skin_grey</item>
+        <item name="colorAccent">@color/skin_grey</item>
+    </style>
+
+    <!--高端黑-->
+    <style name="AppSkin.Black" parent="AppTheme">
+        <item name="colorPrimary">@color/skin_black</item>
+        <item name="colorPrimaryDark">@color/skin_black</item>
+        <item name="colorAccent">@color/skin_black</item>
     </style>
 
 

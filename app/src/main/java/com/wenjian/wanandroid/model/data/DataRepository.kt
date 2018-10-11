@@ -62,19 +62,19 @@ class DataRepository private constructor() : BaseRepository() {
 
     fun login(username: String, password: String,
               callback: ViewCallback,
-              handle: (UserInfo) -> Unit): LiveData<UserInfo> {
+              handle: (UserInfo?) -> Unit): LiveData<UserInfo> {
         return doSimpleAction(mService.login(username, password), callback, handle)
     }
 
     fun register(username: String, password: String, repassword: String,
                  callback: ViewCallback,
-                 handle: (UserInfo) -> Unit):
+                 handle: (UserInfo?) -> Unit):
             LiveData<UserInfo> {
         return doSimpleAction(mService.register(username, password, repassword), callback, handle)
     }
 
-    fun logout(callback: ViewCallback): LiveData<Unit> {
-        return doSimpleAction(mService.logout(), callback) {}
+    fun logout(callback: ViewCallback, handle: (Unit?) -> Unit): LiveData<Unit> {
+        return doSimpleAction(mService.logout(), callback, handle)
     }
 
     fun loadCollects(pager: Int, callback: ViewCallback, handle: (ListContract<List<Article>>) -> Unit): LiveData<List<Article>> {

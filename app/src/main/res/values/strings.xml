@@ -48,6 +48,7 @@
     <string name="label_confirm_pass">确认密码</string>
     <string name="label_logout">退出登录</string>
     <string name="wanandroid">WanAndroid</string>
+    <string name="label_theme_style">主题风格</string>
 
 
 </resources>

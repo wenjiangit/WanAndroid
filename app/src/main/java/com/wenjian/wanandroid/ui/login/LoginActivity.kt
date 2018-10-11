@@ -21,6 +21,7 @@ class LoginActivity : VMActivity<UserModel>(UserModel::class.java), View.OnClick
     override fun setup() {
         setContentView(R.layout.activity_login)
         setupActionBar(title = "登录")
+        translucentStatusBar()
         initEvents()
     }
 
@@ -57,6 +58,7 @@ class LoginActivity : VMActivity<UserModel>(UserModel::class.java), View.OnClick
         super.showLoading()
         bt_login.gone()
         progress_bar.visible()
+
     }
 
     override fun hideLoading() {

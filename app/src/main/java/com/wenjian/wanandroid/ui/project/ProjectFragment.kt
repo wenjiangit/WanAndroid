@@ -13,7 +13,6 @@ import android.widget.ProgressBar
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMFragment
 import com.wenjian.wanandroid.entity.ProjectTree
-import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.gone
 import com.wenjian.wanandroid.extension.visible
 

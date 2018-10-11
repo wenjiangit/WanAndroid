@@ -15,6 +15,7 @@ import com.wenjian.wanandroid.ui.collect.CollectActivity
 import com.wenjian.wanandroid.ui.login.LoginActivity
 import com.wenjian.wanandroid.ui.profile.ProfileActivity
 import com.wenjian.wanandroid.ui.setting.SettingActivity
+import com.wenjian.wanandroid.ui.theme.ThemeActivity
 import de.hdodenhof.circleimageview.CircleImageView
 import io.reactivex.disposables.Disposable
 
@@ -49,6 +50,11 @@ class MineFragment : BaseFragment() {
         mRoot.findViewById<TextView>(R.id.tv_setting)
                 .setOnClickListener {
                     launch(SettingActivity::class.java)
+                }
+
+        mRoot.findViewById<TextView>(R.id.tv_theme)
+                .setOnClickListener {
+                    launch(ThemeActivity::class.java)
                 }
     }
 

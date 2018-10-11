@@ -95,4 +95,24 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
 
+  <TextView
+        android:id="@+id/tv_theme"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:background="@drawable/home_item_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:text="@string/label_theme_style"
+        android:textColor="@color/primary_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_setting" />
+
+
+
+
 </android.support.constraint.ConstraintLayout>

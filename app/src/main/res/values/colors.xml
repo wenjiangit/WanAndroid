@@ -16,6 +16,8 @@
     //浅的状态栏颜色
     <color name="light_status_bar">#C6C6C6</color>
 
+    <color name="text_grey">#8a8a8a</color>
+
     <color name="overlay_dark_10">#1A000000</color>
     <color name="overlay_dark_20">#33000000</color>
     <color name="overlay_dark_30">#4D000000</color>
@@ -310,13 +312,22 @@
     <color name="grey_1000">#1a1a1a</color>
 
 
-    <color name="skin_purple">#673ab7</color>
-    <color name="skin_red">#E53935</color>
-    <color name="skin_blue">#5677fc</color>
-    <color name="skin_green">#689F38</color>
-    <color name="skin_deep_orange">#ff5722</color>
-    <color name="skin_orange">#ff9800</color>
-    <color name="skin_pink">#e91e63</color>
+    <color name="skin_purple">#673cb5</color>
+    <color name="skin_red">#db4539</color>
+    <color name="skin_blue_yiti">#3f54ad</color>
+    <color name="skin_blue_zhihu">#2197f4</color>
+    <color name="skin_green_shuiya">#019787</color>
+    <color name="skin_green_kuan">#0f9159</color>
+
+    <color name="skin_orange_yiteng">#ff9800</color>
+    <!--bili粉-->
+    <color name="skin_pink">#fa7399</color>
+    <!--古铜棕-->
+    <color name="skin_gutong">#785648</color>
+    <!--低调灰-->
+    <color name="skin_grey">#5f7e8b</color>
+    <!--高端黑-->
+    <color name="skin_black">#222222</color>
 
     <array name="mdcolor_random">
         <item type="color">#e91e63</item>

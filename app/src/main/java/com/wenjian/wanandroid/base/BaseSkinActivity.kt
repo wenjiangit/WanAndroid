@@ -1,7 +1,7 @@
 package com.wenjian.wanandroid.base
 
 import android.os.Bundle
-import com.wenjian.wanandroid.R
+import com.wenjian.wanandroid.helper.ThemeHelper
 
 /**
  * Description ${name}
@@ -23,7 +23,7 @@ abstract class BaseSkinActivity : BaseActivity() {
     }
 
     private fun initTheme() {
-        setTheme(R.style.AppSkin_Purple)
+        setTheme(ThemeHelper.getSkinId())
     }
 
     abstract fun setup()

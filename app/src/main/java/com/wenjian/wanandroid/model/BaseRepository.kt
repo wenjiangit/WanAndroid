@@ -24,7 +24,7 @@ open class BaseRepository {
 
     open val mService: ApiService by lazy { RetrofitManager.service }
 
-    open fun <T> doSimpleAction(observable: Observable<Resp<T>>, callback: ViewCallback, handle: (T) -> Unit): LiveData<T> {
+    open fun <T> doSimpleAction(observable: Observable<Resp<T>>, callback: ViewCallback, handle: (T?) -> Unit): LiveData<T> {
         val live: SingleLiveEvent<T> = SingleLiveEvent()
         mDisposables.add(observable.io2Main()
                 .doOnSubscribe {
