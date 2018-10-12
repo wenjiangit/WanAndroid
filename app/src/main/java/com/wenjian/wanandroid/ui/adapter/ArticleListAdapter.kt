@@ -2,14 +2,17 @@ package com.wenjian.wanandroid.ui.adapter
 
 import android.text.Html
 import android.widget.ImageView
+import android.widget.TextView
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseRecyclerAdapter
 import com.wenjian.wanandroid.entity.Article
+import com.wenjian.wanandroid.extension.getColorAccent
 import com.wenjian.wanandroid.extension.gone
 import com.wenjian.wanandroid.extension.loadUrl
 import com.wenjian.wanandroid.extension.visible
 import com.wenjian.wanandroid.ui.web.WebActivity
+import org.jetbrains.anko.textColor
 
 /**
  * Description: ArticleListAdapter
@@ -30,7 +33,10 @@ class ArticleListAdapter : BaseRecyclerAdapter<Article>(R.layout.rv_item_article
                         append("/${superChapterName?.trim()}")
                     }
                 }
-                setText(R.id.tv_category, buildString)
+                getView<TextView>(R.id.tv_category).apply {
+                    text = buildString
+                    textColor = mContext.getColorAccent()
+                }
                 setText(R.id.tv_title, Html.fromHtml(title?.trim()))
                 setText(R.id.tv_name, author?.trim())
                 setText(R.id.tv_date, niceDate?.trim())

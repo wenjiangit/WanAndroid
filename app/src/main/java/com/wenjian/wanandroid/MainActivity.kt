@@ -1,7 +1,5 @@
 package com.wenjian.wanandroid
 
-import android.annotation.TargetApi
-import android.os.Build
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
@@ -11,6 +9,7 @@ import android.view.MenuItem
 import com.wenjian.wanandroid.base.BaseSkinActivity
 import com.wenjian.wanandroid.extension.launch
 import com.wenjian.wanandroid.extension.setupActionBar
+import com.wenjian.wanandroid.extension.toastWarning
 import com.wenjian.wanandroid.model.RxBus
 import com.wenjian.wanandroid.model.SkinChangeEvent
 import com.wenjian.wanandroid.ui.home.HomeFragment
@@ -21,7 +20,6 @@ import com.wenjian.wanandroid.ui.search.SearchActivity
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.common_title_bar.*
-import org.jetbrains.anko.toast
 
 class MainActivity : BaseSkinActivity() {
 
@@ -114,7 +112,7 @@ class MainActivity : BaseSkinActivity() {
     override fun onBackPressed() {
         val current = System.currentTimeMillis()
         if (current - lastBack > 2000) {
-            toast("再按一次退出" + getString(R.string.app_name))
+            toastWarning("再按一次退出" + getString(R.string.app_name))
         } else {
             super.onBackPressed()
         }

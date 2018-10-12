@@ -1,8 +1,8 @@
 package com.wenjian.wanandroid.base
 
 import android.support.v7.app.AppCompatActivity
-import androidx.core.widget.toast
 import com.wenjian.wanandroid.entity.Resource
+import com.wenjian.wanandroid.extension.toastError
 import com.wenjian.wanandroid.model.view.ViewFeature
 
 /**
@@ -45,7 +45,7 @@ abstract class BaseActivity : AppCompatActivity(), ViewFeature {
 
     override fun showError(msg: String?) {
         msg?.let {
-            toast(msg)
+            toastError(msg)
         }
     }
 

@@ -105,9 +105,9 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
 
     private fun unCollect() {
         mViewModel.collect(mWebModel?.id!!)
-                .observe(this, Observer {
+                .observe(this, Observer { it ->
                     it?.let {
-                        toast("添加收藏成功")
+                        toastSuccess("添加收藏成功")
                         btCollect.setImageResource(R.drawable.ic_favorite)
                         btCollect.tag = true
                     }
@@ -118,7 +118,7 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
         mViewModel.uncollect(mWebModel?.id!!)
                 .observe(this, Observer {data->
                     data?.let {
-                        toast("已取消收藏")
+                        toastInfo("已取消收藏")
                         btCollect.setImageResource(R.drawable.ic_favorite_border)
                         btCollect.tag = false
                     }

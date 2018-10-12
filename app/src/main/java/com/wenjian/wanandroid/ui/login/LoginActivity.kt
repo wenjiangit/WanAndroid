@@ -7,7 +7,6 @@ import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMActivity
 import com.wenjian.wanandroid.extension.*
 import kotlinx.android.synthetic.main.activity_login.*
-import org.jetbrains.anko.toast
 
 /**
  * Description: LoginActivity
@@ -82,7 +81,7 @@ class LoginActivity : VMActivity<UserModel>(UserModel::class.java), View.OnClick
     private fun login(user: String, pass: String) {
         mViewModel.login(user,pass)
                 .observe(this, Observer {
-                    toast("登录成功")
+                    toastSuccess("登录成功")
                     launch(MainActivity::class.java)
                 })
     }
@@ -105,7 +104,7 @@ class LoginActivity : VMActivity<UserModel>(UserModel::class.java), View.OnClick
     private fun register(user: String, pass: String, repass: String) {
         mViewModel.register(user, pass, repass)
                 .observe(this, Observer {
-                    toast("注册成功")
+                    toastSuccess("注册成功")
                     launch(MainActivity::class.java)
                 })
     }

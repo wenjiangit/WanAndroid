@@ -5,12 +5,8 @@ import android.support.v7.app.AlertDialog
 import com.wenjian.wanandroid.MainActivity
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMActivity
-import com.wenjian.wanandroid.extension.launch
-import com.wenjian.wanandroid.extension.loadAvatar
-import com.wenjian.wanandroid.extension.setupActionBar
-import com.wenjian.wanandroid.extension.translucentStatusBar
+import com.wenjian.wanandroid.extension.*
 import kotlinx.android.synthetic.main.activity_profile.*
-import org.jetbrains.anko.toast
 
 class ProfileActivity : VMActivity<ProfileModel>(ProfileModel::class.java) {
     override fun setup() {
@@ -53,7 +49,7 @@ class ProfileActivity : VMActivity<ProfileModel>(ProfileModel::class.java) {
     private fun logout() {
         mViewModel.logout()
                 .observe(this, Observer {
-                    toast("退出登录成功")
+                    toastSuccess("退出登录成功")
                     launch(MainActivity::class.java)
                 })
     }

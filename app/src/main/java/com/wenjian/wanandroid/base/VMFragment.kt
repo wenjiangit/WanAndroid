@@ -3,10 +3,10 @@ package com.wenjian.wanandroid.base
 import android.arch.lifecycle.Observer
 import android.support.annotation.CallSuper
 import com.wenjian.wanandroid.extension.apiModelDelegate
+import com.wenjian.wanandroid.extension.toastError
 import com.wenjian.wanandroid.model.DataViewModel
 import com.wenjian.wanandroid.model.ViewState
 import com.wenjian.wanandroid.model.view.ViewCallback
-import org.jetbrains.anko.support.v4.toast
 
 /**
  * Description: VM
@@ -38,7 +38,7 @@ abstract class VMFragment<VM : DataViewModel>(clz: Class<VM>) : BaseFragment(), 
 
     override fun showError(msg: String?) {
         msg?.let {
-            toast(msg)
+            context?.toastError(msg)
         }
     }
 

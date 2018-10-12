@@ -1,10 +1,8 @@
 package com.wenjian.wanandroid.utils
 
 import android.content.Context
-import android.content.res.TypedArray
 import android.graphics.Color
-
-import java.util.Random
+import java.util.*
 
 object MaterialColor {
 
