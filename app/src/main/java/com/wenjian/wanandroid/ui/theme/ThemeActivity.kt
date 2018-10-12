@@ -1,13 +1,15 @@
 package com.wenjian.wanandroid.ui.theme
 
-import android.support.v4.content.ContextCompat
+import android.graphics.Color
 import android.support.v7.widget.LinearLayoutManager
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseSkinActivity
 import com.wenjian.wanandroid.entity.Skin
 import com.wenjian.wanandroid.extension.addCustomDecoration
+import com.wenjian.wanandroid.extension.getCompatColor
 import com.wenjian.wanandroid.extension.setSystemBarColor
 import com.wenjian.wanandroid.extension.setupActionBar
+import com.wenjian.wanandroid.helper.QMUIStatusBarHelper
 import com.wenjian.wanandroid.helper.ThemeHelper
 import com.wenjian.wanandroid.model.RxBus
 import com.wenjian.wanandroid.model.SkinChangeEvent
@@ -47,15 +49,31 @@ class ThemeActivity : BaseSkinActivity() {
     }
 
     private fun applySkin(skin: Skin) {
-        val colorInt = ContextCompat.getColor(this, skin.color)
-        setSystemBarColor(colorInt = colorInt)
+        val skinColor: Int = if (ThemeHelper.isDefault(skin)) R.color.white else skin.color
+        val colorInt = getCompatColor(skinColor)
         toolBar.setBackgroundColor(colorInt)
+        if (ThemeHelper.isDefault(skin)) {
+            toolBar.setTitleTextColor(Color.BLACK)
+            toolBar.navigationIcon?.setTint(Color.BLACK)
+            setSystemBarColor(getCompatColor(R.color.white))
+            QMUIStatusBarHelper.setStatusBarLightMode(this)
+        } else {
+            setSystemBarColor(colorInt)
+            toolBar.setTitleTextColor(Color.WHITE)
+            toolBar.navigationIcon?.setTint(Color.WHITE)
+            QMUIStatusBarHelper.setStatusBarDarkMode(this)
+        }
+        //这里不能使用recreate,会使界面黑屏
+//        recreate()
         ThemeHelper.setSkin(skin.id)
     }
 
     override fun onPause() {
         super.onPause()
-        RxBus.post(SkinChangeEvent())
+        //通知主题发生改变,主界面重新启动
+        if (ThemeHelper.hasChanged()) {
+            RxBus.post(SkinChangeEvent())
+        }
     }
 
 }

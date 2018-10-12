@@ -12,16 +12,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
-        android:elevation="4dp"
         android:visibility="gone"
+        android:elevation="4dp"
+        android:background="?colorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabBackground="?attr/colorPrimary"
-        app:tabIndicatorColor="@color/white"
+        app:tabIndicatorColor="?attr/customTabIndicatorColor"
         app:tabMode="scrollable"
-        app:tabSelectedTextColor="@color/white"
+        app:tabSelectedTextColor="?attr/customTabSelectedTextColor"
         app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-        app:tabTextColor="@color/grey_300">
+        app:tabTextColor="?attr/customTabTextColor">
 
     </android.support.design.widget.TabLayout>
 

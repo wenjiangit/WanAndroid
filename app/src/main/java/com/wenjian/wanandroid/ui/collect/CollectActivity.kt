@@ -11,6 +11,7 @@ class CollectActivity : BaseSkinActivity() {
         setContentView(R.layout.activity_collect)
         setupActionBar(title = "收藏")
         translucentStatusBar()
+        Tools.setSystemBarLight(this)
     }
 
 }

@@ -68,7 +68,7 @@
         android:focusable="true"
         android:src="@drawable/ic_favorite"
         android:tint="@color/white"
-        app:backgroundTint="@color/colorAccent"
+        app:backgroundTint="?attr/colorAccent"
         app:elevation="5dp"
         app:fabSize="normal"
         app:rippleColor="@color/shallow_bg" />

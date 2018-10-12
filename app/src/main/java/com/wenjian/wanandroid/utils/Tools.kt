@@ -11,7 +11,6 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Build
 import android.support.annotation.ColorInt
-import android.support.annotation.ColorRes
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AppCompatActivity
@@ -19,11 +18,9 @@ import android.support.v7.widget.Toolbar
 import android.util.TypedValue
 import android.view.Menu
 import android.view.View
-import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import com.wenjian.wanandroid.R
-import com.wenjian.wanandroid.base.BaseActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -44,17 +41,12 @@ object Tools {
         }
     }
 
-    fun setSystemBarColor(act: Activity, @ColorRes colorRes: Int, @ColorInt colorInt: Int) {
+    fun setSystemBarColor(act: Activity, @ColorInt colorInt: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = act.window
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            if (colorRes != -1) {
-                window.statusBarColor = act.resources.getColor(colorRes)
-            }
-            if (colorInt != -1) {
-                window.statusBarColor = colorInt
-            }
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = colorInt
         }
     }
 

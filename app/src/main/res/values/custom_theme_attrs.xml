@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="customTabIndicatorColor" format="reference|color" />
+    <attr name="customTabSelectedTextColor" format="reference|color" />
+    <attr name="customTabTextColor" format="reference|color" />
+    <attr name="customToolbar" format="reference"/>
+    <attr name="icon_color" format="reference|color"/>
+
+</resources>

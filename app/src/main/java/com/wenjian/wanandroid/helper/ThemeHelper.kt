@@ -2,6 +2,8 @@ package com.wenjian.wanandroid.helper
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.support.annotation.AttrRes
+import android.support.annotation.ColorRes
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.WanAndroidApp
 import com.wenjian.wanandroid.entity.Skin
@@ -17,9 +19,13 @@ object ThemeHelper {
     private const val NAME: String = "skin_prefs"
     private const val KEY_THEME_ID = "key_theme_id"
     private val SKIN_PREFS: SharedPreferences = WanAndroidApp.instance.getSharedPreferences(NAME, Context.MODE_PRIVATE)
+    private const val DEFAULT_THEME: Int = R.style.AppSkin_White
+    private var current: Int = DEFAULT_THEME
+    private var changed: Boolean = false
 
     fun loadSkin(): List<Skin> {
         return arrayListOf<Skin>().apply {
+            add(Skin(R.style.AppSkin_White, "默认白", R.color.text_grey, false))
             add(Skin(R.style.AppSkin_Green, "酷安绿", R.color.skin_green_kuan, false))
             add(Skin(R.style.AppSkin_Red, "姨妈红", R.color.skin_red, false))
             add(Skin(R.style.AppSkin_Pink, "哔哩粉", R.color.skin_pink, false))
@@ -35,26 +41,40 @@ object ThemeHelper {
             forEach {
                 if (getSkinId() == it.id) {
                     it.select = true
+                    current = it.id
                 }
             }
         }
     }
 
     fun setSkin(themeId: Int) {
+        if (current != themeId) {
+            changed = true
+            current = themeId
+        }
         SKIN_PREFS.edit().putInt(KEY_THEME_ID, themeId).apply()
     }
 
+    /**
+     * 主题是否改变
+     */
+    fun hasChanged() = changed
+
     fun getSkinId(): Int {
-        return SKIN_PREFS.getInt(KEY_THEME_ID, -1)
+        return SKIN_PREFS.getInt(KEY_THEME_ID, DEFAULT_THEME)
     }
 
-    fun getColorPrimary(context: Context): Int {
-        val arrayOf = intArrayOf(android.R.attr.colorPrimary)
+    /**
+     * 获取主题属性颜色
+     */
+    fun obtainColorAttrValue(context: Context, @AttrRes attrId: Int, @ColorRes default: Int): Int {
+        val arrayOf = intArrayOf(attrId)
         val typedArray = context.theme.obtainStyledAttributes(getSkinId(), arrayOf)
-        val color = typedArray.getColor(0, context.getCompatColor(R.color.colorPrimary))
+        val color = typedArray.getColor(0, context.getCompatColor(default))
         typedArray.recycle()
         return color
     }
 
+    fun isDefault(skin: Skin) = skin.id == DEFAULT_THEME
 
 }

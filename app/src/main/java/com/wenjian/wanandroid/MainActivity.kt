@@ -1,8 +1,11 @@
 package com.wenjian.wanandroid
 
+import android.annotation.TargetApi
+import android.os.Build
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.support.v7.content.res.AppCompatResources
 import android.view.Menu
 import android.view.MenuItem
 import com.wenjian.wanandroid.base.BaseSkinActivity
@@ -15,6 +18,7 @@ import com.wenjian.wanandroid.ui.knowledge.TreeFragment
 import com.wenjian.wanandroid.ui.mine.MineFragment
 import com.wenjian.wanandroid.ui.project.ProjectFragment
 import com.wenjian.wanandroid.ui.search.SearchActivity
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.common_title_bar.*
 import org.jetbrains.anko.toast
@@ -22,6 +26,8 @@ import org.jetbrains.anko.toast
 class MainActivity : BaseSkinActivity() {
 
     private var lastBack: Long = 0
+
+    private var disposable: Disposable? = null
 
     override fun setup() {
         setContentView(R.layout.activity_main)
@@ -34,6 +40,9 @@ class MainActivity : BaseSkinActivity() {
 //            enableAnimation(false)
             setSmallTextSize(12f)
             setLargeTextSize(13f)
+            val stateList = AppCompatResources.getColorStateList(this@MainActivity, R.color.navigation_menu_item_color)
+            itemTextColor = stateList
+            itemIconTintList = stateList
             setOnNavigationItemSelectedListener {
                 when (it.itemId) {
                     R.id.home -> {
@@ -63,14 +72,17 @@ class MainActivity : BaseSkinActivity() {
             navigation.translationY = Math.abs(verticalOffset).toFloat()
         }
 
-        RxBus.toObservable(SkinChangeEvent::class.java)
+        disposable = RxBus.toObservable(SkinChangeEvent::class.java)
                 .subscribe {
                     recreate()
                 }
 
     }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable?.dispose()
+    }
 
 
     private fun initFragments() {

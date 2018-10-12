@@ -68,7 +68,6 @@ class ProjectFragment : VMFragment<ProjectModel>(ProjectModel::class.java) {
         } else {
             mAppBar?.elevation = 8f
         }
-
     }
 
     class ProjectPagerAdapter(fm: FragmentManager, val data: List<ProjectTree>) : FragmentPagerAdapter(fm) {

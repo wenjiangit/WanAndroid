@@ -8,6 +8,23 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="customTabIndicatorColor">?colorAccent</item>
+        <item name="customTabSelectedTextColor">?colorAccent</item>
+        <item name="customTabTextColor">@color/text_grey</item>
+        <item name="customToolbar">@style/ToolbarStyleLight</item>
+        <item name="icon_color">@color/black</item>
+    </style>
+
+    <style name="AppTheme.Dark" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="customTabIndicatorColor">@color/white</item>
+        <item name="customTabSelectedTextColor">@color/white</item>
+        <item name="customTabTextColor">@color/grey_300</item>
+        <item name="customToolbar">@style/ToolbarStyleDark</item>
+        <item name="icon_color">@color/white</item>
+    </style>
+
     <style name="AppTheme.TransStatusBar.Base" parent="AppTheme">
         <!--去除顶部的状态栏-->
         <item name="android:windowIsTranslucent">true</item>
@@ -42,6 +59,20 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="ToolbarStyleDark">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlHighlight">#42ffffff</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+    </style>
+
+    <style name="ToolbarStyleLight">
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="colorControlNormal">@color/black</item>
+        <item name="colorControlHighlight">#42000000</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
 
@@ -94,79 +125,85 @@
         <item name="android:textColor">@android:color/transparent</item>
     </style>
 
+    <!--默认白-->
+    <style name="AppSkin.White" parent="AppTheme.Light">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
 
     <!--酷安绿-->
-    <style name="AppSkin.Green" parent="AppTheme">
+    <style name="AppSkin.Green" parent="AppTheme.Dark">
         <item name="colorPrimary">@color/skin_green_kuan</item>
         <item name="colorPrimaryDark">@color/skin_green_kuan</item>
         <item name="colorAccent">@color/skin_green_kuan</item>
     </style>
 
     <!--姨妈红-->
-    <style name="AppSkin.Red" parent="AppTheme">
+    <style name="AppSkin.Red" parent="AppTheme.Dark">
         <item name="colorPrimary">@color/skin_red</item>
         <item name="colorPrimaryDark">@color/skin_red</item>
         <item name="colorAccent">@color/skin_red</item>
     </style>
 
     <!--bili粉-->
-    <style name="AppSkin.Pink" parent="AppTheme">
+    <style name="AppSkin.Pink" parent="AppTheme.Dark">
         <item name="colorPrimary">@color/skin_pink</item>
         <item name="colorPrimaryDark">@color/skin_pink</item>
         <item name="colorAccent">@color/skin_pink</item>
     </style>
 
     <!--颐提篮-->
-    <style name="AppSkin.Blue.Yiti" parent="AppTheme">
+    <style name="AppSkin.Blue.Yiti" parent="AppTheme.Dark">
         <item name="colorPrimary">@color/skin_blue_yiti</item>
         <item name="colorPrimaryDark">@color/skin_blue_yiti</item>
         <item name="colorAccent">@color/skin_blue_yiti</item>
     </style>
 
     <!--水鸭青-->
-    <style name="AppSkin.Green.Shuiya" parent="AppTheme">
+    <style name="AppSkin.Green.Shuiya" parent="AppTheme.Dark">
         <item name="colorPrimary">@color/skin_green_shuiya</item>
         <item name="colorPrimaryDark">@color/skin_green_shuiya</item>
         <item name="colorAccent">@color/skin_green_shuiya</item>
     </style>
 
     <!--伊藤橙-->
-    <style name="AppSkin.Orange" parent="AppTheme">
+    <style name="AppSkin.Orange" parent="AppTheme.Dark">
         <item name="colorPrimary">@color/skin_orange_yiteng</item>
         <item name="colorPrimaryDark">@color/skin_orange_yiteng</item>
         <item name="colorAccent">@color/skin_orange_yiteng</item>
     </style>
 
     <!--基佬紫-->
-    <style name="AppSkin.Purple" parent="AppTheme">
+    <style name="AppSkin.Purple" parent="AppTheme.Dark">
         <item name="colorPrimary">@color/skin_purple</item>
         <item name="colorPrimaryDark">@color/skin_purple</item>
         <item name="colorAccent">@color/skin_purple</item>
     </style>
 
     <!--知乎篮-->
-    <style name="AppSkin.Blue.Zhihu" parent="AppTheme">
+    <style name="AppSkin.Blue.Zhihu" parent="AppTheme.Dark">
         <item name="colorPrimary">@color/skin_blue_zhihu</item>
         <item name="colorPrimaryDark">@color/skin_blue_zhihu</item>
         <item name="colorAccent">@color/skin_blue_zhihu</item>
     </style>
 
     <!--古铜棕-->
-    <style name="AppSkin.Palm.Gutong" parent="AppTheme">
+    <style name="AppSkin.Palm.Gutong" parent="AppTheme.Dark">
         <item name="colorPrimary">@color/skin_gutong</item>
         <item name="colorPrimaryDark">@color/skin_gutong</item>
         <item name="colorAccent">@color/skin_gutong</item>
     </style>
 
     <!--低调灰-->
-    <style name="AppSkin.Grey" parent="AppTheme">
+    <style name="AppSkin.Grey" parent="AppTheme.Dark">
         <item name="colorPrimary">@color/skin_grey</item>
         <item name="colorPrimaryDark">@color/skin_grey</item>
         <item name="colorAccent">@color/skin_grey</item>
     </style>
 
     <!--高端黑-->
-    <style name="AppSkin.Black" parent="AppTheme">
+    <style name="AppSkin.Black" parent="AppTheme.Dark">
         <item name="colorPrimary">@color/skin_black</item>
         <item name="colorPrimaryDark">@color/skin_black</item>
         <item name="colorAccent">@color/skin_black</item>

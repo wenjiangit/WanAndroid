@@ -11,5 +11,7 @@ package com.wenjian.wanandroid.model
  */
 class UserInfoRefreshEvent
 
-
+/**
+ * 皮肤改变事件
+ */
 class SkinChangeEvent

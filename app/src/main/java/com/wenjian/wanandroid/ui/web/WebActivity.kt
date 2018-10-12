@@ -18,8 +18,7 @@ import android.webkit.*
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMActivity
 import com.wenjian.wanandroid.entity.WebModel
-import com.wenjian.wanandroid.extension.extraDelegate
-import com.wenjian.wanandroid.extension.setupActionBar
+import com.wenjian.wanandroid.extension.*
 import com.wenjian.wanandroid.ui.collect.CollectModel
 import com.wenjian.wanandroid.utils.NetUtil
 import kotlinx.android.synthetic.main.activity_web.*
@@ -52,6 +51,7 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
     override fun setup() {
         setContentView(R.layout.activity_web)
         setupActionBar(R.drawable.ic_close, "")
+        setSystemBarColor(getCompatColor(R.color.light_status_bar))
         initView()
         initWebListener()
         initWebSetting()
@@ -68,6 +68,7 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
         }
         btCollect.tag = isCollect
 
+        layRefresh.setColorSchemeColors(getColorAccent())
         layRefresh.setOnRefreshListener {
             //1秒后隐藏
             webView.reload()

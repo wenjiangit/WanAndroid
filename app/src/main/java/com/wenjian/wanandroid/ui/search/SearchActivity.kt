@@ -13,15 +13,14 @@ import android.widget.LinearLayout
 import co.lujun.androidtagview.TagView
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMActivity
+import com.wenjian.wanandroid.extension.getCompatColor
 import com.wenjian.wanandroid.extension.setSystemBarColor
 import com.wenjian.wanandroid.extension.setupActionBar
 import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : VMActivity<SearchModel>(SearchModel::class.java) {
 
-
     override fun setup() {
-
     }
 
     private lateinit var searchFragment: SearchFragment
@@ -32,7 +31,6 @@ class SearchActivity : VMActivity<SearchModel>(SearchModel::class.java) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         setupActionBar()
-        setSystemBarColor(R.color.light_status_bar)
         addFragments()
         initEvents()
         subscribeUi()

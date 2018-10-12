@@ -3,7 +3,6 @@ package com.wenjian.wanandroid.extension
 import android.content.Intent
 import android.os.Build
 import android.support.annotation.ColorInt
-import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
@@ -38,8 +37,8 @@ fun Fragment.setupToolBar(@StringRes resId: Int = -1, title: String = "") {
 /**
  * 设置状态栏颜色
  */
-fun AppCompatActivity.setSystemBarColor(@ColorRes resId: Int = -1, @ColorInt colorInt: Int = -1) {
-    Tools.setSystemBarColor(this, resId, colorInt)
+fun AppCompatActivity.setSystemBarColor(@ColorInt colorInt: Int = -1) {
+    Tools.setSystemBarColor(this, colorInt)
 }
 
 /**

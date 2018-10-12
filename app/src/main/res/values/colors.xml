@@ -2,10 +2,11 @@
 <resources>
     <color name="colorPrimary">#673ab7</color>
     <color name="colorPrimaryDark">@color/light_status_bar</color>
-    <color name="colorAccent">#673ab7</color>
+    <color name="colorAccent">#FF4081</color>
     <color name="black_50">#6e000000</color>
     
     <color name="shallow_bg">#EBEBEB</color>
+    <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
 
     <color name="second_text">#8C8C8C</color>
