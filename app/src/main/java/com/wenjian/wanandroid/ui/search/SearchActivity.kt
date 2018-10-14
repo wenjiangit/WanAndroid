@@ -13,8 +13,6 @@ import android.widget.LinearLayout
 import co.lujun.androidtagview.TagView
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMActivity
-import com.wenjian.wanandroid.extension.getCompatColor
-import com.wenjian.wanandroid.extension.setSystemBarColor
 import com.wenjian.wanandroid.extension.setupActionBar
 import kotlinx.android.synthetic.main.activity_search.*
 

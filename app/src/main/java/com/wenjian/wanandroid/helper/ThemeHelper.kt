@@ -75,6 +75,6 @@ object ThemeHelper {
         return color
     }
 
-    fun isDefault(skin: Skin) = skin.id == DEFAULT_THEME
+    fun isDefault(skin: Int = getSkinId()) = skin == DEFAULT_THEME
 
 }
