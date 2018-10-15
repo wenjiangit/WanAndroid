@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
  * @author cginechen
  * @date 2016-03-27
  */
-public class QMUIStatusBarHelper {
+public class StatusBarHelper {
 
     private final static int STATUSBAR_TYPE_DEFAULT = 0;
     private final static int STATUSBAR_TYPE_MIUI = 1;
@@ -57,7 +57,7 @@ public class QMUIStatusBarHelper {
             return;
         }
         // 小米和魅族4.4 以上版本支持沉浸式
-        if (QMUIDeviceHelper.isMeizu() || QMUIDeviceHelper.isMIUI()) {
+        if (DeviceHelper.isMeizu() || DeviceHelper.isMIUI()) {
             Window window = activity.getWindow();
             window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -198,7 +198,7 @@ public class QMUIStatusBarHelper {
         int systemUi = light ? View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR : View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
         systemUi = changeStatusBarModeRetainFlag(window, systemUi);
         decorView.setSystemUiVisibility(systemUi);
-        if(QMUIDeviceHelper.isMIUIV9()){
+        if(DeviceHelper.isMIUIV9()){
             // MIUI 9 低于 6.0 版本依旧只能回退到以前的方案
             // https://github.com/QMUI/QMUI_Android/issues/160
             MIUISetStatusBarLightMode(window, light);
@@ -242,11 +242,11 @@ public class QMUIStatusBarHelper {
      * 见小米开发文档说明：https://dev.mi.com/console/doc/detail?pId=1159
      */
     private static boolean isMIUICustomStatusBarLightModeImpl() {
-        if (QMUIDeviceHelper.isMIUIV9() && Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+        if (DeviceHelper.isMIUIV9() && Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
             return true;
         }
-        return QMUIDeviceHelper.isMIUIV5() || QMUIDeviceHelper.isMIUIV6() ||
-                QMUIDeviceHelper.isMIUIV7() || QMUIDeviceHelper.isMIUIV8();
+        return DeviceHelper.isMIUIV5() || DeviceHelper.isMIUIV6() ||
+                DeviceHelper.isMIUIV7() || DeviceHelper.isMIUIV8();
     }
 
     /**
@@ -343,7 +343,7 @@ public class QMUIStatusBarHelper {
      * 检测 Android 6.0 是否可以启用 window.setStatusBarColor(Color.TRANSPARENT)。
      */
     public static boolean supportTransclentStatusBar6() {
-        return !(QMUIDeviceHelper.isZUKZ1() || QMUIDeviceHelper.isZTKC2016());
+        return !(DeviceHelper.isZUKZ1() || DeviceHelper.isZTKC2016());
     }
 
 

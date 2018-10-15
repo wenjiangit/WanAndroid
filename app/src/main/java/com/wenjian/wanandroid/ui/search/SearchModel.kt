@@ -23,7 +23,7 @@ class SearchModel : DataViewModel() {
 
     private val mPageLive: SingleLiveEvent<Int> = SingleLiveEvent()
 
-    fun loadHotWords() = repository.loadHotWords(ViewCallbackImpl(viewState))
+    fun loadHotWords() = getRepository().loadHotWords(ViewCallbackImpl(viewState))
 
     fun loadMore() {
         if (isOver) {
@@ -40,7 +40,7 @@ class SearchModel : DataViewModel() {
     fun saveHistory(history: Set<String>) = UserHelper.saveSearchHistory(history)
 
     fun loadData(): LiveData<List<Article>> = Transformations.switchMap(mPageLive) { page ->
-        repository.search(lastQuery!!, page, ViewCallbackImpl(viewState)) {
+        getRepository().search(lastQuery!!, page, ViewCallbackImpl(viewState)) {
             curPage = it.curPage
             isOver = it.over
         }

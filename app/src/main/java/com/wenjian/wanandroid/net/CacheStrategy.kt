@@ -22,7 +22,6 @@ object CacheStrategy {
 
 
     val REWRITE_RESPONSE_INTERCEPTOR: Interceptor = Interceptor { chain ->
-
         var originResponse = chain.proceed(chain.request())
         val cacheControl = originResponse.header(CACHE_CONTROL)
         if (cacheControl == null) {
@@ -36,18 +35,16 @@ object CacheStrategy {
     }
 
     val REWRITE_RESPONSE_INTERCEPTOR_OFFLINE = Interceptor { chain ->
-
         var request = chain.request()
-
-        if (!NetUtil.isNetworkAvailable(WanAndroidApp.instance)) {
+        //是get请求
+        val isGet = request.method().equals("get", true)
+        //没有网络
+        if (!NetUtil.isNetworkAvailable(WanAndroidApp.instance) && isGet) {
             request = request.newBuilder()
                     .header(CACHE_CONTROL, "public, only-if-cached, max-stale=$TIMEOUT_DISCONNECT")
                     .build()
         }
-
-
         chain.proceed(request)
-
     }
 
 }

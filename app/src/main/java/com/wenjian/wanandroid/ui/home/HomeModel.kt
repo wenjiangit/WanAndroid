@@ -23,10 +23,10 @@ class HomeModel : DataViewModel() {
 
     private val mPageLive: SingleLiveEvent<Int> = SingleLiveEvent()
 
-    fun loadHomeData() = repository.loadHomeData(ViewCallbackImpl(viewState))
+    fun loadHomeData() = getRepository().loadHomeData(ViewCallbackImpl(viewState))
 
     fun loadArticles(): LiveData<List<Article>> = Transformations.switchMap(mPageLive) { page ->
-        repository.loadArticles(page, ViewCallbackImpl(viewState)) {
+        getRepository().loadArticles(page, ViewCallbackImpl(viewState)) {
             isOver = it.over
             curPage = it.curPage
         }

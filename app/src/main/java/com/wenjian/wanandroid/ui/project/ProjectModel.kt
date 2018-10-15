@@ -22,10 +22,10 @@ class ProjectModel : DataViewModel() {
 
     private val mPageLive: SingleLiveEvent<Int> = SingleLiveEvent()
 
-    fun loadProjectTree() = repository.loadProjectTree(ViewCallbackImpl(viewState))
+    fun loadProjectTree() = getRepository().loadProjectTree(ViewCallbackImpl(viewState))
 
     fun loadProjects(): LiveData<List<Project>> = Transformations.switchMap(mPageLive) { page ->
-        repository.loadProjects(page, cid, ViewCallbackImpl(viewState)) {
+        getRepository().loadProjects(page, cid, ViewCallbackImpl(viewState)) {
             curPage = it.curPage
             isOver = it.over
         }

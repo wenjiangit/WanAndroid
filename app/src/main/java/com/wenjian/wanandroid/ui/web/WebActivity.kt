@@ -105,26 +105,21 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
 
     private fun unCollect() {
         mViewModel.collect(mWebModel?.id!!)
-                .observe(this, Observer { it ->
-                    it?.let {
-                        toastSuccess("添加收藏成功")
-                        btCollect.setImageResource(R.drawable.ic_favorite)
-                        btCollect.tag = true
-                    }
+                .observe(this, Observer {
+                    toastSuccess("添加收藏成功")
+                    btCollect.setImageResource(R.drawable.ic_favorite)
+                    btCollect.tag = true
                 })
     }
 
     private fun collectPost() {
         mViewModel.uncollect(mWebModel?.id!!)
-                .observe(this, Observer {data->
-                    data?.let {
-                        toastInfo("已取消收藏")
-                        btCollect.setImageResource(R.drawable.ic_favorite_border)
-                        btCollect.tag = false
-                    }
+                .observe(this, Observer {
+                    toastInfo("已取消收藏")
+                    btCollect.setImageResource(R.drawable.ic_favorite_border)
+                    btCollect.tag = false
                 })
     }
-
 
 
     private var isFbtHide: Boolean = false

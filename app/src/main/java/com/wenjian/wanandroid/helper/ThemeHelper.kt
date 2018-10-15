@@ -39,7 +39,7 @@ object ThemeHelper {
             add(Skin(R.style.AppSkin_Black, "高端黑", R.color.skin_black, false))
 
             forEach {
-                if (getSkinId() == it.id) {
+                if (getCurrent() == it.id) {
                     it.select = true
                     current = it.id
                 }
@@ -60,7 +60,7 @@ object ThemeHelper {
      */
     fun hasChanged() = changed
 
-    fun getSkinId(): Int {
+    fun getCurrent(): Int {
         return SKIN_PREFS.getInt(KEY_THEME_ID, DEFAULT_THEME)
     }
 
@@ -69,12 +69,12 @@ object ThemeHelper {
      */
     fun obtainColorAttrValue(context: Context, @AttrRes attrId: Int, @ColorRes default: Int): Int {
         val arrayOf = intArrayOf(attrId)
-        val typedArray = context.theme.obtainStyledAttributes(getSkinId(), arrayOf)
+        val typedArray = context.theme.obtainStyledAttributes(getCurrent(), arrayOf)
         val color = typedArray.getColor(0, context.getCompatColor(default))
         typedArray.recycle()
         return color
     }
 
-    fun isDefault(skin: Int = getSkinId()) = skin == DEFAULT_THEME
+    fun isDefault(skin: Int = getCurrent()) = skin == DEFAULT_THEME
 
 }

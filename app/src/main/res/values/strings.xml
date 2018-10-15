@@ -49,6 +49,7 @@
     <string name="label_logout">退出登录</string>
     <string name="wanandroid">WanAndroid</string>
     <string name="label_theme_style">主题风格</string>
+    <string name="label_login_register">登录/注册</string>
 
 
 </resources>

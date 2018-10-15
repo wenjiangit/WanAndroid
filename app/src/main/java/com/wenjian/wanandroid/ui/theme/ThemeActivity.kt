@@ -9,7 +9,7 @@ import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.getCompatColor
 import com.wenjian.wanandroid.extension.setSystemBarColor
 import com.wenjian.wanandroid.extension.setupActionBar
-import com.wenjian.wanandroid.helper.QMUIStatusBarHelper
+import com.wenjian.wanandroid.helper.StatusBarHelper
 import com.wenjian.wanandroid.helper.ThemeHelper
 import com.wenjian.wanandroid.model.RxBus
 import com.wenjian.wanandroid.model.SkinChangeEvent
@@ -56,12 +56,12 @@ class ThemeActivity : BaseSkinActivity() {
             toolBar.setTitleTextColor(Color.BLACK)
             toolBar.navigationIcon?.setTint(Color.BLACK)
             setSystemBarColor(getCompatColor(R.color.white))
-            QMUIStatusBarHelper.setStatusBarLightMode(this)
+            StatusBarHelper.setStatusBarLightMode(this)
         } else {
             setSystemBarColor(colorInt)
             toolBar.setTitleTextColor(Color.WHITE)
             toolBar.navigationIcon?.setTint(Color.WHITE)
-            QMUIStatusBarHelper.setStatusBarDarkMode(this)
+            StatusBarHelper.setStatusBarDarkMode(this)
         }
         //这里不能使用recreate,会使界面黑屏
 //        recreate()

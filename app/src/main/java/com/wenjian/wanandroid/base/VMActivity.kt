@@ -13,7 +13,7 @@ import com.wenjian.wanandroid.model.ViewState
  *
  * @author jian.wen@ubtrobot.com
  */
-abstract class VMActivity<VM : DataViewModel>(clz: Class<VM>) : BaseSkinActivity() {
+abstract class VMActivity<VM : BaseViewModel>(clz: Class<VM>) : BaseSkinActivity() {
 
     open val mViewModel: VM by apiModelDelegate(clz)
 

@@ -1,27 +1,49 @@
 package com.wenjian.wanandroid.ui.setting
 
+import android.arch.lifecycle.Observer
 import android.support.v7.app.AlertDialog
 import com.wenjian.wanandroid.MainActivity
 import com.wenjian.wanandroid.R
-import com.wenjian.wanandroid.base.BaseSkinActivity
+import com.wenjian.wanandroid.base.VMActivity
 import com.wenjian.wanandroid.extension.launch
 import com.wenjian.wanandroid.extension.setupActionBar
-import com.wenjian.wanandroid.helper.UserHelper
-import com.wenjian.wanandroid.model.RxBus
-import com.wenjian.wanandroid.model.UserInfoRefreshEvent
+import com.wenjian.wanandroid.extension.toastSuccess
+import com.wenjian.wanandroid.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_setting.*
 
-class SettingActivity : BaseSkinActivity() {
+class SettingActivity : VMActivity<SettingModel>(SettingModel::class.java) {
 
     override fun setup() {
         setContentView(R.layout.activity_setting)
         setupActionBar(title = "设置")
+        initView()
+        initEvent()
+    }
+
+    private fun initEvent() {
         tv_logout.setOnClickListener {
-            showDialog {
-                UserHelper.logOut()
-                RxBus.post(UserInfoRefreshEvent())
-                launch(MainActivity::class.java)
+            if (mViewModel.isLogin()) {
+                showDialog {
+                    logout()
+                }
+            } else {
+                launch(LoginActivity::class.java)
             }
+        }
+    }
+
+    private fun logout() {
+        mViewModel.logout().observe(this, Observer {
+            toastSuccess("退出登录成功")
+            launch(MainActivity::class.java)
+        })
+    }
+
+    private fun initView() {
+        if (mViewModel.isLogin()) {
+            tv_logout.text = "退出登录"
+        } else {
+            tv_logout.text = "立即登录"
         }
     }
 

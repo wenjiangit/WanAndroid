@@ -23,7 +23,7 @@ abstract class BaseSkinActivity : BaseActivity() {
     }
 
     private fun initTheme() {
-        setTheme(ThemeHelper.getSkinId())
+        setTheme(ThemeHelper.getCurrent())
     }
 
     abstract fun setup()

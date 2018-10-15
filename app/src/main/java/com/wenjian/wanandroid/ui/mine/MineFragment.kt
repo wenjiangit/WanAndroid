@@ -1,13 +1,13 @@
 package com.wenjian.wanandroid.ui.mine
 
 
+import android.annotation.SuppressLint
+import android.support.constraint.ConstraintLayout
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseFragment
-import com.wenjian.wanandroid.extension.launch
-import com.wenjian.wanandroid.extension.loadAvatar
+import com.wenjian.wanandroid.extension.*
 import com.wenjian.wanandroid.helper.UserHelper
 import com.wenjian.wanandroid.model.RxBus
 import com.wenjian.wanandroid.model.UserInfoRefreshEvent
@@ -30,10 +30,17 @@ class MineFragment : BaseFragment() {
 
     private lateinit var mTvUser: TextView
     private lateinit var mIvAvatar: CircleImageView
+    private lateinit var mTvUserId: TextView
+    private lateinit var mTvLoginRegister: TextView
     private var disposable: Disposable? = null
 
     override fun findViews(mRoot: View) {
-        mRoot.findViewById<LinearLayout>(R.id.lay_person)
+        mTvUser = mRoot.findViewById(R.id.tv_username)
+        mIvAvatar = mRoot.findViewById(R.id.iv_avatar)
+        mTvUserId = mRoot.findViewById(R.id.tv_userid)
+        mTvLoginRegister = mRoot.findViewById(R.id.tv_login_register)
+
+        mRoot.findViewById<ConstraintLayout>(R.id.lay_person)
                 .setOnClickListener {
                     if (UserHelper.isLogin()) {
                         launch(ProfileActivity::class.java)
@@ -41,18 +48,23 @@ class MineFragment : BaseFragment() {
                         launch(LoginActivity::class.java)
                     }
                 }
-        mTvUser = mRoot.findViewById(R.id.tv_username)
-        mIvAvatar = mRoot.findViewById(R.id.iv_avatar)
-        mRoot.findViewById<TextView>(R.id.tv_collect)
+
+        mRoot.findViewById<ConstraintLayout>(R.id.lay_toolbox)
+                .setOnClickListener {
+                    context?.toastInfo("敬请期待")
+                }
+
+        mRoot.findViewById<ConstraintLayout>(R.id.lay_collect)
                 .setOnClickListener {
                     launch(CollectActivity::class.java)
                 }
-        mRoot.findViewById<TextView>(R.id.tv_setting)
+
+        mRoot.findViewById<ConstraintLayout>(R.id.lay_settings)
                 .setOnClickListener {
                     launch(SettingActivity::class.java)
                 }
 
-        mRoot.findViewById<TextView>(R.id.tv_theme)
+        mRoot.findViewById<ConstraintLayout>(R.id.lay_theme)
                 .setOnClickListener {
                     launch(ThemeActivity::class.java)
                 }
@@ -67,14 +79,21 @@ class MineFragment : BaseFragment() {
                 }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateUserInfo() {
         if (UserHelper.isLogin()) {
+            mTvLoginRegister.gone()
+            mTvUserId.visible()
+            mTvUser.visible()
             UserHelper.getUserInfo()?.apply {
                 mTvUser.text = username
                 mIvAvatar.loadAvatar(icon)
+                mTvUserId.text = "id : $id"
             }
         } else {
-            mTvUser.text = "登录/注册"
+            mTvLoginRegister.visible()
+            mTvUserId.gone()
+            mTvUser.gone()
         }
     }
 

@@ -29,7 +29,7 @@ fun Context.toastWarning(msg: String) {
 }
 
 fun Context.toastError(msg: String) {
-    Toasty.error(this, msg, Toast.LENGTH_SHORT, true).show()
+    Toasty.error(this, msg, Toast.LENGTH_SHORT, false).show()
 }
 
 fun Context.toastSuccess(msg: String) {

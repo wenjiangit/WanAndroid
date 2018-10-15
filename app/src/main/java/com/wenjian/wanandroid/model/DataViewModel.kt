@@ -1,7 +1,6 @@
 package com.wenjian.wanandroid.model
 
 import com.wenjian.wanandroid.base.BaseViewModel
-import com.wenjian.wanandroid.model.data.DataRepository
 
 /**
  * Description: DataViewModel
@@ -10,4 +9,9 @@ import com.wenjian.wanandroid.model.data.DataRepository
  * @author jian.wen@ubtrobot.com
  */
 
-open class DataViewModel : BaseViewModel<DataRepository>(DataRepository.getInstance())
+open class DataViewModel : BaseViewModel() {
+
+    override fun needRepository(): Boolean {
+        return true
+    }
+}

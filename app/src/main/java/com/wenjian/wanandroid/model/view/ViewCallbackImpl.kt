@@ -25,6 +25,7 @@ open class ViewCallbackImpl(private val viewState: MutableLiveData<ViewState>) :
 
     override fun showError(msg: String?) {
         viewState.value = ViewState.error(msg)
+        hideLoading()
     }
 
 

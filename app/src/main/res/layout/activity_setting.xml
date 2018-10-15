@@ -21,7 +21,7 @@
         android:focusable="true"
         android:gravity="center"
         android:text="@string/label_logout"
-        android:textColor="@color/colorAccent" />
+        android:textColor="?attr/colorAccent" />
 
 
 </LinearLayout>

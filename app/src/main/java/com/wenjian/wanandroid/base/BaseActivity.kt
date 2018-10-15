@@ -13,9 +13,8 @@ import com.wenjian.wanandroid.model.view.ViewFeature
  */
 abstract class BaseActivity : AppCompatActivity(), ViewFeature {
 
-
     override fun onNavigateUp(): Boolean {
-        finish()
+        onBackPressed()
         return super.onNavigateUp()
     }
 

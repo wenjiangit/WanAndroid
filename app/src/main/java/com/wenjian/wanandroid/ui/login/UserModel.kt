@@ -16,12 +16,12 @@ import com.wenjian.wanandroid.model.view.ViewCallbackImpl
 
 class UserModel : DataViewModel() {
 
-    fun login(username: String, password: String) = repository
+    fun login(username: String, password: String) = getRepository()
             .login(username, password, ViewCallbackImpl(viewState)) {
                 handleUserInfo(it!!)
             }
 
-    fun register(username: String, password: String, repass: String) = repository
+    fun register(username: String, password: String, repass: String) = getRepository()
             .register(username, password, repass, ViewCallbackImpl(viewState)) {
                 handleUserInfo(it!!)
             }

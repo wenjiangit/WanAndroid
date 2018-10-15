@@ -44,20 +44,20 @@ class MainActivity : BaseSkinActivity() {
             setOnNavigationItemSelectedListener {
                 when (it.itemId) {
                     R.id.home -> {
-                        doTabSelect(0)
+                        doTabSelect(0, it.title)
                         true
                     }
                     R.id.knowledge -> {
-                        doTabSelect(1)
+                        doTabSelect(1, it.title)
                         true
                     }
                     R.id.project -> {
-                        doTabSelect(2)
+                        doTabSelect(2, it.title)
                         true
                     }
 
                     R.id.mine -> {
-                        doTabSelect(3)
+                        doTabSelect(3, it.title)
                         true
                     }
                     else -> false
@@ -70,6 +70,7 @@ class MainActivity : BaseSkinActivity() {
             navigation.translationY = Math.abs(verticalOffset).toFloat()
         }
 
+        //注册皮肤变化的监听
         disposable = RxBus.toObservable(SkinChangeEvent::class.java)
                 .subscribe {
                     recreate()
@@ -92,8 +93,9 @@ class MainActivity : BaseSkinActivity() {
         mainPager.adapter = MainPagerAdapter(supportFragmentManager, mFragments)
     }
 
-    private fun doTabSelect(position: Int) {
+    private fun doTabSelect(position: Int, charSequence: CharSequence) {
         mainPager.currentItem = position
+        toolBar.title = charSequence
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {

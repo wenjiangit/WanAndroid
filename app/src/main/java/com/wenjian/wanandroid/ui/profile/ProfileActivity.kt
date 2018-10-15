@@ -1,11 +1,10 @@
 package com.wenjian.wanandroid.ui.profile
 
-import android.arch.lifecycle.Observer
-import android.support.v7.app.AlertDialog
-import com.wenjian.wanandroid.MainActivity
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMActivity
-import com.wenjian.wanandroid.extension.*
+import com.wenjian.wanandroid.extension.loadAvatar
+import com.wenjian.wanandroid.extension.setupActionBar
+import com.wenjian.wanandroid.extension.translucentStatusBar
 import kotlinx.android.synthetic.main.activity_profile.*
 
 class ProfileActivity : VMActivity<ProfileModel>(ProfileModel::class.java) {
@@ -27,31 +26,7 @@ class ProfileActivity : VMActivity<ProfileModel>(ProfileModel::class.java) {
 
           }*/
 
-        btn_logout.setOnClickListener { _ ->
-            showDialog {
-                logout()
-            }
-        }
 
-    }
-
-    private fun showDialog(handler: () -> Unit) {
-        AlertDialog.Builder(this)
-                .setMessage("确定要退出登录么?")
-                .setNegativeButton("取消") { dialog, _ ->
-                    dialog.dismiss()
-                }.setPositiveButton("确认") { dialog, _ ->
-                    handler()
-                    dialog.dismiss()
-                }.show()
-    }
-
-    private fun logout() {
-        mViewModel.logout()
-                .observe(this, Observer {
-                    toastSuccess("退出登录成功")
-                    launch(MainActivity::class.java)
-                })
     }
 
     private fun initViews() {
