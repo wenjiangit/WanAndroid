@@ -50,6 +50,10 @@
     <string name="wanandroid">WanAndroid</string>
     <string name="label_theme_style">主题风格</string>
     <string name="label_login_register">登录/注册</string>
+    <string name="change_password">修改密码</string>
+    <string name="clear_cache">清除缓存</string>
+    <string name="check_update">检查更新</string>
+    <string name="about_wanandroid">关于WanAndroid</string>
 
 
 </resources>

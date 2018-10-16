@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,17 +9,89 @@
     tools:context=".ui.setting.SettingActivity">
 
 
-    <include layout="@layout/fix_title_bar"/>
+    <include layout="@layout/fix_title_bar" />
 
 
     <TextView
-        android:layout_marginTop="20dp"
-        android:id="@+id/tv_logout"
+        android:layout_marginTop="16dp"
+        android:id="@+id/tv_change_pass"
+        style="@style/RippleItem"
         android:layout_width="match_parent"
-        android:layout_height="47dp"
-        android:background="@drawable/home_item_bg"
-        android:clickable="true"
-        android:focusable="true"
+        android:layout_height="45dp"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/change_password"
+        android:textColor="@color/primary_text" />
+
+  <!--  <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+
+        android:background="@color/shallow_bg" />-->
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/lay_clear_cache"
+        style="@style/RippleItem"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="0.5dp">
+
+
+        <TextView
+            android:id="@+id/tv_clear_cache"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/clear_cache"
+            android:textColor="@color/primary_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_cache_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/second_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="45M" />
+    </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_check_update"
+        style="@style/RippleItem"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="0.5dp"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/check_update"
+        android:textColor="@color/primary_text" />
+
+    <TextView
+        android:id="@+id/tv_about"
+        style="@style/RippleItem"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="0.5dp"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/about_wanandroid"
+        android:textColor="@color/primary_text" />
+
+
+    <TextView
+        android:id="@+id/tv_logout"
+        style="@style/RippleItem"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="@string/label_logout"
         android:textColor="?attr/colorAccent" />

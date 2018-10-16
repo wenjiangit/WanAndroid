@@ -195,7 +195,7 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
             domStorageEnabled = true
             databaseEnabled = true
 
-            val appCacheDir = this@WebActivity.cacheDir.absolutePath + "/webViewCache"
+            val appCacheDir = this@WebActivity.externalCacheDir.absolutePath + "/webViewCache"
             setAppCachePath(appCacheDir)
             setAppCacheEnabled(true)
             cacheMode = if (NetUtil.isNetworkAvailable(this@WebActivity)) {

@@ -49,16 +49,16 @@ class ThemeActivity : BaseSkinActivity() {
     }
 
     private fun applySkin(skin: Skin) {
-        val skinColor: Int = if (ThemeHelper.isDefault(skin.id)) R.color.white else skin.color
+        val isDefault: Boolean = ThemeHelper.isDefault(skin.id)
+        val skinColor: Int = if (isDefault) R.color.white else skin.color
         val colorInt = getCompatColor(skinColor)
         toolBar.setBackgroundColor(colorInt)
-        if (ThemeHelper.isDefault(skin.id)) {
+        setSystemBarColor(colorInt)
+        if (isDefault) {
             toolBar.setTitleTextColor(Color.BLACK)
             toolBar.navigationIcon?.setTint(Color.BLACK)
-            setSystemBarColor(getCompatColor(R.color.white))
             StatusBarHelper.setStatusBarLightMode(this)
         } else {
-            setSystemBarColor(colorInt)
             toolBar.setTitleTextColor(Color.WHITE)
             toolBar.navigationIcon?.setTint(Color.WHITE)
             StatusBarHelper.setStatusBarDarkMode(this)

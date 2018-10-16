@@ -84,7 +84,16 @@ interface ApiService {
      * 登出
      */
     @GET("/user/logout/json")
-    fun logout():Observable<Resp<Unit>>
+    fun logout(): Observable<Resp<Unit>>
+
+    /**
+     * 修改密码
+     */
+    @FormUrlEncoded
+    @GET("/user/lg/password")
+    fun modifyPassword(@Field("curPassword") curPass: String,
+                       @Field("password") password: String,
+                       @Field("repassword") repassword: String): Observable<Resp<Unit>>
 
     /**
      * 我的收藏

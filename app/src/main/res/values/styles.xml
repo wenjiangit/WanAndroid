@@ -210,4 +210,14 @@
     </style>
 
 
+    <!--  android:background="@drawable/home_item_bg"
+        android:clickable="true"
+        android:focusable="true"-->
+
+    <style name="RippleItem">
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/home_item_bg</item>
+    </style>
+
 </resources>
