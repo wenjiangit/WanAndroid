@@ -5,6 +5,7 @@ import com.wenjian.wanandroid.WanAndroidApp
 import com.wenjian.wanandroid.model.SingleLiveEvent
 import com.wenjian.wanandroid.model.ViewState
 import com.wenjian.wanandroid.model.data.DataRepository
+import com.wenjian.wanandroid.model.view.ViewCallback
 
 /**
  * Description: BaseViewModel
@@ -12,7 +13,8 @@ import com.wenjian.wanandroid.model.data.DataRepository
  *
  * @author jian.wen@ubtrobot.com
  */
-open class BaseViewModel : AndroidViewModel(WanAndroidApp.instance) {
+open class BaseViewModel : AndroidViewModel(WanAndroidApp.instance), ViewCallback {
+
 
     val viewState: SingleLiveEvent<ViewState> = SingleLiveEvent()
 
@@ -34,4 +36,21 @@ open class BaseViewModel : AndroidViewModel(WanAndroidApp.instance) {
 
     open fun needRepository() = false
 
+    override fun showLoading() {
+        viewState.value = ViewState.loading()
+    }
+
+    override fun hideLoading() {
+        viewState.value = ViewState.hideLoading()
+    }
+
+    override fun showEmpty() {
+        viewState.value = ViewState.empty()
+    }
+
+    override fun showError(msg: String?) {
+        viewState.value = ViewState.error(msg)
+    }
+
+    open fun getApp() = getApplication<WanAndroidApp>()
 }

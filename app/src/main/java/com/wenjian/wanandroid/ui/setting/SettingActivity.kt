@@ -2,13 +2,13 @@ package com.wenjian.wanandroid.ui.setting
 
 import android.arch.lifecycle.Observer
 import android.support.v7.app.AlertDialog
-import com.wenjian.wanandroid.MainActivity
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMActivity
 import com.wenjian.wanandroid.extension.*
 import com.wenjian.wanandroid.ui.login.LoginActivity
-import com.wenjian.wanandroid.utils.FileUtil
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_setting.*
+import java.util.concurrent.TimeUnit
 
 class SettingActivity : VMActivity<SettingModel>(SettingModel::class.java) {
 
@@ -31,25 +31,32 @@ class SettingActivity : VMActivity<SettingModel>(SettingModel::class.java) {
         }
 
         tv_check_update.setOnClickListener {
-            toastInfo("已是最新版本了")
+            showLoading()
+            Observable.timer(2,TimeUnit.SECONDS)
+                    .io2Main()
+                    .subscribe {
+                        hideLoading()
+                        toastInfo("已是最新版本了")
+                    }
         }
 
         lay_clear_cache.setOnClickListener {
-            showDialog("确定清除缓存数据么?"){
+            showDialog("确定清除缓存数据么?") {
                 clearCache()
             }
         }
     }
 
     private fun clearCache() {
-        FileUtil.deleteFile(externalCacheDir)
-        tv_cache_size.text = FileUtil.getFormatSize(externalCacheDir)
+        mViewModel.clearCache()
+        tv_cache_size.text = mViewModel.getCacheSize()
+        toastSuccess("清理成功")
     }
 
     private fun logout() {
         mViewModel.logout().observe(this, Observer {
             toastSuccess("退出登录成功")
-            launch(MainActivity::class.java)
+            finish()
         })
     }
 
@@ -62,7 +69,7 @@ class SettingActivity : VMActivity<SettingModel>(SettingModel::class.java) {
             tv_change_pass.gone()
         }
 
-        tv_cache_size.text = FileUtil.getFormatSize(externalCacheDir)
+        tv_cache_size.text = mViewModel.getCacheSize()
     }
 
     private fun showDialog(msg: String, handler: () -> Unit) {

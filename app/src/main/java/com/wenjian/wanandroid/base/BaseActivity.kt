@@ -3,7 +3,8 @@ package com.wenjian.wanandroid.base
 import android.support.v7.app.AppCompatActivity
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.extension.toastError
-import com.wenjian.wanandroid.model.view.ViewFeature
+import com.wenjian.wanandroid.model.view.ViewCallback
+import com.wenjian.wanandroid.widget.AppLoadingDialog
 
 /**
  * Description: BaseActivity
@@ -11,7 +12,9 @@ import com.wenjian.wanandroid.model.view.ViewFeature
  *
  * @author jian.wen@ubtrobot.com
  */
-abstract class BaseActivity : AppCompatActivity(), ViewFeature {
+abstract class BaseActivity : AppCompatActivity(), ViewCallback {
+
+    private val loading: AppLoadingDialog by lazy { AppLoadingDialog(this) }
 
     override fun onNavigateUp(): Boolean {
         onBackPressed()
@@ -35,11 +38,11 @@ abstract class BaseActivity : AppCompatActivity(), ViewFeature {
     }
 
     override fun showLoading() {
-
+        loading.show()
     }
 
     override fun hideLoading() {
-
+        loading.dismiss()
     }
 
     override fun showError(msg: String?) {

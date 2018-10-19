@@ -53,7 +53,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.theme.ThemeActivity"></activity>
+        <activity android:name=".ui.theme.ThemeActivity" />
+        <activity android:name=".ui.setting.modify.ModifyPasswordActivity"></activity>
     </application>
 
 </manifest>

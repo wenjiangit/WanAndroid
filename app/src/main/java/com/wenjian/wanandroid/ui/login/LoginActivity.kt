@@ -54,14 +54,12 @@ class LoginActivity : VMActivity<UserModel>(UserModel::class.java), View.OnClick
     }
 
     override fun showLoading() {
-        super.showLoading()
         bt_login.gone()
         progress_bar.visible()
 
     }
 
     override fun hideLoading() {
-        super.hideLoading()
         progress_bar.gone()
         bt_login.visible()
     }
