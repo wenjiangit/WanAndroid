@@ -1,15 +1,12 @@
 package com.wenjian.wanandroid.ui.setting
 
-import com.wenjian.wanandroid.extension.io2Main
 import com.wenjian.wanandroid.helper.UserHelper
 import com.wenjian.wanandroid.model.DataViewModel
 import com.wenjian.wanandroid.model.RxBus
 import com.wenjian.wanandroid.model.SkinChangeEvent
 import com.wenjian.wanandroid.model.view.ViewCallbackImpl
 import com.wenjian.wanandroid.utils.FileUtil
-import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import java.util.concurrent.TimeUnit
 
 /**
  * Description: SettingModel
@@ -34,6 +31,10 @@ class SettingModel : DataViewModel() {
     }
 
     fun getCacheSize() = FileUtil.getFormatSize(getApp().externalCacheDir)
+
+    fun modifyPass(curPass: String, newPass: String, rePass: String, handler: (Unit?) -> Unit) = getRepository()
+            .modifyPassword(curPass, newPass, rePass, ViewCallbackImpl(viewState), handler)
+
 
     override fun onCleared() {
         super.onCleared()

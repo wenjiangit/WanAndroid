@@ -54,6 +54,10 @@
     <string name="clear_cache">清除缓存</string>
     <string name="check_update">检查更新</string>
     <string name="about_wanandroid">关于WanAndroid</string>
+    <string name="origin_password">原密码</string>
+    <string name="new_password">新密码</string>
+    <string name="confirm_password">确认密码</string>
+    <string name="modify_password">修改密码</string>
 
 
 </resources>

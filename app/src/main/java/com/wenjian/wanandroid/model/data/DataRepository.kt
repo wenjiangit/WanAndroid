@@ -91,8 +91,8 @@ class DataRepository private constructor() : BaseRepository() {
     }
 
     fun modifyPassword(curPass: String, password: String, repassword: String,
-                       callback: ViewCallback): LiveData<Unit> {
-        return doSimpleAction(mService.modifyPassword(curPass, password, repassword), callback) {}
+                       callback: ViewCallback,handle: (Unit?) -> Unit): LiveData<Unit> {
+        return doSimpleAction(mService.modifyPassword(curPass, password, repassword), callback,handle)
     }
 
     companion object {

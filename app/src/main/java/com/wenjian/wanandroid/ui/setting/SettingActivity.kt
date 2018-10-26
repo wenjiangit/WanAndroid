@@ -6,6 +6,7 @@ import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMActivity
 import com.wenjian.wanandroid.extension.*
 import com.wenjian.wanandroid.ui.login.LoginActivity
+import com.wenjian.wanandroid.ui.setting.modify.ModifyPasswordActivity
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_setting.*
 import java.util.concurrent.TimeUnit
@@ -32,7 +33,7 @@ class SettingActivity : VMActivity<SettingModel>(SettingModel::class.java) {
 
         tv_check_update.setOnClickListener {
             showLoading()
-            Observable.timer(2,TimeUnit.SECONDS)
+            Observable.timer(2, TimeUnit.SECONDS)
                     .io2Main()
                     .subscribe {
                         hideLoading()
@@ -45,6 +46,12 @@ class SettingActivity : VMActivity<SettingModel>(SettingModel::class.java) {
                 clearCache()
             }
         }
+
+        tv_change_pass.setOnClickListener {
+            launch(ModifyPasswordActivity::class.java)
+        }
+
+
     }
 
     private fun clearCache() {

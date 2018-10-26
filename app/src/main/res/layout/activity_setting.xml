@@ -12,30 +12,18 @@
     <include layout="@layout/fix_title_bar" />
 
 
-    <TextView
-        android:layout_marginTop="16dp"
-        android:id="@+id/tv_change_pass"
-        style="@style/RippleItem"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="@string/change_password"
-        android:textColor="@color/primary_text" />
+    <!--  <View
+          android:layout_width="match_parent"
+          android:layout_height="0.5dp"
 
-  <!--  <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-
-        android:background="@color/shallow_bg" />-->
+          android:background="@color/shallow_bg" />-->
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/lay_clear_cache"
         style="@style/RippleItem"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_marginTop="0.5dp">
+        android:layout_marginTop="16dp">
 
 
         <TextView
@@ -60,6 +48,18 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="45M" />
     </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_change_pass"
+        style="@style/RippleItem"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="0.5dp"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/change_password"
+        android:textColor="@color/primary_text" />
 
     <TextView
         android:id="@+id/tv_check_update"

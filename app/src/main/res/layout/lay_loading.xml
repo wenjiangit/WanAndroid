@@ -8,7 +8,6 @@
         style="@style/AVLoadingIndicatorView"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        app:indicatorColor="?attr/colorAccent"
         app:indicatorName="BallClipRotatePulseIndicator"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
