@@ -90,7 +90,7 @@ interface ApiService {
      * 修改密码
      */
     @FormUrlEncoded
-    @GET("/user/lg/password")
+    @POST("/user/lg/password")
     fun modifyPassword(@Field("curPassword") curPass: String,
                        @Field("password") password: String,
                        @Field("repassword") repassword: String): Observable<Resp<Unit>>

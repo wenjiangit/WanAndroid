@@ -50,6 +50,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tv_change_pass"
         style="@style/RippleItem"
         android:layout_width="match_parent"

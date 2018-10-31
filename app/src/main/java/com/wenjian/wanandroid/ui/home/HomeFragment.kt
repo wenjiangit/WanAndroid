@@ -68,7 +68,7 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
                     setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE)
                     setDelayTime(2000)
                     setImageLoader(GlideImageLoader())
-                    setBannerAnimation(Transformer.Accordion)
+                    setBannerAnimation(Transformer.Stack)
                     setOnBannerListener { position ->
                         val banner = bannerData[position]
                         WebActivity.start(context, WebModel(banner.id, banner.url, false))
