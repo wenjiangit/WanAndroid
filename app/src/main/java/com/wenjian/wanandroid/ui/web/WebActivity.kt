@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.webkit.*
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMActivity
@@ -274,6 +275,8 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
 
     override fun onDestroy() {
         super.onDestroy()
+        val parent = webView.parent as? ViewGroup
+        parent?.removeView(webView)
         webView.removeAllViews()
         webView.destroy()
     }
