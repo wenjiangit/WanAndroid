@@ -34,6 +34,7 @@
             android:name=".MainActivity"
             android:launchMode="singleTask" />
         <activity
+            android:process=":remote"
             android:name=".ui.web.WebActivity"
             android:theme="@style/WebActTheme" />
         <activity android:name=".ui.search.SearchActivity" />
@@ -55,6 +56,10 @@
         </activity>
         <activity android:name=".ui.theme.ThemeActivity" />
         <activity android:name=".ui.setting.modify.ModifyPasswordActivity"></activity>
+
+        <service android:name=".ui.web.WebService"
+            android:process=":remote"
+            />
     </application>
 
 </manifest>
