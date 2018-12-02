@@ -55,11 +55,18 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.theme.ThemeActivity" />
-        <activity android:name=".ui.setting.modify.ModifyPasswordActivity"></activity>
+        <activity android:name=".ui.setting.modify.ModifyPasswordActivity" />
 
         <service android:name=".ui.web.WebService"
             android:process=":remote"
             />
+
+
+        <provider
+            android:exported="true"
+            android:enabled="true"
+            android:authorities="com.wenjian.wanandroid.provider"
+            android:name=".provider.CookieSyncProvider"/>
     </application>
 
 </manifest>

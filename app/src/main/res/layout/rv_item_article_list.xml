@@ -10,11 +10,14 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/tv_category"
+        android:id="@+id/tv_date"
+        android:drawableStart="@drawable/ic_access_time"
+        android:drawableTint="?attr/colorAccent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/second_text"
         android:textSize="12sp"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="TextView" />
@@ -26,26 +29,24 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:lineSpacingExtra="4dp"
-        android:maxWidth="240dp"
         android:textColor="@color/primary_text"
         android:textSize="13sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/iv_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_name"
         tools:text="TextView" />
 
-    <ImageView
-        android:id="@+id/iv_image"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:background="@color/shallow_bg"
-        android:elevation="5dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_title"
-        tools:ignore="ContentDescription"
-        tools:srcCompat="@mipmap/ic_launcher" />
+    <!--<ImageView-->
+        <!--android:id="@+id/iv_image"-->
+        <!--android:layout_width="70dp"-->
+        <!--android:layout_height="70dp"-->
+        <!--android:background="@color/shallow_bg"-->
+        <!--android:elevation="5dp"-->
+        <!--android:scaleType="centerCrop"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/tv_title"-->
+        <!--tools:ignore="ContentDescription"-->
+        <!--tools:srcCompat="@mipmap/ic_launcher" />-->
 
     <TextView
         android:id="@+id/tv_name"
@@ -58,13 +59,16 @@
         tools:text="TextView" />
 
     <TextView
-        android:id="@+id/tv_date"
+        android:id="@+id/tv_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="3dp"
         android:layout_marginBottom="2dp"
         android:layout_marginTop="8dp"
-        android:textColor="@color/second_text"
-        android:textSize="12sp"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        android:gravity="center"
+        android:background="@drawable/bg_tag"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
@@ -73,16 +77,15 @@
 
     <ImageView
         android:id="@+id/iv_like"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/ic_favorite"
         android:tint="@color/selector_like_tint"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_date"
+        app:layout_constraintRight_toRightOf="parent"
         tools:ignore="ContentDescription" />
 
 

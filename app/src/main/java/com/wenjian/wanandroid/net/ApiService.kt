@@ -33,7 +33,6 @@ interface ApiService {
     /**
      * 搜索
      */
-    @Headers("${CacheStrategy.CUSTOM_HEADER}: 0")
     @FormUrlEncoded
     @POST("/article/query/{page}/json")
     fun search(@Field("k") k: String, @Path("page") page: Int): Observable<PagingResp<List<Article>>>

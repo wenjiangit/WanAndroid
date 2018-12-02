@@ -15,15 +15,15 @@ import okhttp3.HttpUrl
 class CookieJarImpl(private val manager: CookieManager) : CookieJar {
 
     companion object {
-        fun create(context: Context) = CookieJarImpl(CookieManager(context))
+        fun create(context: Context) = CookieJarImpl(CookieManager.getInstance(context))
     }
 
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
         Log.i("wj", "receive cookie ${url.host()} >>> $cookies")
-        manager.save(url.host(), cookies)
+        manager.saveMutilProcess(url.host(), cookies)
     }
 
     override fun loadForRequest(url: HttpUrl): List<Cookie> {
-        return manager.load(url.host())
+        return manager.loadMutilProcess(url.host())
     }
 }

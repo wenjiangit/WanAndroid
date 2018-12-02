@@ -275,6 +275,6 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
     override fun onDestroy() {
         super.onDestroy()
         webView.removeAllViews()
-        webView.destroy()
+//        webView.destroy()
     }
 }

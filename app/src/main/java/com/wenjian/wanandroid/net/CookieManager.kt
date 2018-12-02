@@ -1,10 +1,14 @@
 package com.wenjian.wanandroid.net
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
+import android.os.Bundle
 import android.util.Log
 import com.google.gson.Gson
 import com.wenjian.wanandroid.extension.genericType
+import com.wenjian.wanandroid.ui.web.WebClient
 import okhttp3.Cookie
 import java.util.concurrent.ConcurrentHashMap
 
@@ -14,11 +18,25 @@ import java.util.concurrent.ConcurrentHashMap
  *
  * @author jian.wen@ubtrobot.com
  */
-class CookieManager(val context: Context) {
+class CookieManager private constructor(val context: Context) {
 
     companion object {
         private const val NAME: String = "cookie_prefs"
         private val TAG: String = CookieManager::class.java.simpleName
+
+        @SuppressLint("StaticFieldLeak")
+        private var instance: CookieManager? = null
+
+        fun getInstance(context: Context): CookieManager {
+            instance ?: CookieManager(context.applicationContext).also {
+                instance = it
+            }
+            return instance!!
+        }
+
+        private const val COOKIE_URI = "content://com.wenjian.wanandroid.provider"
+
+
     }
 
     private val cookieStore: ConcurrentHashMap<String, ConcurrentHashMap<String, Cookie>?> = ConcurrentHashMap()
@@ -49,6 +67,31 @@ class CookieManager(val context: Context) {
             }
         }
         else -> null
+    }
+
+    fun loadMutilProcess(host: String): List<Cookie> {
+        return if (WebClient.isInWebViewProcess(context)) {
+            call("load", host)
+        } else {
+            load(host)
+        }
+    }
+
+    fun saveMutilProcess(host: String, cookies: List<Cookie>) {
+        if (WebClient.isInWebViewProcess(context)) {
+            val bundle = Bundle().apply {
+                putString("req", gson.toJson(cookies))
+            }
+            context.contentResolver.call(Uri.parse(COOKIE_URI),"save",host,bundle)
+        } else {
+            save(host, cookies)
+        }
+    }
+
+    private fun call(method: String, arg: String): List<Cookie> {
+        val bundle = context.contentResolver.call(Uri.parse(COOKIE_URI), method, arg, null)
+        val string = bundle.getString("ret")
+        return gson.fromJson(string, genericType<List<Cookie>>())
     }
 
 
