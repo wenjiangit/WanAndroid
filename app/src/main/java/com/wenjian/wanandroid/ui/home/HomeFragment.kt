@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Handler
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
+import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import com.wenjian.wanandroid.base.BaseRecyclerAdapter
 import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.loadUrl
+import com.wenjian.wanandroid.extension.logI
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
 import com.wenjian.wanandroid.utils.Tools
 import com.youth.banner.loader.ImageLoaderInterface
@@ -34,7 +36,7 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
 
     private val mHandler = Handler()
 
-    private var mCurrentIndex: Int = INITIAIL_INDEX
+    private var mCurrentIndex: Int = 0
 
     private val mLoopRunnable = object : Runnable {
         override fun run() {
@@ -48,9 +50,8 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
         mRecycler.addCustomDecoration(drawable = R.drawable.divider_tree)
         val inflateView = LayoutInflater.from(context).inflate(R.layout.lay_home_banner, mRecycler, false)
         mBannerPager = inflateView.findViewById(R.id.banner_pager)
-        mBannerPager.pageMargin = Tools.dpToPx(context!!, 6)
-        mBannerPager.offscreenPageLimit = 2
-        mBannerPager.currentItem = INITIAIL_INDEX
+        mBannerPager.pageMargin = Tools.dpToPx(context!!, 4)
+        mBannerPager.offscreenPageLimit = 1
 
         mAdapter.addHeaderView(inflateView)
     }
@@ -58,6 +59,8 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
 
     override fun onStart() {
         super.onStart()
+        mBannerPager.currentItem = INITIAIL_INDEX
+        mBannerPager.pageMargin = Tools.dpToPx(context!!, 4)
         mHandler.postDelayed(mLoopRunnable, INTERVAL_TIME)
     }
 
@@ -81,22 +84,7 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
         mViewModel.loadHomeData().observe(this, Observer { data ->
             data?.let {
                 val (bannerData, second) = it
-                mBannerPager.adapter = MyPagerAdapter(context!!,bannerData.map { it.imagePath })
-
-                /* mBanner.apply {
-                     setImages(bannerData.map { it.imagePath })
-                     setBannerTitles(bannerData.map { it.title })
-                     setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE)
-                     setDelayTime(2000)
-                     setImageLoader(GlideImageLoader())
-                     setBannerAnimation(Transformer.Stack)
-                     setOnBannerListener { position ->
-                         val banner = bannerData[position]
-                         WebActivity.start(context, WebModel(banner.id, banner.url, false))
-                     }
-                     setIndicatorGravity(BannerConfig.RIGHT)
-                     start()
-                 }*/
+                mBannerPager.adapter = MyPagerAdapter(context!!, bannerData.map { it.imagePath })
                 mAdapter.setNewData(second)
             }
         })
@@ -108,7 +96,7 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
         }
 
         private const val INITIAIL_INDEX = 1000000
-        private const val INTERVAL_TIME = 2000L
+        private const val INTERVAL_TIME = 3000L
     }
 
     override fun onStop() {
@@ -116,28 +104,11 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
         mHandler.removeCallbacks(mLoopRunnable)
     }
 
-    class GlideImageLoader : ImageLoaderInterface<ImageView> {
-        override fun createImageView(context: Context?): ImageView {
-            return ImageView(context)
-        }
-
-        override fun displayImage(context: Context?, path: Any?, imageView: ImageView?) {
-            Glide.with(context!!).load(path).into(imageView!!)
-        }
-    }
-
     class MyPagerAdapter(context: Context, private val urls: List<String>) : PagerAdapter() {
 
         private val size: Int = urls.size
 
-        private val mViewList: MutableList<ImageView> = arrayListOf()
-
-        init {
-            for (i in 0 until size) {
-                val imageView = ImageView(context)
-                mViewList.add(imageView)
-            }
-        }
+        private val mViewList: SparseArray<ImageView> = SparseArray()
 
         override fun getCount(): Int = Int.MAX_VALUE
 
@@ -146,17 +117,20 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
         }
 
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
+            logI("instantiateItem == $position")
             val newPos = position % size
-            val imageView = mViewList[newPos]
-            imageView.loadUrl(urls[newPos])
-            if (container.indexOfChild(imageView) == -1) {
-                container.addView(imageView)
+            val imageView = mViewList[newPos] ?: ImageView(container.context).apply {
+                scaleType = ImageView.ScaleType.CENTER_CROP
+                loadUrl(urls[newPos])
             }
+            container.addView(imageView)
             return imageView
         }
 
         override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
             container.removeView(obj as View)
+            logI("destroyItem == $position")
+            mViewList.put(position % size, obj as ImageView)
         }
     }
 
