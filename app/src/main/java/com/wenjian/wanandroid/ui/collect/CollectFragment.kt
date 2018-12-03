@@ -25,7 +25,6 @@ class CollectFragment : BaseListFragment<Article, CollectModel>(CollectModel::cl
     override fun initViews() {
         super.initViews()
         mRecycler.addCustomDecoration()
-        mAdapter.showLike(false)
     }
 
     override fun subscribeUi() {
@@ -37,6 +36,18 @@ class CollectFragment : BaseListFragment<Article, CollectModel>(CollectModel::cl
 
     override fun onLoadMore() {
         mViewModel.loadMore()
+    }
+
+    override fun showContent(res: List<Article>?) {
+        res?.let { list ->
+            val collectList = list.onEach { it.collect = true }
+            if (isLoadMore) {
+                mAdapter.addData(collectList)
+                mAdapter.loadMoreComplete()
+            } else {
+                mAdapter.setNewData(collectList)
+            }
+        }
     }
 
 

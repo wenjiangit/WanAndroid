@@ -27,16 +27,16 @@ class CookieManager private constructor(val context: Context) {
         @SuppressLint("StaticFieldLeak")
         private var instance: CookieManager? = null
 
+        private const val COOKIE_URI = "content://com.wenjian.wanandroid.provider"
+
         fun getInstance(context: Context): CookieManager {
-            instance ?: CookieManager(context.applicationContext).also {
-                instance = it
+            instance ?: synchronized(CookieManager::class.java) {
+                CookieManager(context.applicationContext).also {
+                    instance = it
+                }
             }
             return instance!!
         }
-
-        private const val COOKIE_URI = "content://com.wenjian.wanandroid.provider"
-
-
     }
 
     private val cookieStore: ConcurrentHashMap<String, ConcurrentHashMap<String, Cookie>?> = ConcurrentHashMap()
@@ -69,7 +69,7 @@ class CookieManager private constructor(val context: Context) {
         else -> null
     }
 
-    fun loadMutilProcess(host: String): List<Cookie> {
+    fun loadMultiProcess(host: String): List<Cookie> {
         return if (WebClient.isInWebViewProcess(context)) {
             call("load", host)
         } else {
@@ -77,12 +77,12 @@ class CookieManager private constructor(val context: Context) {
         }
     }
 
-    fun saveMutilProcess(host: String, cookies: List<Cookie>) {
+    fun saveMultiProcess(host: String, cookies: List<Cookie>) {
         if (WebClient.isInWebViewProcess(context)) {
             val bundle = Bundle().apply {
                 putString("req", gson.toJson(cookies))
             }
-            context.contentResolver.call(Uri.parse(COOKIE_URI),"save",host,bundle)
+            context.contentResolver.call(Uri.parse(COOKIE_URI), "save", host, bundle)
         } else {
             save(host, cookies)
         }

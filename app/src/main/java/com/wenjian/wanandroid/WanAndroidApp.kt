@@ -1,8 +1,11 @@
 package com.wenjian.wanandroid
 
 import android.app.Application
+import android.os.Process
 import com.squareup.leakcanary.LeakCanary
 import com.tencent.bugly.crashreport.CrashReport
+import com.wenjian.wanandroid.extension.logI
+import com.wenjian.wanandroid.ui.web.WebClient
 import kotlin.properties.Delegates
 
 /**
@@ -32,4 +35,12 @@ class WanAndroidApp : Application() {
         //提前启动web进程,避免WebActivity启动时白屏
         WebClient.preLoad(this)
     }
+
+
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        logI("onTrimMemory ${Process.myPid()}")
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package com.wenjian.wanandroid.net
 
 import com.wenjian.wanandroid.entity.*
+import io.reactivex.Maybe
 import io.reactivex.Observable
 import retrofit2.http.*
 
@@ -106,6 +107,12 @@ interface ApiService {
     @POST("/lg/collect/{id}/json")
     fun collect(@Path("id") id: Int): Observable<Resp<Unit>>
 
+    /**
+     * 添加收藏
+     */
+    @POST("/lg/collect/{id}/json")
+    fun collectPost(@Path("id") id: Int): Maybe<Resp<Any>>
+
 
     /**
      * 取消收藏
@@ -113,6 +120,14 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/lg/uncollect/{id}/json")
     fun unCollect(@Path("id") id: Int, @Field("originId") originId: Int): Observable<Resp<Unit>>
+
+
+    /**
+     * 取消收藏
+     */
+    @FormUrlEncoded
+    @POST("/lg/uncollect/{id}/json")
+    fun unCollectPost(@Path("id") id: Int, @Field("originId") originId: Int): Maybe<Resp<Any>>
 
 
 }

@@ -33,7 +33,7 @@
         android:textSize="13sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_avatar"
         tools:text="TextView" />
 
     <!--<ImageView-->
@@ -52,17 +52,18 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/primary_text"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/second_text"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_avatar"
+        app:layout_constraintStart_toEndOf="@id/tv_avatar"
         tools:text="TextView" />
 
     <TextView
         android:id="@+id/tv_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="3dp"
+        android:padding="2dp"
         android:layout_marginBottom="2dp"
         android:layout_marginTop="8dp"
         android:textColor="@color/white"
@@ -77,8 +78,8 @@
 
     <ImageView
         android:id="@+id/iv_like"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:focusable="true"
@@ -87,6 +88,31 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tv_avatar"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/bg_avatar"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="12sp"
+        tools:text="T"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_chapter"
+        android:padding="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="10sp"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_tag"
+        tools:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_category"
+        app:layout_constraintStart_toEndOf="@+id/tv_category" />
 
 
 </android.support.constraint.ConstraintLayout>

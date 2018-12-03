@@ -1,5 +1,6 @@
 package com.wenjian.wanandroid
 
+import android.support.design.widget.AppBarLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
@@ -17,6 +18,7 @@ import com.wenjian.wanandroid.ui.knowledge.TreeFragment
 import com.wenjian.wanandroid.ui.mine.MineFragment
 import com.wenjian.wanandroid.ui.project.ProjectFragment
 import com.wenjian.wanandroid.ui.search.SearchActivity
+import com.wenjian.wanandroid.widget.appbar.AppBarStateChangeListener
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.common_title_bar.*
@@ -29,7 +31,9 @@ class MainActivity : BaseSkinActivity() {
 
     override fun setup() {
         setContentView(R.layout.activity_main)
-        setupActionBar(show = false)
+        setupActionBar(show = false,listener = {
+            moveTaskToBack(true)
+        })
         initFragments()
 
         navigation.apply {
@@ -66,9 +70,16 @@ class MainActivity : BaseSkinActivity() {
         }
 
         //导航栏随着appbar做相反运动
-        app_bar.addOnOffsetChangedListener { _, verticalOffset ->
-            navigation.translationY = Math.abs(verticalOffset).toFloat()
-        }
+        app_bar.addOnOffsetChangedListener(object : AppBarStateChangeListener() {
+            override fun onStateChange(appBarLayout: AppBarLayout, state: State) {
+                when (state) {
+                    State.EXPANDED -> showNavigation()
+                    State.COLLAPSED -> hideNavigation()
+                    else -> {
+                    }
+                }
+            }
+        })
 
         //注册皮肤变化的监听
         disposable = RxBus.toObservable(SkinChangeEvent::class.java)
@@ -76,6 +87,18 @@ class MainActivity : BaseSkinActivity() {
                     recreate()
                 }
 
+    }
+
+    private fun showNavigation() {
+        navigation.animate().translationY(0f)
+                .setDuration(200L)
+                .start()
+    }
+
+    private fun hideNavigation() {
+        navigation.animate().translationY(navigation.height.toFloat())
+                .setDuration(200L)
+                .start()
     }
 
     override fun onDestroy() {
