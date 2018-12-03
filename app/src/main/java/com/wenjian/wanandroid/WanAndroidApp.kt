@@ -26,5 +26,7 @@ class WanAndroidApp : Application() {
         LeakCanary.install(this)
         instance = this
         CrashReport.initCrashReport(this)
+
+
     }
 }
