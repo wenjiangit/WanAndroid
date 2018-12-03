@@ -24,11 +24,12 @@ object CacheStrategy {
     val REWRITE_RESPONSE_INTERCEPTOR: Interceptor = Interceptor { chain ->
         var originResponse = chain.proceed(chain.request())
         val cacheControl = originResponse.header(CACHE_CONTROL)
-        if (cacheControl == null) {
+        val isGet = chain.request().method().equals("get", true)
+        val cache = chain.request().header(CUSTOM_HEADER)
+        if (cacheControl == null && isGet && !cache.isNullOrBlank()) {
             //读取自定义缓存时间
-            val cache = chain.request().header(CUSTOM_HEADER)
             originResponse = originResponse.newBuilder()
-                    .header(CACHE_CONTROL, "public, max-age=${if (cache.isNullOrBlank()) MAX_AGE.toString() else cache}")
+                    .header(CACHE_CONTROL, "public, max-age=$cache")
                     .build()
         }
         originResponse

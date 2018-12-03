@@ -35,18 +35,18 @@ class ArticleListAdapter : BaseRecyclerAdapter<Article>(R.layout.rv_item_article
                 }
                 getView<TextView>(R.id.tv_category).apply {
                     text = buildString
-                    textColor = mContext.getColorAccent()
+//                    textColor = mContext.getColorAccent()
                 }
                 setText(R.id.tv_title, Html.fromHtml(title?.trim()))
                 setText(R.id.tv_name, author?.trim())
                 setText(R.id.tv_date, niceDate?.trim())
-                val imageView = getView<ImageView>(R.id.iv_image)
-                if (!envelopePic.isNullOrBlank()) {
-                    imageView.loadUrl(envelopePic)
-                    imageView.visible()
-                } else {
-                    imageView.gone()
-                }
+//                val imageView = getView<ImageView>(R.id.iv_image)
+//                if (!envelopePic.isNullOrBlank()) {
+//                    imageView.loadUrl(envelopePic)
+//                    imageView.visible()
+//                } else {
+//                    imageView.gone()
+//                }
                 itemView.setOnClickListener {
                     WebActivity.start(it.context, buildWebModel())
                 }

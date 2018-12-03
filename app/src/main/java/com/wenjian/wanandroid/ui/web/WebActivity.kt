@@ -278,6 +278,6 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
         val parent = webView.parent as? ViewGroup
         parent?.removeView(webView)
         webView.removeAllViews()
-        webView.destroy()
+//        webView.destroy()
     }
 }
