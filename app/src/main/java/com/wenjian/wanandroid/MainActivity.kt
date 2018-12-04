@@ -31,9 +31,7 @@ class MainActivity : BaseSkinActivity() {
 
     override fun setup() {
         setContentView(R.layout.activity_main)
-        setupActionBar(show = false,listener = {
-            moveTaskToBack(true)
-        })
+        setupActionBar(show = false)
         initFragments()
 
         navigation.apply {

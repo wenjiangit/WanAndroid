@@ -1,1 +1,1 @@
-include ':app',":androidtagview"
+include ':app', ':mylibrary', ':loopbanner',":androidtagview"

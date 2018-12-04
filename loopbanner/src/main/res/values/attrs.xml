@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="LoopBanner">
+
+        <attr name="lb_pageMargin" format="dimension|reference" />
+        <attr name="lb_canLoop" format="boolean" />
+        <attr name="lb_lrMargin" format="dimension|reference" />
+        <attr name="lb_topMargin" format="dimension|reference"/>
+        <attr name="lb_bottomMargin" format="dimension|reference"/>
+        <attr name="lb_interval" format="integer"/>
+        <attr name="lb_offsetPageLimit" format="integer"/>
+
+
+    </declare-styleable>
+
+</resources>
