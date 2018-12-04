@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import java.util.List;
@@ -178,7 +179,7 @@ public class LoopBanner extends FrameLayout {
         inLoop = false;
     }
 
-    public void enableLoop(boolean enable) {
+    public void setCanLoop(boolean enable) {
         this.mCanLoop = enable;
     }
 
@@ -262,12 +263,25 @@ public class LoopBanner extends FrameLayout {
      *
      * @param urls 图片地址
      */
-    public void setImages(List<String> urls) {
+    public void setImages(List<String> urls,OnItemClickListener listener) {
         SimpleImageAdapter imageAdapter = new SimpleImageAdapter(urls);
+        imageAdapter.setOnItemClickListener(listener);
         imageAdapter.setCanLoop(mCanLoop);
         mViewPager.setAdapter(imageAdapter);
         if (mCanLoop) {
             startInternal(true);
         }
     }
+
+    public interface OnItemClickListener {
+        /**
+         * Item点击事件处理
+         *
+         * @param itemView 被点击的view
+         * @param position 位置
+         */
+        void onItemClick(View itemView, int position);
+    }
+
+
 }

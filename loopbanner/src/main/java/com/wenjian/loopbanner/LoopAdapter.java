@@ -27,6 +27,7 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
     private List<T> mData;
     private int mLayoutId;
     private boolean mCanLoop = true;
+    private LoopBanner.OnItemClickListener mClickListener;
 
     public LoopAdapter(List<T> data, int layoutId) {
         mData = data;
@@ -53,16 +54,28 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
     @NonNull
     @Override
     public final Object instantiateItem(@NonNull ViewGroup container, int position) {
-        int newPosition = position % mData.size();
+        final int newPosition = position % mData.size();
         ViewHolder holder = mHolderList.get(newPosition);
         if (holder == null) {
             View convertView = onCreateView(container);
+            addClickListener(newPosition, convertView);
             holder = new ViewHolder(convertView);
             container.setTag(R.id.key_holder, holder);
             onBindView(holder, mData.get(newPosition));
         }
         container.addView(holder.itemView);
         return holder.itemView;
+    }
+
+    private void addClickListener(final int newPosition, View convertView) {
+        if (mClickListener != null) {
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onItemClick(v,newPosition);
+                }
+            });
+        }
     }
 
     @Override
@@ -102,12 +115,16 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
         notifyDataSetChanged();
     }
 
+    public void setOnItemClickListener(LoopBanner.OnItemClickListener listener) {
+        this.mClickListener = listener;
+    }
+
     void setCanLoop(boolean canLoop) {
         mCanLoop = canLoop;
     }
 
-    static final class ViewHolder {
-        View itemView;
+    public static final class ViewHolder {
+        public View itemView;
 
         private SparseArray<View> mViewList = new SparseArray<>();
 
