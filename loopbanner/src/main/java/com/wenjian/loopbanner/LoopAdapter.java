@@ -106,7 +106,7 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
     }
 
     private int computePosition(int position) {
-        int size = mData.size();
+        final int size = mData.size();
         return size == 0 ? -1 : position % size;
     }
 
@@ -129,15 +129,15 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
     }
 
     /**
-     * 为item绑定数据
+     * 为每个page绑定数据
      *
      * @param holder ViewHolder
      * @param data   数据
      */
-    public abstract void onBindView(ViewHolder holder, T data);
+    protected abstract void onBindView(ViewHolder holder, T data);
 
     /**
-     * 绑定数据
+     * 设置数据集
      *
      * @param data List<T> data
      */

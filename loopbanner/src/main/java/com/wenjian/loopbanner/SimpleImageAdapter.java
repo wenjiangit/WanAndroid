@@ -25,4 +25,6 @@ public class SimpleImageAdapter extends LoopAdapter<String> {
                 .load(data)
                 .into(itemView);
     }
+
+
 }

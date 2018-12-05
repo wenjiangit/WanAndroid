@@ -8,7 +8,6 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
@@ -17,7 +16,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -345,8 +343,8 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
     public void setMargins(int margin) {
         int marginDp = Tools.dp2px(getContext(), margin);
         mParams.setMargins(marginDp, marginDp, marginDp, marginDp);
-        mViewPager.setLayoutParams(mParams);
         mLrMargin = mTopMargin = mBottomMargin = marginDp;
+        mViewPager.setLayoutParams(mParams);
         adjustIndicator();
     }
 
@@ -415,11 +413,11 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
     /**
      * 设置离屏缓存个数,默认为2,即内存中同时存在5个页面
      *
-     * @param offscreenPageLimit 离屏缓存个数
+     * @param limit 离屏缓存个数
      */
-    public void setOffscreenPageLimit(int offscreenPageLimit) {
-        mOffscreenPageLimit = offscreenPageLimit;
-        mViewPager.setOffscreenPageLimit(offscreenPageLimit);
+    public void setOffscreenPageLimit(int limit) {
+        mOffscreenPageLimit = limit;
+        mViewPager.setOffscreenPageLimit(limit);
     }
 
     public long getInterval() {
@@ -480,7 +478,7 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
         if (minimumWidth == 0 || minimumHeight == 0) {
             params = new LinearLayout.LayoutParams(mIndicatorSize, mIndicatorSize);
         } else {
-            params = new LinearLayout.LayoutParams(minimumWidth, minimumHeight);
+            params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         }
         params.leftMargin = mIndicatorMargin;
         for (int i = 0; i < dataSize; i++) {
@@ -492,7 +490,7 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
         mIndicatorContainer.getChildAt(0).setSelected(true);
     }
 
-    private LoopAdapter getAdapter() {
+    public LoopAdapter getAdapter() {
         PagerAdapter adapter = mViewPager.getAdapter();
         return adapter == null ? null : (LoopAdapter) adapter;
     }
@@ -532,7 +530,7 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
      */
     public void enableIndicator(boolean enable) {
         this.mShowIndicator = enable;
-        if (mIndicatorContainer == null) {
+        if (enable && mIndicatorContainer == null) {
             initIndicatorContainer();
         }
     }

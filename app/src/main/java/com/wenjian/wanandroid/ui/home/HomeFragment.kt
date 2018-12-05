@@ -77,7 +77,7 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
     }
 
     class BannerAdapter(data:List<Banner>) : LoopAdapter<Banner>(data,R.layout.lay_banner_item) {
-        override fun onBindView(holder: ViewHolder, data: Banner) {
+        override fun onBindView(holder: LoopAdapter.ViewHolder, data: Banner) {
             val image = holder.getView<ImageView>(R.id.iv_image)
             image.loadUrl(data.imagePath)
             holder.itemView.setOnClickListener {
