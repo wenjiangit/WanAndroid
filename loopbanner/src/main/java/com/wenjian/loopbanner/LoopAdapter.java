@@ -13,6 +13,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -72,8 +73,16 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
             addClickListenerIfNeed(dataPosition, convertView);
             onBindView(holder, mData.get(dataPosition));
         }
-        container.addView(holder.itemView);
-        return holder.itemView;
+        return addViewSafely(container, holder.itemView);
+    }
+
+    private View addViewSafely(ViewGroup container, View itemView) {
+        ViewParent parent = itemView.getParent();
+        if (parent != null) {
+            ((ViewGroup) parent).removeView(itemView);
+        }
+        container.addView(itemView);
+        return itemView;
     }
 
     @Override

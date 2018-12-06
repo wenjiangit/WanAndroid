@@ -489,12 +489,24 @@ public class LoopBanner extends FrameLayout {
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         super.onWindowFocusChanged(hasWindowFocus);
         Tools.logI(TAG, "onWindowFocusChanged," + hasWindowFocus);
-        if (hasWindowFocus) {
+//        if (hasWindowFocus) {
+//            startInternal(true);
+//        } else {
+//            stopInternal();
+//        }
+    }
+
+    @Override
+    protected void onWindowVisibilityChanged(int visibility) {
+        super.onWindowVisibilityChanged(visibility);
+        Tools.logI(TAG, "onWindowVisibilityChanged," + visibility);
+        if (visibility == VISIBLE) {
             startInternal(true);
         } else {
             stopInternal();
         }
     }
+
 
     /**
      * 强制停止轮播
