@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.widget.ImageView
 import com.wenjian.loopbanner.LoopAdapter
 import com.wenjian.loopbanner.LoopBanner
+import com.wenjian.loopbanner.indicator.JDIndicatorAdapter
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseListFragment
 import com.wenjian.wanandroid.base.BaseRecyclerAdapter
@@ -13,6 +14,7 @@ import com.wenjian.wanandroid.entity.Banner
 import com.wenjian.wanandroid.entity.WebModel
 import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.loadUrl
+import com.wenjian.wanandroid.extension.logI
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
 import com.wenjian.wanandroid.ui.web.WebActivity
 
@@ -28,7 +30,7 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
 
     private lateinit var mBannerPager: LoopBanner
 
-//    private val mBannerAdapter: BannerAdapter by lazy { BannerAdapter() }
+    private val mBannerAdapter: BannerAdapter by lazy { BannerAdapter() }
 
     override fun initViews() {
         super.initViews()
@@ -37,10 +39,14 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
         mBannerPager.apply {
             setCanLoop(true)
             setLrMargin(20)
-            pageMargin = 6
+            pageMargin = 4
             interval = 3000
+            setIndicatorStyle(LoopBanner.Style.JD)
+            setOnPageSelectListener {
+                logI("select=$it")
+            }
         }
-//        mBannerPager.setAdapter(mBannerAdapter)
+        mBannerPager.adapter = mBannerAdapter
         mAdapter.addHeaderView(mBannerPager)
     }
 
@@ -63,8 +69,8 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
         mViewModel.loadHomeData().observe(this, Observer { data ->
             data?.let {
                 val (bannerData, second) = it
-//                mBannerAdapter.setNewData(bannerData)
-                mBannerPager.setAdapter(BannerAdapter(bannerData))
+                mBannerAdapter.setNewData(bannerData)
+//                mBannerPager.adapter = BannerAdapter(bannerData)
                 mAdapter.setNewData(second)
             }
         })
@@ -76,7 +82,7 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
         }
     }
 
-    class BannerAdapter(data:List<Banner>) : LoopAdapter<Banner>(data,R.layout.lay_banner_item) {
+    class BannerAdapter : LoopAdapter<Banner>(R.layout.lay_banner_item) {
         override fun onBindView(holder: LoopAdapter.ViewHolder, data: Banner) {
             val image = holder.getView<ImageView>(R.id.iv_image)
             image.loadUrl(data.imagePath)

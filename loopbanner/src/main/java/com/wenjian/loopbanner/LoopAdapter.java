@@ -1,5 +1,6 @@
 package com.wenjian.loopbanner;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
@@ -26,11 +27,12 @@ import java.util.List;
  */
 public abstract class LoopAdapter<T> extends PagerAdapter {
 
-    private SparseArray<ViewHolder> mHolderList = new SparseArray<>();
+    private static final String TAG = "LoopAdapter";
+    private SparseArray<ViewHolder> mHolderMap = new SparseArray<>();
     private List<T> mData;
     private int mLayoutId;
     private boolean mCanLoop = true;
-    private LoopBanner.OnItemClickListener mClickListener;
+    private LoopBanner.OnPageClickListener mClickListener;
 
     public LoopAdapter(List<T> data, int layoutId) {
         mData = data;
@@ -61,14 +63,14 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
     @NonNull
     @Override
     public final Object instantiateItem(@NonNull ViewGroup container, int position) {
-        final int newPosition = computePosition(position);
-        ViewHolder holder = mHolderList.get(newPosition);
+        final int dataPosition = computePosition(position);
+        ViewHolder holder = mHolderMap.get(dataPosition);
         if (holder == null) {
             View convertView = onCreateView(container);
-            addClickListener(newPosition, convertView);
             holder = new ViewHolder(convertView);
-            container.setTag(R.id.key_holder, holder);
-            onBindView(holder, mData.get(newPosition));
+            convertView.setTag(R.id.key_holder, holder);
+            addClickListenerIfNeed(dataPosition, convertView);
+            onBindView(holder, mData.get(dataPosition));
         }
         container.addView(holder.itemView);
         return holder.itemView;
@@ -77,7 +79,7 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
     @Override
     public final void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
-        mHolderList.put(computePosition(position), (ViewHolder) ((View) object).getTag(R.id.key_holder));
+        mHolderMap.put(computePosition(position), (ViewHolder) ((View) object).getTag(R.id.key_holder));
     }
 
     @Override
@@ -85,13 +87,13 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
         return view == object;
     }
 
-    private void addClickListener(final int newPosition, View convertView) {
+    private void addClickListenerIfNeed(final int dataPosition, View convertView) {
         if (mClickListener != null) {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mClickListener != null) {
-                        mClickListener.onItemClick(v, newPosition);
+                        mClickListener.onPageClick(v, dataPosition);
                     }
                 }
             });
@@ -116,7 +118,9 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
      * @param container ViewGroup
      * @return itemView
      */
+    @NonNull
     protected View onCreateView(@NonNull ViewGroup container) {
+        Tools.logI(TAG, "onCreateView");
         View view;
         if (mLayoutId != -1) {
             view = LayoutInflater.from(container.getContext()).inflate(mLayoutId, container, false);
@@ -143,11 +147,15 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
      */
     public final void setNewData(List<T> data) {
         mData = data != null ? data : new ArrayList<T>();
-        mHolderList.clear();
+        mHolderMap.clear();
         notifyDataSetChanged();
     }
 
-    void setOnItemClickListener(LoopBanner.OnItemClickListener listener) {
+    int getDataPosition(int position) {
+        return computePosition(position);
+    }
+
+    void setOnPageClickListener(LoopBanner.OnPageClickListener listener) {
         this.mClickListener = listener;
     }
 
@@ -156,7 +164,7 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
     }
 
     public static final class ViewHolder {
-        public View itemView;
+        public final View itemView;
 
         private SparseArray<View> mViewList = new SparseArray<>();
 
@@ -172,6 +180,10 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
                 mViewList.put(viewId, view);
             }
             return (T) view;
+        }
+
+        public Context getContext() {
+            return itemView.getContext();
         }
 
         /**

@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author jian.wen@ubtrobot.com
  */
-public class SimpleImageAdapter extends LoopAdapter<String> {
+class SimpleImageAdapter extends LoopAdapter<String> {
 
     SimpleImageAdapter(List<String> data) {
         super(data);

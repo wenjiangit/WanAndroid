@@ -1,10 +1,6 @@
 package com.wenjian.loopbanner;
 
 import android.annotation.TargetApi;
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
@@ -12,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -21,8 +18,11 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import com.wenjian.loopbanner.indicator.DrawableAdapter;
+import com.wenjian.loopbanner.indicator.IndicatorAdapter;
+import com.wenjian.loopbanner.indicator.JDIndicatorAdapter;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ import java.util.List;
  *
  * @author jian.wen@ubtrobot.com
  */
-public class LoopBanner extends FrameLayout implements LifecycleObserver {
+public class LoopBanner extends FrameLayout {
 
     private static final int GRAVITY_BOTTOM_LEFT = 1;
     private static final int GRAVITY_BOTTOM_RIGHT = 2;
@@ -40,8 +40,8 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
     private static final int DEFAULT_GRAVITY = GRAVITY_BOTTOM_CENTER;
     private static final long DEFAULT_INTERVAL_TIME = 3000L;
     private static final int DEFAULT_PAGE_LIMIT = 2;
-    private static final int DEFAULT_INDICATOR_SIZE = 8;
-    private static final int DEFAULT_INDICATOR_MARGIN = 5;
+    private static final int DEFAULT_INDICATOR_SIZE = 6;
+    private static final int DEFAULT_INDICATOR_MARGIN = 3;
     private static final int DEFAULT_INDICATOR_MARGIN_TO_PARENT = 16;
     private static final long TOUCH_DELAY = 4000;
     private static final String TAG = "LoopBanner";
@@ -108,6 +108,31 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
      */
     private int mIndicatorMargin;
     /**
+     * 指示器适配
+     */
+    private IndicatorAdapter mIndicatorAdapter = new DrawableAdapter();
+
+    /**
+     * 指示器的位置
+     */
+    private int mIndicatorGravity;
+    /**
+     * 是否显示指示器
+     */
+    private boolean mShowIndicator;
+    /**
+     * 选中监听
+     */
+    private OnPageSelectListener mSelectListener;
+    /**
+     * Indicator选中的资源
+     */
+    private Drawable mSelectDrawable;
+    /**
+     * Indicator未选中的资源
+     */
+    private Drawable mUnSelectDrawable;
+    /**
      * 数据观察者
      */
     private final DataSetObserver mDataSetObserver = new DataSetObserver() {
@@ -119,8 +144,9 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
                 return;
             }
             final int dataSize = adapter.getDataSize();
-            createIndicatorIfNeed(dataSize);
             if (dataSize > 0) {
+                createIndicatorIfNeed(dataSize);
+                setProperIndex(dataSize);
                 startInternal(true);
             }
         }
@@ -131,22 +157,18 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
         }
     };
     /**
-     * 指示器容器与page边距
+     * mIndicatorContainer相对于父容器的垂直方向间距
      */
-    private int mIndicatorMarginToParent;
+    private int mIndicatorMarginV;
     /**
-     * 指示器的位置
+     * mIndicatorContainer相对于父容器的水平方向间距
      */
-    private int mIndicatorGravity;
-    /**
-     * 是否显示指示器
-     */
-    private boolean mShowIndicator;
-
+    private int mIndicatorMarginH;
 
     public LoopBanner(@NonNull Context context) {
         this(context, null);
     }
+
 
     public LoopBanner(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
@@ -160,34 +182,33 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
     public LoopBanner(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LoopBanner, defStyleAttr, defStyleRes);
-        try {
-            mCanLoop = a.getBoolean(R.styleable.LoopBanner_lb_canLoop, true);
-            mShowIndicator = a.getBoolean(R.styleable.LoopBanner_lb_showIndicator, true);
-            mInterval = a.getInteger(R.styleable.LoopBanner_lb_interval, (int) DEFAULT_INTERVAL_TIME);
-            mOffscreenPageLimit = a.getInteger(R.styleable.LoopBanner_lb_offsetPageLimit, DEFAULT_PAGE_LIMIT);
-            mPageMargin = (int) a.getDimension(R.styleable.LoopBanner_lb_pageMargin, 0);
-            final int margin = (int) a.getDimension(R.styleable.LoopBanner_lb_margin, 0);
-            mLrMargin = (int) a.getDimension(R.styleable.LoopBanner_lb_lrMargin, margin);
-            mTopMargin = (int) a.getDimension(R.styleable.LoopBanner_lb_topMargin, margin);
-            mBottomMargin = (int) a.getDimension(R.styleable.LoopBanner_lb_bottomMargin, margin);
-            //for indicator
-            mIndicatorGravity = a.getInt(R.styleable.LoopBanner_lb_indicatorGravity, DEFAULT_GRAVITY);
-            mIndicatorSize = (int) a.getDimension(R.styleable.LoopBanner_lb_indicatorSize, Tools.dp2px(context, DEFAULT_INDICATOR_SIZE));
-            mIndicatorMargin = (int) a.getDimension(R.styleable.LoopBanner_lb_indicatorMargin, Tools.dp2px(context, DEFAULT_INDICATOR_MARGIN));
-            mIndicatorMarginToParent = a.getInt(R.styleable.LoopBanner_lb_indicatorMarginToParent, Tools.dp2px(context, DEFAULT_INDICATOR_MARGIN_TO_PARENT));
-            Drawable selectDrawable = a.getDrawable(R.styleable.LoopBanner_lb_indicatorSelect);
-            Drawable unSelectDrawable = a.getDrawable(R.styleable.LoopBanner_lb_indicatorUnSelect);
-
-            if (selectDrawable != null && unSelectDrawable != null) {
-                StateListDrawable listDrawable = new StateListDrawable();
-                listDrawable.addState(new int[]{android.R.attr.state_selected}, selectDrawable);
-                listDrawable.addState(new int[]{}, unSelectDrawable);
-            }
-
-        } finally {
-            a.recycle();
-        }
+        mCanLoop = a.getBoolean(R.styleable.LoopBanner_lb_canLoop, true);
+        mShowIndicator = a.getBoolean(R.styleable.LoopBanner_lb_showIndicator, true);
+        mInterval = a.getInteger(R.styleable.LoopBanner_lb_interval, (int) DEFAULT_INTERVAL_TIME);
+        mOffscreenPageLimit = a.getInteger(R.styleable.LoopBanner_lb_offsetPageLimit, DEFAULT_PAGE_LIMIT);
+        mPageMargin = (int) a.getDimension(R.styleable.LoopBanner_lb_pageMargin, 0);
+        final int margin = (int) a.getDimension(R.styleable.LoopBanner_lb_margin, 0);
+        mLrMargin = (int) a.getDimension(R.styleable.LoopBanner_lb_lrMargin, margin);
+        mTopMargin = (int) a.getDimension(R.styleable.LoopBanner_lb_topMargin, margin);
+        mBottomMargin = (int) a.getDimension(R.styleable.LoopBanner_lb_bottomMargin, margin);
+        //for indicator
+        mIndicatorGravity = a.getInt(R.styleable.LoopBanner_lb_indicatorGravity, DEFAULT_GRAVITY);
+        mIndicatorSize = (int) a.getDimension(R.styleable.LoopBanner_lb_indicatorSize, Tools.dp2px(context, DEFAULT_INDICATOR_SIZE));
+        mIndicatorMargin = (int) a.getDimension(R.styleable.LoopBanner_lb_indicatorMargin, Tools.dp2px(context, DEFAULT_INDICATOR_MARGIN));
+        mIndicatorMarginV = a.getInt(R.styleable.LoopBanner_lb_indicatorMarginV, Tools.dp2px(context, DEFAULT_INDICATOR_MARGIN_TO_PARENT));
+        mIndicatorMarginH = a.getInt(R.styleable.LoopBanner_lb_indicatorMarginH, Tools.dp2px(context, DEFAULT_INDICATOR_MARGIN_TO_PARENT));
+        mSelectDrawable = a.getDrawable(R.styleable.LoopBanner_lb_indicatorSelect);
+        mUnSelectDrawable = a.getDrawable(R.styleable.LoopBanner_lb_indicatorUnSelect);
+        a.recycle();
         init();
+    }
+
+    private void setProperIndex(int dataSize) {
+        int index = mCurrentIndex;
+        Tools.logI(TAG, "oldIndex: " + index);
+        int ret = Math.round(index * 1.0f / dataSize + 0.5f) * dataSize - 1;
+        mCurrentIndex = ret >= 0 ? ret : 0;
+        Tools.logI(TAG, "mCurrentIndex: " + mCurrentIndex);
     }
 
     private void init() {
@@ -195,7 +216,6 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
         setClipChildren(false);
         setLayerType(LAYER_TYPE_SOFTWARE, null);
 
-//        injectLifeCycle();
         mViewPager = new ViewPager(getContext());
         setupViewPager(mViewPager);
         mParams = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -216,15 +236,15 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
 
     public LayoutParams createLayoutParams() {
         LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        layoutParams.bottomMargin = mIndicatorMarginToParent + mBottomMargin;
+        layoutParams.bottomMargin = mIndicatorMarginV;
         switch (mIndicatorGravity) {
             case GRAVITY_BOTTOM_LEFT:
                 layoutParams.gravity = Gravity.BOTTOM | Gravity.START;
-                layoutParams.leftMargin = mIndicatorMarginToParent + mLrMargin;
+                layoutParams.leftMargin = mIndicatorMarginH + mLrMargin;
                 break;
             case GRAVITY_BOTTOM_RIGHT:
                 layoutParams.gravity = Gravity.BOTTOM | Gravity.END;
-                layoutParams.rightMargin = mIndicatorMarginToParent + mLrMargin;
+                layoutParams.rightMargin = mIndicatorMarginH + mLrMargin;
                 break;
             case GRAVITY_BOTTOM_CENTER:
                 layoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
@@ -232,19 +252,6 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
             default:
         }
         return layoutParams;
-    }
-
-    private void injectLifeCycle() {
-        Context context = getContext();
-        if (context instanceof LifecycleOwner) {
-            ((LifecycleOwner) context).getLifecycle().addObserver(this);
-        }
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    public void onActivityStop() {
-        Tools.logI(TAG, "onActivityStop");
-        stopInternal();
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -259,6 +266,7 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
             @Override
             public void onPageSelected(int position) {
                 mCurrentIndex = position;
+                notifySelectChange(position);
                 updateIndicators(position);
             }
 
@@ -277,6 +285,17 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
         });
     }
 
+    private void notifySelectChange(int position) {
+        LoopAdapter adapter = getAdapter();
+        if (adapter == null || adapter.getDataSize() == 0) {
+            return;
+        }
+
+        if (mSelectListener != null) {
+            mSelectListener.onPageSelected(adapter.getDataPosition(position));
+        }
+    }
+
     private void updateIndicators(int position) {
         if (mIndicatorContainer == null) {
             return;
@@ -286,16 +305,32 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
             return;
         }
 
-        int dataSize = adapter.getDataSize();
-        int realPosition = position % dataSize;
-        int childCount = mIndicatorContainer.getChildCount();
+        final int dataPosition = adapter.getDataPosition(position);
+        if (dataPosition == 0) {
+            if (mIndicatorAdapter.reset(mIndicatorContainer)) {
+                return;
+            }
+        }
+        final int childCount = mIndicatorContainer.getChildCount();
         if (childCount > 0) {
             for (int i = 0; i < childCount; i++) {
-                mIndicatorContainer.getChildAt(i).setSelected(false);
+                mIndicatorAdapter.applyUnSelectState(mIndicatorContainer.getChildAt(i));
             }
-            mIndicatorContainer.getChildAt(realPosition).setSelected(true);
+
+            final int prev = computePrevPosition(adapter, position);
+            mIndicatorAdapter.applySelectState(mIndicatorContainer.getChildAt(prev),
+                    mIndicatorContainer.getChildAt(dataPosition));
         }
     }
+
+    private int computePrevPosition(LoopAdapter adapter, int position) {
+        final int prev = position - 1;
+        if (prev >= 0) {
+            return adapter.getDataPosition(prev);
+        }
+        return adapter.getDataSize() - 1;
+    }
+
 
     private void startInternal(boolean force) {
         if (!mCanLoop) {
@@ -341,6 +376,7 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
      * @param margin 间距
      */
     public void setMargins(int margin) {
+        checkAdapter("setMargins");
         int marginDp = Tools.dp2px(getContext(), margin);
         mParams.setMargins(marginDp, marginDp, marginDp, marginDp);
         mLrMargin = mTopMargin = mBottomMargin = marginDp;
@@ -354,6 +390,7 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
      * @param topMargin 上边距
      */
     public void setTopMargin(int topMargin) {
+        checkAdapter("setTopMargin");
         final int topMarginDp = Tools.dp2px(getContext(), topMargin);
         mParams.topMargin = topMarginDp;
         mTopMargin = topMarginDp;
@@ -367,6 +404,7 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
      * @param bottomMargin 下边距
      */
     public void setBottomMargin(int bottomMargin) {
+        checkAdapter("setBottomMargin");
         mBottomMargin = Tools.dp2px(getContext(), bottomMargin);
         mParams.bottomMargin = mBottomMargin;
         mViewPager.setLayoutParams(mParams);
@@ -379,6 +417,7 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
      * @param lrMargin 左右边距
      */
     public void setLrMargin(int lrMargin) {
+        checkAdapter("setLrMargin");
         mLrMargin = Tools.dp2px(getContext(), lrMargin);
         mParams.setMargins(mLrMargin, mTopMargin, mLrMargin, mBottomMargin);
         mViewPager.setLayoutParams(mParams);
@@ -401,6 +440,7 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
      * @param pageMargin page之间的间距
      */
     public void setPageMargin(int pageMargin) {
+        checkAdapter("setPageMargin");
         mPageMargin = Tools.dp2px(getContext(), pageMargin);
         mViewPager.setPageMargin(mPageMargin);
         adjustIndicator();
@@ -416,6 +456,7 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
      * @param limit 离屏缓存个数
      */
     public void setOffscreenPageLimit(int limit) {
+        checkAdapter("setOffscreenPageLimit");
         mOffscreenPageLimit = limit;
         mViewPager.setOffscreenPageLimit(limit);
     }
@@ -430,6 +471,7 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
      * @param interval 间隔时间
      */
     public void setInterval(long interval) {
+        checkAdapter("setInterval");
         mInterval = interval;
     }
 
@@ -439,6 +481,7 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
      * @param pageTransformer 切换动画
      */
     public void setPageTransformer(ViewPager.PageTransformer pageTransformer) {
+        checkAdapter("setPageTransformer");
         mViewPager.setPageTransformer(false, pageTransformer);
     }
 
@@ -468,28 +511,33 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
 
         mIndicatorContainer.removeAllViews();
 
-        Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.indicator_color_selector);
-        if (drawable == null) {
-            return;
-        }
-        final int minimumWidth = drawable.getMinimumWidth();
-        final int minimumHeight = drawable.getMinimumHeight();
-        LinearLayout.LayoutParams params;
-        if (minimumWidth == 0 || minimumHeight == 0) {
-            params = new LinearLayout.LayoutParams(mIndicatorSize, mIndicatorSize);
-        } else {
-            params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        }
-        params.leftMargin = mIndicatorMargin;
         for (int i = 0; i < dataSize; i++) {
-            ImageView indicator = new ImageView(getContext());
-            Drawable localDrawable = ContextCompat.getDrawable(getContext(), R.drawable.indicator_color_selector);
-            indicator.setImageDrawable(localDrawable);
-            mIndicatorContainer.addView(indicator, params);
+            mIndicatorAdapter.addIndicator(mIndicatorContainer, makeDrawable(), mIndicatorSize, mIndicatorMargin);
         }
-        mIndicatorContainer.getChildAt(0).setSelected(true);
+        updateIndicators(0);
     }
 
+    private Drawable makeDrawable() {
+        Drawable ret;
+        if (mSelectDrawable != null && mUnSelectDrawable != null) {
+            StateListDrawable listDrawable = new StateListDrawable();
+            listDrawable.addState(new int[]{android.R.attr.state_selected}, mSelectDrawable);
+            listDrawable.addState(new int[]{}, mUnSelectDrawable);
+            ret = listDrawable;
+        } else {
+            ret = ContextCompat.getDrawable(getContext(), R.drawable.indicator_color_selector);
+        }
+        return ret;
+    }
+
+    private void checkAdapter(String methodName) {
+        LoopAdapter adapter = getAdapter();
+        if (adapter != null) {
+            throw new IllegalStateException("please call " + methodName + " before setAdapter");
+        }
+    }
+
+    @Nullable
     public LoopAdapter getAdapter() {
         PagerAdapter adapter = mViewPager.getAdapter();
         return adapter == null ? null : (LoopAdapter) adapter;
@@ -513,9 +561,9 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
      *
      * @param urls 图片地址
      */
-    public void setImages(List<String> urls, OnItemClickListener listener) {
+    public void setImages(List<String> urls, OnPageClickListener listener) {
         SimpleImageAdapter imageAdapter = new SimpleImageAdapter(urls);
-        imageAdapter.setOnItemClickListener(listener);
+        imageAdapter.setOnPageClickListener(listener);
         this.setAdapter(imageAdapter);
     }
 
@@ -526,24 +574,112 @@ public class LoopBanner extends FrameLayout implements LifecycleObserver {
     /**
      * 是否使用指示器
      *
-     * @param enable
+     * @param enable 是否可用
      */
     public void enableIndicator(boolean enable) {
         this.mShowIndicator = enable;
-        if (enable && mIndicatorContainer == null) {
-            initIndicatorContainer();
+        if (enable) {
+            if (mIndicatorContainer == null) {
+                initIndicatorContainer();
+            }
+        } else {
+            if (mIndicatorContainer != null) {
+                this.removeView(mIndicatorContainer);
+                mIndicatorContainer = null;
+            }
         }
     }
 
-    public interface OnItemClickListener {
+    /**
+     * 设置指示适配器
+     *
+     * @param indicatorAdapter IndicatorAdapter
+     */
+    public void setIndicatorAdapter(IndicatorAdapter indicatorAdapter) {
+        checkAdapter("setIndicatorAdapter");
+        mIndicatorAdapter = Tools.checkNotNull(indicatorAdapter, "indicatorAdapter is null");
+    }
+
+    /**
+     * 设置页面选中监听
+     *
+     * @param listener OnPageSelectListener
+     */
+    public void setOnPageSelectListener(OnPageSelectListener listener) {
+        checkAdapter("setOnPageSelectListener");
+        this.mSelectListener = listener;
+    }
+
+    /**
+     * 设置指示器资源
+     *
+     * @param selectRes   选中
+     * @param unSelectRes 未选中
+     */
+    public void setIndicatorResource(@DrawableRes int selectRes, @DrawableRes int unSelectRes) {
+        checkAdapter("setIndicatorResource");
+        Drawable selectDrawable = ContextCompat.getDrawable(getContext(), selectRes);
+        Drawable unSelectDrawable = ContextCompat.getDrawable(getContext(), unSelectRes);
+        this.mSelectDrawable = selectDrawable;
+        this.mUnSelectDrawable = unSelectDrawable;
+    }
+
+    /**
+     * 设置指示器风格
+     *
+     * @param style Style
+     */
+    public void setIndicatorStyle(Style style) {
+        checkAdapter("setIndicatorStyle");
+        switch (style) {
+            case JD:
+                setIndicatorAdapter(new JDIndicatorAdapter());
+                break;
+            case PILL:
+                setIndicatorResource(R.drawable.indicator_select, R.drawable.indicator_unselect);
+                break;
+            case NORMAL:
+            default:
+        }
+    }
+
+    public enum Style {
         /**
-         * Item点击事件处理
+         * 京东
+         */
+        JD,
+        /**
+         * 药丸
+         */
+        PILL,
+        /**
+         * 普通
+         */
+        NORMAL
+
+    }
+
+    public interface OnPageClickListener {
+        /**
+         * page点击事件处理
          *
          * @param itemView 被点击的view
          * @param position 位置
          */
-        void onItemClick(View itemView, int position);
+        void onPageClick(View itemView, int position);
     }
 
+    /**
+     * page选中监听
+     */
+    public interface OnPageSelectListener {
+
+        /**
+         * page选中事件处理
+         *
+         * @param position 被选中的位置
+         */
+        void onPageSelected(int position);
+    }
 
 }

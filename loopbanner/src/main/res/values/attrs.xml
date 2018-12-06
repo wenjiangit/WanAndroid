@@ -20,9 +20,10 @@
 
         <attr name="lb_indicatorSize" format="dimension"/>
         <attr name="lb_indicatorMargin" format="dimension"/>
-        <attr name="lb_indicatorMarginToParent" format="dimension"/>
         <attr name="lb_indicatorSelect" format="reference"/>
         <attr name="lb_indicatorUnSelect" format="reference"/>
+        <attr name="lb_indicatorMarginV" format="dimension"/>
+        <attr name="lb_indicatorMarginH" format="dimension"/>
 
     </declare-styleable>
 
