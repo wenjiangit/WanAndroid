@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="150dp"
     app:lb_indicatorGravity="bottomCenter"
-    app:lb_indicatorSelect="@drawable/indicator_select"
-    app:lb_indicatorUnSelect="@drawable/indicator_unselect"
+    app:lb_indicatorStyle="pill"
   >
 
 </com.wenjian.loopbanner.LoopBanner>

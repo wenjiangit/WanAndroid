@@ -169,7 +169,6 @@ public class LoopBanner extends FrameLayout {
         this(context, null);
     }
 
-
     public LoopBanner(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -206,7 +205,7 @@ public class LoopBanner extends FrameLayout {
     }
 
     private void handleIndicatorStyle(int style) {
-        Style s ;
+        Style s;
         switch (style) {
             case 1:
                 s = Style.JD;
@@ -217,7 +216,7 @@ public class LoopBanner extends FrameLayout {
             default:
                 s = Style.NORMAL;
         }
-        setIndicatorStyle(s);
+        setIndicatorStyle(s, false);
     }
 
     private void setProperIndex(int dataSize) {
@@ -318,7 +317,7 @@ public class LoopBanner extends FrameLayout {
             return;
         }
         LoopAdapter adapter = getAdapter();
-        if (adapter == null || adapter.getDataSize() == 0) {
+        if (adapter == null || adapter.getDataSize() <= 1) {
             return;
         }
 
@@ -357,7 +356,7 @@ public class LoopBanner extends FrameLayout {
         }
         if (force) {
             mHandler.removeCallbacks(mLoopRunnable);
-            mLoopRunnable.run();
+            mHandler.postDelayed(mLoopRunnable, 200);
             inLoop = true;
         } else {
             if (!inLoop) {
@@ -643,11 +642,33 @@ public class LoopBanner extends FrameLayout {
      * @param unSelectRes 未选中
      */
     public void setIndicatorResource(@DrawableRes int selectRes, @DrawableRes int unSelectRes) {
-        checkAdapter("setIndicatorResource");
+        this.setIndicatorResource(selectRes, unSelectRes, true);
+    }
+
+    private void setIndicatorResource(@DrawableRes int selectRes, @DrawableRes int unSelectRes, boolean byUser) {
+        if (byUser) {
+            checkAdapter("setIndicatorResource");
+        }
         Drawable selectDrawable = ContextCompat.getDrawable(getContext(), selectRes);
         Drawable unSelectDrawable = ContextCompat.getDrawable(getContext(), unSelectRes);
         this.mSelectDrawable = selectDrawable;
         this.mUnSelectDrawable = unSelectDrawable;
+    }
+
+    private void setIndicatorStyle(Style style, boolean byUser) {
+        if (byUser) {
+            checkAdapter("setIndicatorStyle");
+        }
+        switch (style) {
+            case JD:
+                setIndicatorAdapter(new JDIndicatorAdapter());
+                break;
+            case PILL:
+                setIndicatorResource(R.drawable.indicator_select, R.drawable.indicator_unselect, byUser);
+                break;
+            case NORMAL:
+            default:
+        }
     }
 
     /**
@@ -656,17 +677,7 @@ public class LoopBanner extends FrameLayout {
      * @param style Style
      */
     public void setIndicatorStyle(Style style) {
-        checkAdapter("setIndicatorStyle");
-        switch (style) {
-            case JD:
-                setIndicatorAdapter(new JDIndicatorAdapter());
-                break;
-            case PILL:
-                setIndicatorResource(R.drawable.indicator_select, R.drawable.indicator_unselect);
-                break;
-            case NORMAL:
-            default:
-        }
+        this.setIndicatorStyle(style, true);
     }
 
     public enum Style {

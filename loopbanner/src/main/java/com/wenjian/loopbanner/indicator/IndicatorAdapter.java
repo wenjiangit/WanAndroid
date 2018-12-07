@@ -34,7 +34,7 @@ public interface IndicatorAdapter {
     /**
      * 应用为选中效果
      *
-     * @param indicator
+     * @param indicator 指示器
      */
     void applyUnSelectState(View indicator);
 

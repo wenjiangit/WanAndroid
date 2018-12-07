@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.widget.ImageView
 import com.wenjian.loopbanner.LoopAdapter
 import com.wenjian.loopbanner.LoopBanner
-import com.wenjian.loopbanner.indicator.JDIndicatorAdapter
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseListFragment
 import com.wenjian.wanandroid.base.BaseRecyclerAdapter
@@ -41,7 +40,7 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
             setLrMargin(20)
             pageMargin = 4
             interval = 3000
-            setIndicatorStyle(LoopBanner.Style.JD)
+//            setIndicatorStyle(LoopBanner.Style.JD)
             setOnPageSelectListener {
                 logI("select=$it")
             }
@@ -69,6 +68,9 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
         mViewModel.loadHomeData().observe(this, Observer { data ->
             data?.let {
                 val (bannerData, second) = it
+
+                println(bannerData.map { it.imagePath })
+
                 mBannerAdapter.setNewData(bannerData)
 //                mBannerPager.adapter = BannerAdapter(bannerData)
                 mAdapter.setNewData(second)

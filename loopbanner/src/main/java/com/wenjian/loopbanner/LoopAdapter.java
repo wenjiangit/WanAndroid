@@ -76,15 +76,6 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
         return addViewSafely(container, holder.itemView);
     }
 
-    private View addViewSafely(ViewGroup container, View itemView) {
-        ViewParent parent = itemView.getParent();
-        if (parent != null) {
-            ((ViewGroup) parent).removeView(itemView);
-        }
-        container.addView(itemView);
-        return itemView;
-    }
-
     @Override
     public final void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
@@ -94,6 +85,15 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
     @Override
     public final boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
         return view == object;
+    }
+
+    private View addViewSafely(ViewGroup container, View itemView) {
+        ViewParent parent = itemView.getParent();
+        if (parent != null) {
+            ((ViewGroup) parent).removeView(itemView);
+        }
+        container.addView(itemView);
+        return itemView;
     }
 
     private void addClickListenerIfNeed(final int dataPosition, View convertView) {
@@ -112,7 +112,7 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
     /**
      * 获取真实的数据个数
      */
-    public int getDataSize() {
+    public final int getDataSize() {
         return mData.size();
     }
 
