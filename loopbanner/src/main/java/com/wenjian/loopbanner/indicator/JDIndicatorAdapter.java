@@ -4,8 +4,6 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -50,10 +48,14 @@ public class JDIndicatorAdapter implements IndicatorAdapter {
     }
 
     @Override
-    public void applySelectState(View prev, View current) {
+    public void applySelectState(View prev, View current, boolean reverse) {
         prev.setPivotX(0);
-        prev.setPivotY(prev.getHeight()/2);
-        prev.animate().scaleX(mScale).setDuration(200).start();
+        prev.setPivotY(prev.getHeight() / 2);
+        if (reverse) {
+            current.animate().scaleX(1).setDuration(200).start();
+        } else {
+            prev.animate().scaleX(mScale).setDuration(200).start();
+        }
     }
 
     @Override
@@ -62,17 +64,28 @@ public class JDIndicatorAdapter implements IndicatorAdapter {
     }
 
     @Override
-    public boolean reset(LinearLayout container) {
+    public boolean handleSpecial(LinearLayout container, int position) {
         int childCount = container.getChildCount();
-        if (childCount > 0) {
+        //对第一个和最后一个做特殊处理
+        if (position == 0 || position == childCount - 1) {
             for (int i = 0; i < childCount; i++) {
                 View childAt = container.getChildAt(i);
                 childAt.setPivotX(0);
-                childAt.setPivotY(childAt.getHeight()/2);
-                childAt.animate().scaleX(1).setDuration(100).start();
+                childAt.setPivotY(childAt.getHeight() / 2);
+                //第一个
+                if (position == 0) {
+                    childAt.animate().scaleX(1).setDuration(200).start();
+                }
+                //最后一个
+                else {
+                    if (i != childCount - 1) {
+                        childAt.animate().scaleX(mScale).setDuration(200).start();
+                    }
+                }
             }
+            return true;
         }
-        return true;
+        return false;
     }
 
     private void computeScale(int width, int margin) {
@@ -82,17 +95,4 @@ public class JDIndicatorAdapter implements IndicatorAdapter {
         }
     }
 
-    private Animation getResetAnimation() {
-        Animation animation2 = new ScaleAnimation(mScale, 1, 1, 1, 0, 0.5f);
-        animation2.setFillAfter(true);
-        animation2.setDuration(100);
-        return animation2;
-    }
-
-    private Animation getSelectAnimation() {
-        Animation animation1 = new ScaleAnimation(1, mScale, 1, 1, 0, 0.5f);
-        animation1.setFillAfter(true);
-        animation1.setDuration(200);
-        return animation1;
-    }
 }

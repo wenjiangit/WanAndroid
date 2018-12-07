@@ -25,10 +25,11 @@ public interface IndicatorAdapter {
     /**
      * 应用选中效果
      *
-     * @param prev    前一个
+     * @param prev    上一个
      * @param current 当前
+     * @param reverse 是否逆向滑动
      */
-    void applySelectState(View prev, View current);
+    void applySelectState(View prev, View current, boolean reverse);
 
     /**
      * 应用为选中效果
@@ -39,12 +40,13 @@ public interface IndicatorAdapter {
 
 
     /**
-     * 重置为初始效果(在第一个page选中的时候会触发)
+     * 是否需要对某个位置进行特殊处理
      *
-     * @param container
-     * @return
+     * @param container 指示器容器
+     * @param position  第一个或最后一个
+     * @return 返回true代表处理好了
      */
-    boolean reset(LinearLayout container);
+    boolean handleSpecial(LinearLayout container, int position);
 
 
 }

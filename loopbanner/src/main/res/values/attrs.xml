@@ -22,8 +22,14 @@
         <attr name="lb_indicatorMargin" format="dimension"/>
         <attr name="lb_indicatorSelect" format="reference"/>
         <attr name="lb_indicatorUnSelect" format="reference"/>
-        <attr name="lb_indicatorMarginV" format="dimension"/>
-        <attr name="lb_indicatorMarginH" format="dimension"/>
+        <attr name="lb_indicatorParentMarginV" format="dimension"/>
+        <attr name="lb_indicatorParentMarginH" format="dimension"/>
+
+        <attr name="lb_indicatorStyle">
+            <enum name="normal" value="0"/>
+            <enum name="jd" value="1"/>
+            <enum name="pill" value="2"/>
+        </attr>
 
     </declare-styleable>
 

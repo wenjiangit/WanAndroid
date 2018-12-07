@@ -7,12 +7,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 /**
- * Description: DrawableAdapter
+ * Description: SelectDrawableAdapter
  * Date: 2018/12/6
  *
  * @author jian.wen@ubtrobot.com
  */
-public final class DrawableAdapter implements IndicatorAdapter {
+public final class SelectDrawableAdapter implements IndicatorAdapter {
 
     private LinearLayout.LayoutParams mLayoutParams;
 
@@ -22,6 +22,12 @@ public final class DrawableAdapter implements IndicatorAdapter {
         ImageView image = new ImageView(container.getContext());
         ViewCompat.setBackground(image, drawable);
         container.addView(image, layoutParams);
+    }
+
+    @Override
+    public void applySelectState(View prev, View current, boolean reverse) {
+        current.setSelected(true);
+        current.requestLayout();
     }
 
     private LinearLayout.LayoutParams generateLayoutParams(Drawable drawable, int size, int margin) {
@@ -42,20 +48,15 @@ public final class DrawableAdapter implements IndicatorAdapter {
     }
 
     @Override
-    public void applySelectState(View prev,View current) {
-        current.setSelected(true);
-        current.requestLayout();
-    }
-
-    @Override
     public void applyUnSelectState(View indicator) {
         indicator.setSelected(false);
         indicator.requestLayout();
     }
 
     @Override
-    public boolean reset(LinearLayout container) {
+    public boolean handleSpecial(LinearLayout container, int position) {
         return false;
     }
+
 
 }

@@ -20,9 +20,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.wenjian.loopbanner.indicator.DrawableAdapter;
 import com.wenjian.loopbanner.indicator.IndicatorAdapter;
 import com.wenjian.loopbanner.indicator.JDIndicatorAdapter;
+import com.wenjian.loopbanner.indicator.SelectDrawableAdapter;
 
 import java.util.List;
 
@@ -110,7 +110,7 @@ public class LoopBanner extends FrameLayout {
     /**
      * 指示器适配
      */
-    private IndicatorAdapter mIndicatorAdapter = new DrawableAdapter();
+    private IndicatorAdapter mIndicatorAdapter = new SelectDrawableAdapter();
 
     /**
      * 指示器的位置
@@ -144,7 +144,7 @@ public class LoopBanner extends FrameLayout {
                 return;
             }
             final int dataSize = adapter.getDataSize();
-            if (dataSize > 0) {
+            if (dataSize > 1) {
                 createIndicatorIfNeed(dataSize);
                 setProperIndex(dataSize);
                 startInternal(true);
@@ -159,11 +159,11 @@ public class LoopBanner extends FrameLayout {
     /**
      * mIndicatorContainer相对于父容器的垂直方向间距
      */
-    private int mIndicatorMarginV;
+    private int mIndicatorParentMarginV;
     /**
      * mIndicatorContainer相对于父容器的水平方向间距
      */
-    private int mIndicatorMarginH;
+    private int mIndicatorParentMarginH;
 
     public LoopBanner(@NonNull Context context) {
         this(context, null);
@@ -195,12 +195,29 @@ public class LoopBanner extends FrameLayout {
         mIndicatorGravity = a.getInt(R.styleable.LoopBanner_lb_indicatorGravity, DEFAULT_GRAVITY);
         mIndicatorSize = (int) a.getDimension(R.styleable.LoopBanner_lb_indicatorSize, Tools.dp2px(context, DEFAULT_INDICATOR_SIZE));
         mIndicatorMargin = (int) a.getDimension(R.styleable.LoopBanner_lb_indicatorMargin, Tools.dp2px(context, DEFAULT_INDICATOR_MARGIN));
-        mIndicatorMarginV = a.getInt(R.styleable.LoopBanner_lb_indicatorMarginV, Tools.dp2px(context, DEFAULT_INDICATOR_MARGIN_TO_PARENT));
-        mIndicatorMarginH = a.getInt(R.styleable.LoopBanner_lb_indicatorMarginH, Tools.dp2px(context, DEFAULT_INDICATOR_MARGIN_TO_PARENT));
+        mIndicatorParentMarginV = (int) a.getDimension(R.styleable.LoopBanner_lb_indicatorParentMarginV, Tools.dp2px(context, DEFAULT_INDICATOR_MARGIN_TO_PARENT));
+        mIndicatorParentMarginH = (int) a.getDimension(R.styleable.LoopBanner_lb_indicatorParentMarginH, Tools.dp2px(context, DEFAULT_INDICATOR_MARGIN_TO_PARENT));
         mSelectDrawable = a.getDrawable(R.styleable.LoopBanner_lb_indicatorSelect);
         mUnSelectDrawable = a.getDrawable(R.styleable.LoopBanner_lb_indicatorUnSelect);
+        int style = a.getInt(R.styleable.LoopBanner_lb_indicatorStyle, 0);
+        handleIndicatorStyle(style);
         a.recycle();
         init();
+    }
+
+    private void handleIndicatorStyle(int style) {
+        Style s ;
+        switch (style) {
+            case 1:
+                s = Style.JD;
+                break;
+            case 2:
+                s = Style.PILL;
+                break;
+            default:
+                s = Style.NORMAL;
+        }
+        setIndicatorStyle(s);
     }
 
     private void setProperIndex(int dataSize) {
@@ -236,15 +253,15 @@ public class LoopBanner extends FrameLayout {
 
     public LayoutParams createLayoutParams() {
         LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        layoutParams.bottomMargin = mIndicatorMarginV;
+        layoutParams.bottomMargin = mIndicatorParentMarginV;
         switch (mIndicatorGravity) {
             case GRAVITY_BOTTOM_LEFT:
                 layoutParams.gravity = Gravity.BOTTOM | Gravity.START;
-                layoutParams.leftMargin = mIndicatorMarginH + mLrMargin;
+                layoutParams.leftMargin = mIndicatorParentMarginH + mLrMargin;
                 break;
             case GRAVITY_BOTTOM_RIGHT:
                 layoutParams.gravity = Gravity.BOTTOM | Gravity.END;
-                layoutParams.rightMargin = mIndicatorMarginH + mLrMargin;
+                layoutParams.rightMargin = mIndicatorParentMarginH + mLrMargin;
                 break;
             case GRAVITY_BOTTOM_CENTER:
                 layoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
@@ -260,14 +277,14 @@ public class LoopBanner extends FrameLayout {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
             public void onPageSelected(int position) {
+                int lastPosition = mCurrentIndex;
                 mCurrentIndex = position;
                 notifySelectChange(position);
-                updateIndicators(position);
+                updateIndicators(position, lastPosition);
             }
 
             @Override
@@ -296,7 +313,7 @@ public class LoopBanner extends FrameLayout {
         }
     }
 
-    private void updateIndicators(int position) {
+    private void updateIndicators(int position, int lastPosition) {
         if (mIndicatorContainer == null) {
             return;
         }
@@ -306,31 +323,33 @@ public class LoopBanner extends FrameLayout {
         }
 
         final int dataPosition = adapter.getDataPosition(position);
-        if (dataPosition == 0) {
-            if (mIndicatorAdapter.reset(mIndicatorContainer)) {
-                return;
-            }
+        if (mIndicatorAdapter.handleSpecial(mIndicatorContainer, dataPosition)) {
+            return;
         }
         final int childCount = mIndicatorContainer.getChildCount();
         if (childCount > 0) {
             for (int i = 0; i < childCount; i++) {
                 mIndicatorAdapter.applyUnSelectState(mIndicatorContainer.getChildAt(i));
             }
+            boolean auto = lastPosition == position;
+            int prev;
+            if (auto) {
+                prev = computePrevPosition(adapter, lastPosition - 1);
+            } else {
+                prev = computePrevPosition(adapter, lastPosition);
+            }
 
-            final int prev = computePrevPosition(adapter, position);
             mIndicatorAdapter.applySelectState(mIndicatorContainer.getChildAt(prev),
-                    mIndicatorContainer.getChildAt(dataPosition));
+                    mIndicatorContainer.getChildAt(dataPosition), lastPosition > position);
         }
     }
 
-    private int computePrevPosition(LoopAdapter adapter, int position) {
-        final int prev = position - 1;
-        if (prev >= 0) {
-            return adapter.getDataPosition(prev);
+    private int computePrevPosition(LoopAdapter adapter, int lastPosition) {
+        if (lastPosition >= 0) {
+            return adapter.getDataPosition(lastPosition);
         }
         return adapter.getDataSize() - 1;
     }
-
 
     private void startInternal(boolean force) {
         if (!mCanLoop) {
@@ -489,11 +508,6 @@ public class LoopBanner extends FrameLayout {
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         super.onWindowFocusChanged(hasWindowFocus);
         Tools.logI(TAG, "onWindowFocusChanged," + hasWindowFocus);
-//        if (hasWindowFocus) {
-//            startInternal(true);
-//        } else {
-//            stopInternal();
-//        }
     }
 
     @Override
@@ -517,7 +531,7 @@ public class LoopBanner extends FrameLayout {
     }
 
     private void createIndicatorIfNeed(int dataSize) {
-        if (mIndicatorContainer == null || dataSize <= 0) {
+        if (mIndicatorContainer == null || dataSize <= 1) {
             return;
         }
 
@@ -526,7 +540,7 @@ public class LoopBanner extends FrameLayout {
         for (int i = 0; i < dataSize; i++) {
             mIndicatorAdapter.addIndicator(mIndicatorContainer, makeDrawable(), mIndicatorSize, mIndicatorMargin);
         }
-        updateIndicators(0);
+        updateIndicators(0, -1);
     }
 
     private Drawable makeDrawable() {
