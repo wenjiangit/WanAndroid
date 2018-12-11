@@ -13,7 +13,6 @@ import com.wenjian.wanandroid.entity.Banner
 import com.wenjian.wanandroid.entity.WebModel
 import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.loadUrl
-import com.wenjian.wanandroid.extension.logI
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
 import com.wenjian.wanandroid.ui.web.WebActivity
 
@@ -35,16 +34,6 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
         super.initViews()
         mRecycler.addCustomDecoration(drawable = R.drawable.divider_tree)
         mBannerPager = LayoutInflater.from(context).inflate(R.layout.lay_home_banner, mRecycler, false) as LoopBanner
-        mBannerPager.apply {
-            setCanLoop(true)
-            setLrMargin(20)
-            pageMargin = 4
-            interval = 3000
-//            setIndicatorStyle(LoopBanner.Style.JD)
-            setOnPageSelectListener {
-                logI("select=$it")
-            }
-        }
         mBannerPager.adapter = mBannerAdapter
         mAdapter.addHeaderView(mBannerPager)
     }
@@ -68,11 +57,8 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
         mViewModel.loadHomeData().observe(this, Observer { data ->
             data?.let {
                 val (bannerData, second) = it
-
                 println(bannerData.map { it.imagePath })
-
                 mBannerAdapter.setNewData(bannerData)
-//                mBannerPager.adapter = BannerAdapter(bannerData)
                 mAdapter.setNewData(second)
             }
         })
@@ -85,7 +71,7 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
     }
 
     class BannerAdapter : LoopAdapter<Banner>(R.layout.lay_banner_item) {
-        override fun onBindView(holder: LoopAdapter.ViewHolder, data: Banner) {
+        override fun onBindView(holder: LoopAdapter.ViewHolder, data: Banner, position: Int) {
             val image = holder.getView<ImageView>(R.id.iv_image)
             image.loadUrl(data.imagePath)
             holder.itemView.setOnClickListener {
