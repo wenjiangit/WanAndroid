@@ -5,8 +5,9 @@
     android:layout_height="150dp"
     app:lb_lrMargin="20dp"
     app:lb_indicatorGravity="bottomCenter"
-    app:lb_indicatorSelect="@drawable/indicator_select"
-    app:lb_indicatorUnSelect="@drawable/indicator_unselect"
+    app:lb_indicatorStyle="jd"
+    app:lb_lrMargin="16dp"
+    app:lb_pageMargin="4dp"
   >
 
 </com.wenjian.loopbanner.LoopBanner>
