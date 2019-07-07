@@ -38,13 +38,13 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
         mBannerPager = LayoutInflater.from(context).inflate(R.layout.lay_home_banner, mRecycler, false) as LoopBanner
         mBannerPager.apply {
             setCanLoop(true)
-            setLrMargin(20)
             pageMargin = 4
             interval = 3000
             setIndicatorStyle(LoopBanner.Style.JD)
             setOnPageSelectListener {
                 logI("select=$it")
             }
+            openDebug()
         }
         mBannerPager.adapter = mBannerAdapter
         mAdapter.addHeaderView(mBannerPager)
@@ -83,7 +83,7 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
     }
 
     class BannerAdapter : LoopAdapter<Banner>(R.layout.lay_banner_item) {
-        override fun onBindView(holder: LoopAdapter.ViewHolder, data: Banner) {
+        override fun onBindView(holder: LoopAdapter.ViewHolder, data: Banner, postion: Int) {
             val image = holder.getView<ImageView>(R.id.iv_image)
             image.loadUrl(data.imagePath)
             holder.itemView.setOnClickListener {

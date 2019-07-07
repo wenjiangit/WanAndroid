@@ -3,11 +3,7 @@ package com.wenjian.loopbanner;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
+import android.support.annotation.*;
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -29,14 +25,14 @@ import java.util.List;
 public abstract class LoopAdapter<T> extends PagerAdapter {
 
     private static final String TAG = "LoopAdapter";
-    private SparseArray<ViewHolder> mHolderMap = new SparseArray<>();
+    private final SparseArray<ViewHolder> mHolderMap = new SparseArray<>();
     private List<T> mData;
     private int mLayoutId;
     private boolean mCanLoop = true;
-    private LoopBanner.OnPageClickListener mClickListener;
+    LoopBanner.OnPageClickListener mClickListener;
 
     public LoopAdapter(List<T> data, int layoutId) {
-        mData = data;
+        mData = data == null ? new ArrayList<T>() : data;
         mLayoutId = layoutId;
     }
 
@@ -70,19 +66,9 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
             View convertView = onCreateView(container);
             holder = new ViewHolder(convertView);
             convertView.setTag(R.id.key_holder, holder);
-            addClickListenerIfNeed(dataPosition, convertView);
-            onBindView(holder, mData.get(dataPosition));
+            onBindView(holder, mData.get(dataPosition), dataPosition);
         }
         return addViewSafely(container, holder.itemView);
-    }
-
-    private View addViewSafely(ViewGroup container, View itemView) {
-        ViewParent parent = itemView.getParent();
-        if (parent != null) {
-            ((ViewGroup) parent).removeView(itemView);
-        }
-        container.addView(itemView);
-        return itemView;
     }
 
     @Override
@@ -96,29 +82,25 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
         return view == object;
     }
 
-    private void addClickListenerIfNeed(final int dataPosition, View convertView) {
-        if (mClickListener != null) {
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mClickListener != null) {
-                        mClickListener.onPageClick(v, dataPosition);
-                    }
-                }
-            });
+    private View addViewSafely(ViewGroup container, View itemView) {
+        ViewParent parent = itemView.getParent();
+        if (parent != null) {
+            ((ViewGroup) parent).removeView(itemView);
         }
+        container.addView(itemView);
+        return itemView;
     }
 
     /**
      * 获取真实的数据个数
      */
-    public int getDataSize() {
+    public final int getDataSize() {
         return mData.size();
     }
 
     private int computePosition(int position) {
         final int size = mData.size();
-        return size == 0 ? -1 : position % size;
+        return size == 0 ? 0 : position % size;
     }
 
     /**
@@ -144,10 +126,11 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
     /**
      * 为每个page绑定数据
      *
-     * @param holder ViewHolder
-     * @param data   数据
+     * @param holder   ViewHolder
+     * @param data     数据
+     * @param position 数据真实位置
      */
-    protected abstract void onBindView(ViewHolder holder, T data);
+    protected abstract void onBindView(ViewHolder holder, T data, int position);
 
     /**
      * 设置数据集
@@ -182,7 +165,7 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
         }
 
         @SuppressWarnings("unchecked")
-        public <T> T getView(@IdRes int viewId) {
+        public <T extends View> T getView(@IdRes int viewId) {
             View view = mViewList.get(viewId);
             if (view == null) {
                 view = itemView.findViewById(viewId);
