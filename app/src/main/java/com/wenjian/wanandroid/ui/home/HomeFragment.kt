@@ -35,6 +35,8 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
         mRecycler.addCustomDecoration(drawable = R.drawable.divider_tree)
         mBannerPager = LayoutInflater.from(context).inflate(R.layout.lay_home_banner, mRecycler, false) as LoopBanner
         mBannerPager.adapter = mBannerAdapter
+        mBannerPager.openDebug()
+        mBannerPager.bindLifecycle(this)
         mAdapter.addHeaderView(mBannerPager)
     }
 
@@ -55,8 +57,8 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
     override fun onLazyLoad() {
         super.onLazyLoad()
         mViewModel.loadHomeData().observe(this, Observer { data ->
-            data?.let {
-                val (bannerData, second) = it
+            data?.let { pair ->
+                val (bannerData, second) = pair
                 println(bannerData.map { it.imagePath })
                 mBannerAdapter.setNewData(bannerData)
                 mAdapter.setNewData(second)
@@ -71,7 +73,7 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
     }
 
     class BannerAdapter : LoopAdapter<Banner>(R.layout.lay_banner_item) {
-        override fun onBindView(holder: LoopAdapter.ViewHolder, data: Banner, position: Int) {
+        override fun onBindView(holder: ViewHolder, data: Banner, position: Int) {
             val image = holder.getView<ImageView>(R.id.iv_image)
             image.loadUrl(data.imagePath)
             holder.itemView.setOnClickListener {

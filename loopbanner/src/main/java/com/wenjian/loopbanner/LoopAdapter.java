@@ -8,14 +8,15 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.support.v4.view.PagerAdapter;
+import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,17 +27,18 @@ import java.util.List;
  *
  * @author jian.wen@ubtrobot.com
  */
-public abstract class LoopAdapter<T> extends PagerAdapter {
+public abstract class LoopAdapter<T> extends RecyclerView.Adapter<LoopAdapter.ViewHolder> {
 
     private static final String TAG = "LoopAdapter";
-    private SparseArray<ViewHolder> mHolderMap = new SparseArray<>();
     private List<T> mData;
     private int mLayoutId;
     private boolean mCanLoop = true;
-    private LoopBanner.OnPageClickListener mClickListener;
+    LoopBanner.OnPageClickListener mClickListener;
+
+    private AdapterHelper mHelper;
 
     public LoopAdapter(List<T> data, int layoutId) {
-        mData = data;
+        mData = data == null ? new ArrayList<T>() : data;
         mLayoutId = layoutId;
     }
 
@@ -52,62 +54,36 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
         this(new ArrayList<T>(), -1);
     }
 
-    @Override
-    public final int getCount() {
-        final int size = mData.size();
-        if (size != 0) {
-            return mCanLoop ? Integer.MAX_VALUE : size;
-        }
-        return 0;
+    void setHelper(AdapterHelper helper) {
+        this.mHelper = helper;
     }
 
     @NonNull
     @Override
-    public final Object instantiateItem(@NonNull ViewGroup container, int position) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        final View view = onCreateView(parent);
+        mHelper.onCreateViewHolder(parent, view);
+        return new ViewHolder(view);
+    }
+
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        mHelper.onBindViewHolder(holder);
         final int dataPosition = computePosition(position);
-        ViewHolder holder = mHolderMap.get(dataPosition);
-        if (holder == null) {
-            View convertView = onCreateView(container);
-            holder = new ViewHolder(convertView);
-            convertView.setTag(R.id.key_holder, holder);
-            addClickListenerIfNeed(dataPosition, convertView);
-            onBindView(holder, mData.get(dataPosition));
-        }
-        return addViewSafely(container, holder.itemView);
+        onBindView(holder, mData.get(dataPosition), dataPosition);
     }
+
 
     @Override
-    public final void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        container.removeView((View) object);
-        mHolderMap.put(computePosition(position), (ViewHolder) ((View) object).getTag(R.id.key_holder));
-    }
-
-    @Override
-    public final boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return view == object;
-    }
-
-    private View addViewSafely(ViewGroup container, View itemView) {
-        ViewParent parent = itemView.getParent();
-        if (parent != null) {
-            ((ViewGroup) parent).removeView(itemView);
+    public int getItemCount() {
+        final int size = mData.size();
+        if (size != 0) {
+            return mCanLoop ? Integer.MAX_VALUE : size;
         }
-        container.addView(itemView);
-        return itemView;
+        return size;
     }
 
-    private void addClickListenerIfNeed(final int dataPosition, View convertView) {
-        if (mClickListener != null) {
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mClickListener != null) {
-                        mClickListener.onPageClick(v, dataPosition);
-                    }
-                }
-            });
-        }
-    }
 
     /**
      * 获取真实的数据个数
@@ -118,7 +94,7 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
 
     private int computePosition(int position) {
         final int size = mData.size();
-        return size == 0 ? -1 : position % size;
+        return size == 0 ? 0 : position % size;
     }
 
     /**
@@ -134,9 +110,7 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
         if (mLayoutId != -1) {
             view = LayoutInflater.from(container.getContext()).inflate(mLayoutId, container, false);
         } else {
-            ImageView imageView = new ImageView(container.getContext());
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            view = imageView;
+            view = LayoutInflater.from(container.getContext()).inflate(R.layout.lay_internal_img,container,false);
         }
         return view;
     }
@@ -144,10 +118,11 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
     /**
      * 为每个page绑定数据
      *
-     * @param holder ViewHolder
-     * @param data   数据
+     * @param holder   ViewHolder
+     * @param data     数据
+     * @param position 数据真实位置
      */
-    protected abstract void onBindView(ViewHolder holder, T data);
+    protected abstract void onBindView(ViewHolder holder, T data, int position);
 
     /**
      * 设置数据集
@@ -156,7 +131,6 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
      */
     public final void setNewData(List<T> data) {
         mData = data != null ? data : new ArrayList<T>();
-        mHolderMap.clear();
         notifyDataSetChanged();
     }
 
@@ -172,17 +146,16 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
         mCanLoop = canLoop;
     }
 
-    public static final class ViewHolder {
-        public final View itemView;
+    public static final class ViewHolder extends RecyclerView.ViewHolder {
 
-        private SparseArray<View> mViewList = new SparseArray<>();
+        private final SparseArray<View> mViewList = new SparseArray<>();
 
         ViewHolder(View itemView) {
-            this.itemView = itemView;
+            super(itemView);
         }
 
         @SuppressWarnings("unchecked")
-        public <T> T getView(@IdRes int viewId) {
+        public <T extends View> T getView(@IdRes int viewId) {
             View view = mViewList.get(viewId);
             if (view == null) {
                 view = itemView.findViewById(viewId);
@@ -193,6 +166,10 @@ public abstract class LoopAdapter<T> extends PagerAdapter {
 
         public Context getContext() {
             return itemView.getContext();
+        }
+
+        public View getItemView() {
+            return itemView;
         }
 
         /**
