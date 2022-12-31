@@ -399,7 +399,7 @@ public class TagView extends View {
                 canvas.clipPath(mPath);
                 mPath.addRoundRect(mRectF, mBorderRadius, mBorderRadius, Path.Direction.CCW);
 
-                canvas.clipPath(mPath, Region.Op.REPLACE);
+                canvas.clipPath(mPath, Region.Op.INTERSECT);
                 canvas.drawCircle(mTouchX, mTouchY, mRippleRadius, mRipplePaint);
                 canvas.restore();
             }catch (UnsupportedOperationException e){

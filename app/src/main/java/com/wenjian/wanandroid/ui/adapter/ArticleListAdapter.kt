@@ -26,8 +26,8 @@ class ArticleListAdapter : BaseRecyclerAdapter<Article>(R.layout.rv_item_article
                 setText(R.id.tv_title, Html.fromHtml(title?.trim()))
                 setText(R.id.tv_name, author?.trim())
                 setText(R.id.tv_date, niceDate?.trim())
-                setText(R.id.tv_avatar,author?.trim()?.get(0).toString())
-                setText(R.id.tv_category,chapterName?.trim())
+                setText(R.id.tv_avatar, author?.trim())
+                setText(R.id.tv_category, chapterName?.trim())
 
                 if (superChapterName?.trim().isNullOrBlank()) {
                     getView<TextView>(R.id.tv_chapter).gone()
