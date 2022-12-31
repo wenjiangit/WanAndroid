@@ -17,11 +17,12 @@
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorColor="?attr/customTabIndicatorColor"
+        app:tabIndicatorColor="?attr/colorAccent"
         app:tabMode="scrollable"
-        app:tabSelectedTextColor="?attr/customTabSelectedTextColor"
+        app:tabSelectedTextColor="?attr/colorAccent"
         app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-        app:tabTextColor="?attr/customTabTextColor">
+        app:tabTextColor="?attr/colorAccent">
+
 
     </com.google.android.material.tabs.TabLayout>
 

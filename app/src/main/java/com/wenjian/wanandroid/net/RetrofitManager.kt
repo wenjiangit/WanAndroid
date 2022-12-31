@@ -32,7 +32,7 @@ object RetrofitManager {
     private val myLogInterceptor: Interceptor = Interceptor { chain ->
         var response = chain.proceed(chain.request())
 
-        if (response.cacheResponse() != null && response.networkResponse() == null) {
+        if (response.cacheResponse != null && response.networkResponse == null) {
             //表示该响应来自缓存
             response = response.newBuilder()
                     .message("from-cache")

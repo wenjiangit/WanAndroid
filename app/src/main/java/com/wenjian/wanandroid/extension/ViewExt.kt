@@ -26,7 +26,7 @@ fun BottomNavigationView.disableShiftMode() {
         for (i in 0 until menuView.childCount) {
             val item = menuView.getChildAt(i) as BottomNavigationItemView
 //            item.setShiftingMode(false)
-            item.setChecked(item.itemData.isChecked)
+            item.setChecked(item.itemData?.isChecked ?: false)
         }
     } catch (e: NoSuchFieldException) {
         Log.e("wj", "Unable to get shift mode field", e)

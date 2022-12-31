@@ -2,7 +2,6 @@ package com.wenjian.wanandroid
 
 import android.app.Application
 import android.os.Process
-import com.squareup.leakcanary.LeakCanary
 import com.tencent.bugly.crashreport.CrashReport
 import com.wenjian.wanandroid.extension.logI
 import com.wenjian.wanandroid.ui.web.WebClient
@@ -26,11 +25,11 @@ class WanAndroidApp : Application() {
         instance = this
         logI("pid: ${Process.myPid()}")
         //LeakCanary检测进程或WebView进程
-        if (LeakCanary.isInAnalyzerProcess(this) || WebClient.isInWebViewProcess(this)) {
+        if (WebClient.isInWebViewProcess(this)) {
             return
         }
-        //主进程
-        LeakCanary.install(this)
+//        //主进程
+//        LeakCanary.install(this)
         CrashReport.initCrashReport(this)
         //提前启动web进程,避免WebActivity启动时白屏
         WebClient.preLoad(this)

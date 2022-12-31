@@ -98,7 +98,7 @@ class CookieManager private constructor(val context: Context) {
     fun load(host: String): List<Cookie> {
         val hashMap = cookieStore[host]
         //及时清理过期数据
-        val filter = hashMap?.filter { it.value.expiresAt() > System.currentTimeMillis() }
+        val filter = hashMap?.filter { it.value.expiresAt > System.currentTimeMillis() }
         filter?.let {
             val newMap = ConcurrentHashMap(filter)
             cookieStore[host] = newMap
@@ -115,14 +115,14 @@ class CookieManager private constructor(val context: Context) {
         }
         cookies.forEach {
             //内存中保存所有值
-            hashMap[it.name()] = it
+            hashMap[it.name] = it
         }
         serialize(host, hashMap)
     }
 
     private fun serialize(host: String, map: ConcurrentHashMap<String, Cookie>) {
         //持久化需要持久化的值
-        val filterMap = map.filterValues { it.persistent() }
+        val filterMap = map.filterValues { it.persistent }
         cookiePrefs.edit().putString(host, encode(filterMap)).apply()
     }
 

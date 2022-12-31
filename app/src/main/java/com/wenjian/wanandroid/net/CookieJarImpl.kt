@@ -19,11 +19,11 @@ class CookieJarImpl(private val manager: CookieManager) : CookieJar {
     }
 
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-        Log.i("wj", "receive cookie ${url.host()} >>> $cookies")
-        manager.saveMultiProcess(url.host(), cookies)
+        Log.i("wj", "receive cookie ${url.host} >>> $cookies")
+        manager.saveMultiProcess(url.host, cookies)
     }
 
     override fun loadForRequest(url: HttpUrl): List<Cookie> {
-        return manager.loadMultiProcess(url.host())
+        return manager.loadMultiProcess(url.host)
     }
 }

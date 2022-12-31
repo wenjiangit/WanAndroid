@@ -24,7 +24,7 @@ object CacheStrategy {
     val REWRITE_RESPONSE_INTERCEPTOR: Interceptor = Interceptor { chain ->
         var originResponse = chain.proceed(chain.request())
         val cacheControl = originResponse.header(CACHE_CONTROL)
-        val isGet = chain.request().method().equals("get", true)
+        val isGet = chain.request().method.equals("get", true)
         val cache = chain.request().header(CUSTOM_HEADER)
         if (cacheControl == null && isGet && !cache.isNullOrBlank()) {
             //读取自定义缓存时间
@@ -38,7 +38,7 @@ object CacheStrategy {
     val REWRITE_RESPONSE_INTERCEPTOR_OFFLINE = Interceptor { chain ->
         var request = chain.request()
         //是get请求
-        val isGet = request.method().equals("get", true)
+        val isGet = request.method.equals("get", true)
         //没有网络
         if (!NetUtil.isNetworkAvailable(WanAndroidApp.instance) && isGet) {
             request = request.newBuilder()

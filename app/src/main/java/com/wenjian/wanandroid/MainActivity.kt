@@ -36,7 +36,7 @@ class MainActivity : BaseSkinActivity() {
             val stateList = AppCompatResources.getColorStateList(this@MainActivity, R.color.navigation_menu_item_color)
             itemTextColor = stateList
             itemIconTintList = stateList
-            setOnNavigationItemSelectedListener {
+            setOnItemSelectedListener {
                 when (it.itemId) {
                     R.id.home -> {
                         doTabSelect(0, it.title)
@@ -107,7 +107,7 @@ class MainActivity : BaseSkinActivity() {
         mainPager.adapter = MainPagerAdapter(supportFragmentManager, mFragments)
     }
 
-    private fun doTabSelect(position: Int, charSequence: CharSequence) {
+    private fun doTabSelect(position: Int, charSequence: CharSequence?) {
         mainPager.currentItem = position
         toolBar.title = charSequence
     }

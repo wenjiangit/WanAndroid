@@ -3,7 +3,6 @@ package com.wenjian.wanandroid.ui.web
 import android.app.IntentService
 import android.content.Context
 import android.content.Intent
-import com.squareup.leakcanary.internal.LeakCanaryInternals
 import com.wenjian.wanandroid.extension.logI
 
 /**
@@ -20,12 +19,13 @@ class WebService : IntentService("WebService") {
         var isWebViewProcess: Boolean? = null
 
         fun isInWebViewProcess(context: Context): Boolean {
-
-            val webViewProcess = isWebViewProcess
-            if (webViewProcess == null) {
-                isWebViewProcess = LeakCanaryInternals.isInServiceProcess(context,WebService::class.java)
-            }
-            return isWebViewProcess!!
+            return false
+//
+//            val webViewProcess = isWebViewProcess
+//            if (webViewProcess == null) {
+//                isWebViewProcess = LeakCanaryInternals.isInServiceProcess(context,WebService::class.java)
+//            }
+//            return isWebViewProcess!!
         }
 
 
