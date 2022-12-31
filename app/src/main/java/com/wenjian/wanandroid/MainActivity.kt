@@ -1,12 +1,10 @@
 package com.wenjian.wanandroid
 
-import com.google.android.material.appbar.AppBarLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.appcompat.content.res.AppCompatResources
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.fragment.app.FragmentPagerAdapter
+import com.google.android.material.appbar.AppBarLayout
 import com.wenjian.wanandroid.base.BaseSkinActivity
 import com.wenjian.wanandroid.extension.launch
 import com.wenjian.wanandroid.extension.setupActionBar
@@ -35,11 +33,6 @@ class MainActivity : BaseSkinActivity() {
         initFragments()
 
         navigation.apply {
-//            enableShiftingMode(false)
-//            enableItemShiftingMode(false)
-////            enableAnimation(false)
-//            setSmallTextSize(12f)
-//            setLargeTextSize(13f)
             val stateList = AppCompatResources.getColorStateList(this@MainActivity, R.color.navigation_menu_item_color)
             itemTextColor = stateList
             itemIconTintList = stateList
