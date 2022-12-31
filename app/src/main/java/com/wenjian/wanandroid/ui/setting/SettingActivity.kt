@@ -1,7 +1,7 @@
 package com.wenjian.wanandroid.ui.setting
 
-import android.arch.lifecycle.Observer
-import android.support.v7.app.AlertDialog
+import androidx.lifecycle.Observer
+import androidx.appcompat.app.AlertDialog
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMActivity
 import com.wenjian.wanandroid.extension.*

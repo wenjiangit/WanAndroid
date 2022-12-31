@@ -1,10 +1,10 @@
 package com.wenjian.wanandroid.extension
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import com.wenjian.wanandroid.di.Injector
 import kotlin.reflect.KProperty
 
@@ -25,7 +25,7 @@ class ExtraDelegate<T>(private val key: String, private val default: T) {
     }
 
     @Suppress("UNCHECKED_CAST")
-    operator fun getValue(thisRef: Fragment, property: KProperty<*>): T {
+    operator fun getValue(thisRef: androidx.fragment.app.Fragment, property: KProperty<*>): T {
         val temp = extra ?: thisRef.arguments?.get(key) as T?
         return temp ?: default
     }
@@ -40,7 +40,7 @@ class ViewModelDelegate<T : ViewModel>(private val factory: ViewModelProvider.Fa
 
     private var model: T? = null
 
-    operator fun getValue(thisRef: Fragment, property: KProperty<*>): T {
+    operator fun getValue(thisRef: androidx.fragment.app.Fragment, property: KProperty<*>): T {
         if (model == null) {
             model = if (factory != null) {
                 ViewModelProviders.of(thisRef, factory).get(clz)

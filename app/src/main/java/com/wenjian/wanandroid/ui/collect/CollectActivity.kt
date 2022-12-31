@@ -1,7 +1,7 @@
 package com.wenjian.wanandroid.ui.collect
 
 import android.graphics.Color
-import android.support.design.widget.AppBarLayout
+import com.google.android.material.appbar.AppBarLayout
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseSkinActivity
 import com.wenjian.wanandroid.extension.getCompatColor

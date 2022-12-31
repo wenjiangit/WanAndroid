@@ -1,13 +1,13 @@
 package com.wenjian.wanandroid.ui.project
 
 
-import android.arch.lifecycle.Observer
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.ViewPager
+import androidx.lifecycle.Observer
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.tabs.TabLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
 import android.view.View
 import android.widget.ProgressBar
 import com.wenjian.wanandroid.R
@@ -24,7 +24,7 @@ import com.wenjian.wanandroid.extension.visible
 class ProjectFragment : VMFragment<ProjectModel>(ProjectModel::class.java) {
 
     private var mTabLayout: TabLayout? = null
-    private lateinit var mViewPager: ViewPager
+    private lateinit var mViewPager: androidx.viewpager.widget.ViewPager
     private lateinit var mPbLoading: ProgressBar
     private var mAppBar: AppBarLayout? = null
 
@@ -70,9 +70,9 @@ class ProjectFragment : VMFragment<ProjectModel>(ProjectModel::class.java) {
         }
     }
 
-    class ProjectPagerAdapter(fm: FragmentManager, val data: List<ProjectTree>) : FragmentPagerAdapter(fm) {
+    class ProjectPagerAdapter(fm: androidx.fragment.app.FragmentManager, val data: List<ProjectTree>) : FragmentPagerAdapter(fm) {
 
-        override fun getItem(position: Int): Fragment = ProjectListFragment.newInstance(data[position].id)
+        override fun getItem(position: Int): androidx.fragment.app.Fragment = ProjectListFragment.newInstance(data[position].id)
 
         override fun getCount(): Int = data.size
 

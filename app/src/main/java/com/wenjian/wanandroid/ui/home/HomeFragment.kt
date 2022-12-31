@@ -1,6 +1,6 @@
 package com.wenjian.wanandroid.ui.home
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.view.LayoutInflater
 import android.widget.ImageView
 import com.wenjian.loopbanner.LoopAdapter

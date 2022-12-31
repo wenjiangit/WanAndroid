@@ -2,7 +2,7 @@ package com.wenjian.wanandroid.ui.web
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -56,7 +56,7 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
         initView()
         initWebListener()
         initWebSetting()
-        webView.loadUrl(mWebModel?.link)
+        mWebModel?.link?.let { webView.loadUrl(it) }
     }
 
 
@@ -147,8 +147,8 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
     }
 
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.action_share -> {
                 val intent = Intent(Intent.ACTION_SEND).apply {
                     putExtra(Intent.EXTRA_TEXT, mWebModel?.link)
@@ -179,7 +179,7 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
 
     private fun copy2Clipboard() {
         val cbm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        cbm.primaryClip = ClipData.newPlainText(null, mWebModel?.link)
+        cbm.setPrimaryClip(ClipData.newPlainText(null, mWebModel?.link))
         toast(getString(R.string.copy_success))
     }
 
@@ -196,7 +196,7 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
             domStorageEnabled = true
             databaseEnabled = true
 
-            val appCacheDir = this@WebActivity.externalCacheDir.absolutePath + "/webViewCache"
+            val appCacheDir = this@WebActivity.externalCacheDir?.absolutePath + "/webViewCache"
             setAppCachePath(appCacheDir)
             setAppCacheEnabled(true)
             cacheMode = if (NetUtil.isNetworkAvailable(this@WebActivity)) {
@@ -239,7 +239,7 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 val url = request?.url?.toString()
-                webView.loadUrl(url)
+                webView.loadUrl(url ?: "")
                 return true
             }
 
@@ -248,11 +248,11 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
 //                showError()
             }
 
-            @Suppress("OverridingDeprecatedMember")
-            override fun onReceivedError(view: WebView?, errorCode: Int, description: String?, failingUrl: String?) {
-                Log.i(TAG, "errorCode >>> $errorCode,description >>> $description,failingUrl >>> $failingUrl")
-                showError()
-            }
+//            @Suppress("OverridingDeprecatedMember")
+//            override fun onReceivedError(view: WebView?, errorCode: Int, description: String?, failingUrl: String?) {
+//                Log.i(TAG, "errorCode >>> $errorCode,description >>> $description,failingUrl >>> $failingUrl")
+//                showError()
+//            }
         }
     }
 

@@ -1,8 +1,8 @@
 package com.wenjian.wanandroid.ui.search
 
 
-import android.arch.lifecycle.Observer
-import android.support.v4.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.fragment.app.Fragment
 import com.wenjian.wanandroid.base.BaseListFragment
 import com.wenjian.wanandroid.base.BaseRecyclerAdapter
 import com.wenjian.wanandroid.entity.Article

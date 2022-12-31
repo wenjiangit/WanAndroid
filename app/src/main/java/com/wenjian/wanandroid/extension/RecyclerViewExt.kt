@@ -1,9 +1,9 @@
 package com.wenjian.wanandroid.extension
 
-import android.support.annotation.DrawableRes
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import android.widget.ImageView
 import com.chad.library.adapter.base.BaseViewHolder
 import com.wenjian.wanandroid.widget.NoLastDecoration
@@ -17,8 +17,8 @@ import com.wenjian.wanandroid.widget.NoLastDecoration
 /**
  * 添加自定义的装饰器,最后一行没有装饰
  */
-fun RecyclerView.addCustomDecoration(direction: Int = DividerItemDecoration.VERTICAL,
-                                     @DrawableRes drawable: Int = -1) {
+fun androidx.recyclerview.widget.RecyclerView.addCustomDecoration(direction: Int = androidx.recyclerview.widget.DividerItemDecoration.VERTICAL,
+                                                                                     @DrawableRes drawable: Int = -1) {
     val noLastDecoration = NoLastDecoration(context, direction).apply {
         if (drawable != -1) {
             setDrawable(ContextCompat.getDrawable(context, drawable)!!)

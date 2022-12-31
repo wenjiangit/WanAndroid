@@ -1,6 +1,6 @@
 package com.wenjian.wanandroid.model.view
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.wenjian.wanandroid.model.ViewState
 
 /**

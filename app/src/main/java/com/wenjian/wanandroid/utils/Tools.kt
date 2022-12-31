@@ -10,11 +10,11 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Build
-import android.support.annotation.ColorInt
-import android.support.v4.content.ContextCompat
-import android.support.v4.widget.NestedScrollView
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
+import androidx.core.widget.NestedScrollView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import android.util.TypedValue
 import android.view.Menu
 import android.view.View
@@ -117,7 +117,7 @@ object Tools {
     fun copyToClipboard(context: Context, data: String) {
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("clipboard", data)
-        clipboard.primaryClip = clip
+        clipboard.setPrimaryClip(clip)
         Toast.makeText(context, "Text copied to clipboard", Toast.LENGTH_SHORT).show()
     }
 

@@ -1,7 +1,7 @@
 package com.wenjian.wanandroid.ui.search
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Transformations
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.helper.UserHelper
 import com.wenjian.wanandroid.model.DataViewModel

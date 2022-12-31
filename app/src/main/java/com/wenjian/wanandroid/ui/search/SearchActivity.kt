@@ -1,10 +1,10 @@
 package com.wenjian.wanandroid.ui.search
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v7.widget.SearchView
+import androidx.appcompat.widget.SearchView
 import android.view.Menu
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -99,17 +99,17 @@ class SearchActivity : VMActivity<SearchModel>(SearchModel::class.java) {
         searchView.setIconifiedByDefault(false)
 
         //去掉下滑线
-        val viewById = searchView.findViewById<View>(android.support.v7.appcompat.R.id.search_plate)
+        val viewById: View = searchView.findViewById(androidx.appcompat.R.id.search_plate)
         viewById.setBackgroundColor(Color.TRANSPARENT)
 
         //去掉左边搜索框左边icon
-        val magIcon = searchView.findViewById<ImageView>(android.support.v7.appcompat.R.id.search_mag_icon)
+        val magIcon: ImageView = searchView.findViewById(androidx.appcompat.R.id.search_mag_icon) as ImageView
         magIcon.layoutParams = LinearLayout.LayoutParams(0, 0)
         magIcon.setImageDrawable(null)
 
         //点击清除按钮后,隐藏searchFragment,并弹出软键盘
-        val searchText = searchView.findViewById<SearchView.SearchAutoComplete>(android.support.v7.appcompat.R.id.search_src_text)
-        val closeBt = searchView.findViewById<ImageView>(android.support.v7.appcompat.R.id.search_close_btn)
+        val searchText = searchView.findViewById(androidx.appcompat.R.id.search_src_text) as SearchView.SearchAutoComplete
+        val closeBt = searchView.findViewById(androidx.appcompat.R.id.search_close_btn) as ImageView
         closeBt.setOnClickListener {
             searchView.setQuery("", false)
             searchText.requestFocus()

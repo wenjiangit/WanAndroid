@@ -2,8 +2,8 @@ package com.wenjian.wanandroid.helper
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.support.annotation.AttrRes
-import android.support.annotation.ColorRes
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorRes
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.WanAndroidApp
 import com.wenjian.wanandroid.entity.Skin

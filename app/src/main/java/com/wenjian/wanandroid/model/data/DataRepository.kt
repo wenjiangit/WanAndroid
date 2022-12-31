@@ -1,6 +1,6 @@
 package com.wenjian.wanandroid.model.data
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import com.wenjian.wanandroid.entity.*
 import com.wenjian.wanandroid.model.BaseRepository
 import com.wenjian.wanandroid.model.view.ViewCallback

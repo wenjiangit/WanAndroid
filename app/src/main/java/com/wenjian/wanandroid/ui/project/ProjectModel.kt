@@ -1,7 +1,7 @@
 package com.wenjian.wanandroid.ui.project
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Transformations
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.wenjian.wanandroid.entity.Project
 import com.wenjian.wanandroid.model.DataViewModel
 import com.wenjian.wanandroid.model.SingleLiveEvent

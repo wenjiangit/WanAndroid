@@ -4,10 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import com.google.android.material.tabs.TabLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseActivity
 import com.wenjian.wanandroid.entity.SubTree
@@ -76,15 +76,15 @@ class SubTreeActivity : BaseActivity() {
     }
 
 
-    class SubTreeAdapter(fm: FragmentManager, val list: List<SubTree>) : FragmentPagerAdapter(fm) {
+    class SubTreeAdapter(fm: androidx.fragment.app.FragmentManager, val list: List<SubTree>) : FragmentPagerAdapter(fm) {
 
-        private val fragments: List<Fragment>
+        private val fragments: List<androidx.fragment.app.Fragment>
 
         init {
             fragments = list.map { ArticleListFragment.newInstance(it.id) }
         }
 
-        override fun getItem(position: Int): Fragment = fragments[position]
+        override fun getItem(position: Int): androidx.fragment.app.Fragment = fragments[position]
 
         override fun getCount(): Int = fragments.size
 

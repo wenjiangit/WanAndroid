@@ -19,11 +19,11 @@ import java.lang.UnsupportedOperationException
  * @author wenjianes@163.com
  */
 class CookieSyncProvider : ContentProvider() {
-    override fun insert(uri: Uri?, values: ContentValues?): Uri {
+    override fun insert(uri: Uri, values: ContentValues?): Uri {
         throw UnsupportedOperationException()
     }
 
-    override fun query(uri: Uri?, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor {
+    override fun query(uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor {
         throw UnsupportedOperationException()
     }
 
@@ -32,19 +32,19 @@ class CookieSyncProvider : ContentProvider() {
         return true
     }
 
-    override fun update(uri: Uri?, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {
+    override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {
         throw UnsupportedOperationException()
     }
 
-    override fun delete(uri: Uri?, selection: String?, selectionArgs: Array<out String>?): Int {
+    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int {
         throw UnsupportedOperationException()
     }
 
-    override fun getType(uri: Uri?): String {
+    override fun getType(uri: Uri): String {
         throw UnsupportedOperationException()
     }
 
-    override fun call(method: String?, arg: String?, extras: Bundle?): Bundle {
+    override fun call(method: String, arg: String?, extras: Bundle?): Bundle? {
         logI("method: $method,arg: $arg,extras: $extras")
         if (method.isNullOrBlank() || arg.isNullOrBlank()) {
             throw IllegalAccessException("method or arg is null or blank")
@@ -54,12 +54,12 @@ class CookieSyncProvider : ContentProvider() {
             "save" -> {
                 extras?.getString("req")?.let {
                     val cookies: List<Cookie> = Gson().fromJson(it, genericType<List<Cookie>>())
-                    CookieManager.getInstance(context).save(arg!!, cookies)
+                    CookieManager.getInstance(context!!).save(arg, cookies)
                 }
                 ret
             }
             "load" -> {
-                val list = CookieManager.getInstance(context).load(arg!!)
+                val list = CookieManager.getInstance(context!!).load(arg)
                 ret.putString("ret", Gson().toJson(list))
                 ret
             }

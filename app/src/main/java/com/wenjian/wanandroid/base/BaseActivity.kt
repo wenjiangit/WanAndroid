@@ -1,6 +1,6 @@
 package com.wenjian.wanandroid.base
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.wenjian.wanandroid.entity.Resource
 import com.wenjian.wanandroid.extension.toastError
 import com.wenjian.wanandroid.model.view.ViewCallback

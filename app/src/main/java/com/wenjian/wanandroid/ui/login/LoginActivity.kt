@@ -1,6 +1,6 @@
 package com.wenjian.wanandroid.ui.login
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.view.View
 import com.wenjian.wanandroid.MainActivity
 import com.wenjian.wanandroid.R
@@ -65,8 +65,8 @@ class LoginActivity : VMActivity<UserModel>(UserModel::class.java), View.OnClick
     }
 
     private fun onLogin() {
-        val user = edit_username.text.trim().toString()
-        val pass = edit_password.text.trim().toString()
+        val user = edit_username.text?.trim().toString()
+        val pass = edit_password.text?.trim().toString()
         when {
             user.isBlank() -> edit_username.error = "请输入用户名"
             pass.isBlank() -> edit_password.error = "请输入密码"
@@ -85,9 +85,9 @@ class LoginActivity : VMActivity<UserModel>(UserModel::class.java), View.OnClick
     }
 
     private fun onRegister() {
-        val user = edit_username.text.trim().toString()
-        val pass = edit_password.text.trim().toString()
-        val repass = edit_repassword.text.trim().toString()
+        val user = edit_username.text?.trim().toString()
+        val pass = edit_password.text?.trim().toString()
+        val repass = edit_repassword.text?.trim().toString()
         when {
             user.isBlank() -> edit_username.error = "请输入用户名"
             pass.isBlank() -> edit_password.error = "请输入密码"

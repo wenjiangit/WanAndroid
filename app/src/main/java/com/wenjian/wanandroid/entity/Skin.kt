@@ -1,7 +1,7 @@
 package com.wenjian.wanandroid.entity
 
-import android.support.annotation.ColorRes
-import android.support.annotation.StyleRes
+import androidx.annotation.ColorRes
+import androidx.annotation.StyleRes
 
 /**
  * Description: Skin

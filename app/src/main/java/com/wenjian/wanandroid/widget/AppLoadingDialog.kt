@@ -15,7 +15,7 @@ class AppLoadingDialog(context: Context) : Dialog(context) {
 
     init {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.setBackgroundDrawableResource(android.R.color.transparent)
+        window?.setBackgroundDrawableResource(android.R.color.transparent)
         setContentView(R.layout.lay_loading)
         setCancelable(false)
     }

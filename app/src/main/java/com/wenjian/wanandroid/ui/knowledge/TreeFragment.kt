@@ -1,7 +1,7 @@
 package com.wenjian.wanandroid.ui.knowledge
 
-import android.arch.lifecycle.Observer
-import android.support.v7.widget.LinearLayoutManager
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseListFragment
 import com.wenjian.wanandroid.base.BaseRecyclerAdapter
@@ -26,7 +26,8 @@ class TreeFragment : BaseListFragment<TreeEntry, TreeModel>(TreeModel::class.jav
         super.initViews()
         setupToolBar(R.string.title_knowledge)
         mRecycler.setHasFixedSize(true)
-        mRecycler.layoutManager = LinearLayoutManager(context)
+        mRecycler.layoutManager =
+            androidx.recyclerview.widget.LinearLayoutManager(context)
         mRecycler.adapter = mAdapter
     }
 

@@ -1,10 +1,10 @@
 package com.wenjian.wanandroid
 
-import android.support.design.widget.AppBarLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v7.content.res.AppCompatResources
+import com.google.android.material.appbar.AppBarLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.appcompat.content.res.AppCompatResources
 import android.view.Menu
 import android.view.MenuItem
 import com.wenjian.wanandroid.base.BaseSkinActivity
@@ -35,11 +35,11 @@ class MainActivity : BaseSkinActivity() {
         initFragments()
 
         navigation.apply {
-            enableShiftingMode(false)
-            enableItemShiftingMode(false)
-//            enableAnimation(false)
-            setSmallTextSize(12f)
-            setLargeTextSize(13f)
+//            enableShiftingMode(false)
+//            enableItemShiftingMode(false)
+////            enableAnimation(false)
+//            setSmallTextSize(12f)
+//            setLargeTextSize(13f)
             val stateList = AppCompatResources.getColorStateList(this@MainActivity, R.color.navigation_menu_item_color)
             itemTextColor = stateList
             itemIconTintList = stateList
@@ -119,7 +119,7 @@ class MainActivity : BaseSkinActivity() {
         toolBar.title = charSequence
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.action_search -> {
             launch(SearchActivity::class.java)
             true
@@ -144,8 +144,8 @@ class MainActivity : BaseSkinActivity() {
     }
 
 
-    class MainPagerAdapter(fm: FragmentManager, private val fragments: List<Fragment>) : FragmentPagerAdapter(fm) {
-        override fun getItem(position: Int): Fragment = fragments[position]
+    class MainPagerAdapter(fm: androidx.fragment.app.FragmentManager, private val fragments: List<androidx.fragment.app.Fragment>) : FragmentPagerAdapter(fm) {
+        override fun getItem(position: Int): androidx.fragment.app.Fragment = fragments[position]
         override fun getCount(): Int = fragments.size
     }
 

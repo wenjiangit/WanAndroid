@@ -1,7 +1,7 @@
 package com.wenjian.wanandroid.ui.theme
 
 import android.graphics.Color
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseSkinActivity
 import com.wenjian.wanandroid.entity.Skin
@@ -30,7 +30,8 @@ class ThemeActivity : BaseSkinActivity() {
     private fun initRecycler() {
         themeRecycler.apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(this@ThemeActivity)
+            layoutManager =
+                androidx.recyclerview.widget.LinearLayoutManager(this@ThemeActivity)
             addCustomDecoration()
             adapter = mAdapter
         }

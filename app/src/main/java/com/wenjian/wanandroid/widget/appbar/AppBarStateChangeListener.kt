@@ -1,6 +1,6 @@
 package com.wenjian.wanandroid.widget.appbar
 
-import android.support.design.widget.AppBarLayout
+import com.google.android.material.appbar.AppBarLayout
 
 /**
  * Description: AppBarStateChangeListener

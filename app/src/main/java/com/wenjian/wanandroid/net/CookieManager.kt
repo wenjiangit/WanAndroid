@@ -90,7 +90,7 @@ class CookieManager private constructor(val context: Context) {
 
     private fun call(method: String, arg: String): List<Cookie> {
         val bundle = context.contentResolver.call(Uri.parse(COOKIE_URI), method, arg, null)
-        val string = bundle.getString("ret")
+        val string = bundle?.getString("ret")
         return gson.fromJson(string, genericType<List<Cookie>>())
     }
 

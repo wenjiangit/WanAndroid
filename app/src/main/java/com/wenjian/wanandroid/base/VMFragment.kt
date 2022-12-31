@@ -1,7 +1,7 @@
 package com.wenjian.wanandroid.base
 
-import android.arch.lifecycle.Observer
-import android.support.annotation.CallSuper
+import androidx.lifecycle.Observer
+import androidx.annotation.CallSuper
 import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.extension.toastError
 import com.wenjian.wanandroid.model.DataViewModel

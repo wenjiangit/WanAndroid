@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,14 +16,13 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
     </com.wenjian.wanandroid.widget.ViewPagerView>
 
-    <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
         android:background="@color/white"
         app:elevation="10dp"
-        app:menu="@menu/navigation_items">
+        app:menu="@menu/navigation_items"/>
 
-    </com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,7 +1,6 @@
 package com.wenjian.wanandroid.widget
 
 import android.content.Context
-import android.support.v4.widget.CircularProgressDrawable
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
@@ -23,12 +22,14 @@ class MaterialLoadingView @JvmOverloads constructor(
         private const val CIRCLE_BG_LIGHT: Long = 0xFFFAFAFA
     }
 
-    private var mProgress: CircularProgressDrawable? = null
+    private var mProgress: androidx.swiperefreshlayout.widget.CircularProgressDrawable? = null
 
     init {
         val mCircleView = CircleImageView(context, CIRCLE_BG_LIGHT.toInt())
-        mProgress = CircularProgressDrawable(getContext()).apply {
-            setStyle(CircularProgressDrawable.DEFAULT)
+        mProgress = androidx.swiperefreshlayout.widget.CircularProgressDrawable(
+            getContext()
+        ).apply {
+            setStyle(androidx.swiperefreshlayout.widget.CircularProgressDrawable.DEFAULT)
             setColorSchemeColors(context.getColorAccent())
         }
         mCircleView.setImageDrawable(mProgress)
@@ -42,7 +43,7 @@ class MaterialLoadingView @JvmOverloads constructor(
         mProgress = null
     }
 
-    override fun onVisibilityChanged(changedView: View?, visibility: Int) {
+    override fun onVisibilityChanged(changedView: View, visibility: Int) {
         super.onVisibilityChanged(changedView, visibility)
         if (visibility == View.VISIBLE) {
             mProgress?.start()

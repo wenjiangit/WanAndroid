@@ -1,6 +1,6 @@
 package com.wenjian.wanandroid.model
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import com.wenjian.wanandroid.entity.ListContract
 import com.wenjian.wanandroid.extension.io2Main
 import com.wenjian.wanandroid.helper.ExceptionHelper

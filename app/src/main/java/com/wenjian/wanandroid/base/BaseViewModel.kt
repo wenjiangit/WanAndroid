@@ -1,6 +1,6 @@
 package com.wenjian.wanandroid.base
 
-import android.arch.lifecycle.AndroidViewModel
+import androidx.lifecycle.AndroidViewModel
 import com.wenjian.wanandroid.WanAndroidApp
 import com.wenjian.wanandroid.model.SingleLiveEvent
 import com.wenjian.wanandroid.model.ViewState

@@ -30,7 +30,7 @@ import android.graphics.Region;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.v4.widget.ViewDragHelper;
+import androidx.customview.widget.ViewDragHelper;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;

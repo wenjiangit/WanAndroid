@@ -2,13 +2,13 @@ package com.wenjian.wanandroid.extension
 
 import android.content.Intent
 import android.os.Build
-import android.support.annotation.ColorInt
-import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import com.google.android.material.snackbar.Snackbar
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.google.gson.reflect.TypeToken
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.utils.Tools
@@ -23,7 +23,7 @@ import org.jetbrains.anko.contentView
  */
 
 
-fun Fragment.setupToolBar(@StringRes resId: Int = -1, title: String = "") {
+fun androidx.fragment.app.Fragment.setupToolBar(@StringRes resId: Int = -1, title: String = "") {
     view?.findViewById<Toolbar>(R.id.toolBar)?.let {
         it.setLogo(R.drawable.ic_menu)
         if (resId != -1) {
@@ -53,13 +53,13 @@ fun AppCompatActivity.translucentStatusBar() {
     }
 }
 
-fun Fragment.snak(text: CharSequence) {
-    Snackbar.make(this.view!!, text, Snackbar.LENGTH_SHORT).show()
+fun androidx.fragment.app.Fragment.snak(text: CharSequence) {
+    com.google.android.material.snackbar.Snackbar.make(this.view!!, text, com.google.android.material.snackbar.Snackbar.LENGTH_SHORT).show()
 }
 
 
 fun AppCompatActivity.snak(text: CharSequence) {
-    Snackbar.make(this.contentView!!, text, Snackbar.LENGTH_SHORT).show()
+    com.google.android.material.snackbar.Snackbar.make(this.contentView!!, text, com.google.android.material.snackbar.Snackbar.LENGTH_SHORT).show()
 }
 
 fun AppCompatActivity.setupActionBar(@DrawableRes resId: Int = -1,
@@ -91,7 +91,7 @@ fun AppCompatActivity.launch(clz: Class<*>) {
     startActivity(Intent(this, clz))
 }
 
-fun Fragment.launch(clz: Class<*>) {
+fun androidx.fragment.app.Fragment.launch(clz: Class<*>) {
     startActivity(Intent(context, clz))
 }
 

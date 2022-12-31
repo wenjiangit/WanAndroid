@@ -1,7 +1,7 @@
 package com.wenjian.wanandroid.ui.adapter
 
 import android.graphics.drawable.GradientDrawable
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import android.widget.ImageView
 import android.widget.TextView
 import com.chad.library.adapter.base.BaseViewHolder

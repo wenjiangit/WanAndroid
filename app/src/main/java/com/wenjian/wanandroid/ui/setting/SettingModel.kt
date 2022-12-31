@@ -27,10 +27,10 @@ class SettingModel : DataViewModel() {
     fun isLogin() = UserHelper.isLogin()
 
     fun clearCache() {
-        FileUtil.deleteFile(getApp().externalCacheDir)
+        FileUtil.deleteFile(getApp().externalCacheDir!!)
     }
 
-    fun getCacheSize() = FileUtil.getFormatSize(getApp().externalCacheDir)
+    fun getCacheSize() = FileUtil.getFormatSize(getApp().externalCacheDir!!)
 
     fun modifyPass(curPass: String, newPass: String, rePass: String, handler: (Unit?) -> Unit) = getRepository()
             .modifyPassword(curPass, newPass, rePass, ViewCallbackImpl(viewState), handler)
