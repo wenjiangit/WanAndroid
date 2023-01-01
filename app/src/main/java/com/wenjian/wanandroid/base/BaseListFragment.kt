@@ -1,10 +1,9 @@
 package com.wenjian.wanandroid.base
 
-import androidx.annotation.CallSuper
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
+import androidx.annotation.CallSuper
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.extension.getColorAccent
 import com.wenjian.wanandroid.model.DataViewModel
@@ -18,8 +17,8 @@ import com.wenjian.wanandroid.widget.MyLoadMoreView
  */
 abstract class BaseListFragment<T, VM : DataViewModel>(clz: Class<VM>) : VMFragment<VM>(clz) {
 
-    open lateinit var mRecycler: androidx.recyclerview.widget.RecyclerView
-    open lateinit var mLayRefresh: androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    open lateinit var mRecycler: RecyclerView
+    open lateinit var mLayRefresh: SwipeRefreshLayout
     open lateinit var mAdapter: BaseRecyclerAdapter<T>
 
     open var isLoadMore: Boolean = false
@@ -57,7 +56,7 @@ abstract class BaseListFragment<T, VM : DataViewModel>(clz: Class<VM>) : VMFragm
             }
         }
 
-        mLayRefresh.setColorSchemeColors(context!!.getColorAccent())
+        mLayRefresh.setColorSchemeColors(requireContext().getColorAccent())
         mLayRefresh.setOnRefreshListener {
             refresh()
         }

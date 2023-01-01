@@ -38,7 +38,8 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
     override fun initViews() {
         super.initViews()
         mRecycler.addCustomDecoration(drawable = R.drawable.divider_tree)
-        mBannerPager = LayoutInflater.from(context).inflate(R.layout.lay_home_banner, mRecycler, false) as LoopBanner
+        mBannerPager = LayoutInflater.from(context)
+            .inflate(R.layout.lay_home_banner, mRecycler, false) as LoopBanner
         mBannerPager.adapter = mBannerAdapter
         mBannerPager.openDebug()
         mBannerPager.bindLifecycle(this)
@@ -49,9 +50,9 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
         super.onCreate(savedInstanceState)
         mViewModel.articles.filter { it.isNotEmpty() }
             .onEach {
-            mAdapter.addData(it)
-            mAdapter.loadMoreComplete()
-        }.flowWithLifecycle(lifecycle)
+                mAdapter.addData(it)
+                mAdapter.loadMoreComplete()
+            }.flowWithLifecycle(lifecycle)
             .launchIn(lifecycleScope)
     }
 
