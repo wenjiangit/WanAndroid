@@ -41,7 +41,7 @@ class HomeModel : DataViewModel() {
 
     fun loadMore() {
         if (isOver) {
-            viewState.value = ViewState.empty()
+            updateViewState(ViewState.Empty)
             return
         }
         loadArticles()

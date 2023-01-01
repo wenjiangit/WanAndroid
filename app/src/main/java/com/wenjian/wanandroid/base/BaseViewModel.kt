@@ -3,15 +3,12 @@ package com.wenjian.wanandroid.base
 import androidx.lifecycle.AndroidViewModel
 import com.wenjian.wanandroid.WanAndroidApp
 import com.wenjian.wanandroid.helper.ExceptionHelper
-import com.wenjian.wanandroid.model.SingleLiveEvent
 import com.wenjian.wanandroid.model.ViewState
 import com.wenjian.wanandroid.model.WResult
 import com.wenjian.wanandroid.model.data.DataRepository
 import com.wenjian.wanandroid.model.onFail
 import com.wenjian.wanandroid.model.view.ViewCallback
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 
 /**
  * Description: BaseViewModel
@@ -21,8 +18,8 @@ import kotlinx.coroutines.flow.onStart
  */
 open class BaseViewModel : AndroidViewModel(WanAndroidApp.instance), ViewCallback {
 
-
-    val viewState: SingleLiveEvent<ViewState> = SingleLiveEvent()
+    private val _viewState = MutableStateFlow<ViewState>(ViewState.NoLoading)
+    val viewState = _viewState.asStateFlow()
 
     private var repository: DataRepository? = null
 
@@ -59,19 +56,23 @@ open class BaseViewModel : AndroidViewModel(WanAndroidApp.instance), ViewCallbac
     open fun needRepository() = false
 
     override fun showLoading() {
-        viewState.postValue(ViewState.loading())
+        _viewState.value = ViewState.Loading
     }
 
     override fun hideLoading() {
-        viewState.postValue(ViewState.hideLoading())
+        _viewState.value = ViewState.NoLoading
     }
 
     override fun showEmpty() {
-        viewState.postValue(ViewState.empty())
+        _viewState.value = ViewState.Empty
     }
 
     override fun showError(msg: String?) {
-        viewState.postValue(ViewState.error(msg))
+        _viewState.value = ViewState.Error(msg)
+    }
+
+    open fun updateViewState(viewState: ViewState) {
+        _viewState.value = viewState
     }
 
     open fun getApp() = getApplication<WanAndroidApp>()

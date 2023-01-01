@@ -6,7 +6,6 @@ import com.wenjian.wanandroid.entity.Project
 import com.wenjian.wanandroid.model.DataViewModel
 import com.wenjian.wanandroid.model.SingleLiveEvent
 import com.wenjian.wanandroid.model.ViewState
-import com.wenjian.wanandroid.model.view.ViewCallbackImpl
 
 /**
  * Description: ProjectModel
@@ -22,10 +21,10 @@ class ProjectModel : DataViewModel() {
 
     private val mPageLive: SingleLiveEvent<Int> = SingleLiveEvent()
 
-    fun loadProjectTree() = getRepository().loadProjectTree(ViewCallbackImpl(viewState))
+    fun loadProjectTree() = getRepository().loadProjectTree(this)
 
     fun loadProjects(): LiveData<List<Project>> = Transformations.switchMap(mPageLive) { page ->
-        getRepository().loadProjects(page, cid, ViewCallbackImpl(viewState)) {
+        getRepository().loadProjects(page, cid, this) {
             curPage = it.curPage
             isOver = it.over
         }
@@ -38,7 +37,7 @@ class ProjectModel : DataViewModel() {
 
     fun loadMore() {
         if (isOver) {
-            viewState.value = ViewState.empty()
+            updateViewState(ViewState.Empty)
             return
         }
         mPageLive.value = ++curPage

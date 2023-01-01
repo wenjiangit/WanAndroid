@@ -7,7 +7,6 @@ import com.wenjian.wanandroid.helper.UserHelper
 import com.wenjian.wanandroid.model.DataViewModel
 import com.wenjian.wanandroid.model.SingleLiveEvent
 import com.wenjian.wanandroid.model.ViewState
-import com.wenjian.wanandroid.model.view.ViewCallbackImpl
 
 /**
  * Description ${name}
@@ -23,11 +22,11 @@ class SearchModel : DataViewModel() {
 
     private val mPageLive: SingleLiveEvent<Int> = SingleLiveEvent()
 
-    fun loadHotWords() = getRepository().loadHotWords(ViewCallbackImpl(viewState))
+    fun loadHotWords() = getRepository().loadHotWords(this)
 
     fun loadMore() {
         if (isOver) {
-            viewState.value = ViewState.empty()
+            updateViewState(ViewState.Empty)
             return
         }
         mPageLive.value = ++curPage
@@ -40,7 +39,7 @@ class SearchModel : DataViewModel() {
     fun saveHistory(history: Set<String>) = UserHelper.saveSearchHistory(history)
 
     fun loadData(): LiveData<List<Article>> = Transformations.switchMap(mPageLive) { page ->
-        getRepository().search(lastQuery!!, page, ViewCallbackImpl(viewState)) {
+        getRepository().search(lastQuery!!, page, this) {
             curPage = it.curPage
             isOver = it.over
         }

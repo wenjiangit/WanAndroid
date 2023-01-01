@@ -1,11 +1,12 @@
 package com.wenjian.wanandroid.base
 
-import androidx.lifecycle.Observer
 import androidx.annotation.CallSuper
-import android.view.View
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.wenjian.wanandroid.extension.apiModelDelegate
-import com.wenjian.wanandroid.model.DataViewModel
 import com.wenjian.wanandroid.model.ViewState
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 /**
  * Description: VMActivity
@@ -19,16 +20,15 @@ abstract class VMActivity<VM : BaseViewModel>(clz: Class<VM>) : BaseSkinActivity
 
     @CallSuper
     override fun bindViewModel() {
-        mViewModel.viewState.observe(this, Observer { state ->
-            state?.let {
-                when (it.state) {
-                    ViewState.State.LOADING -> showLoading()
-                    ViewState.State.ERROR -> showError(it.extra)
-                    ViewState.State.EMPTY -> showEmpty()
-                    ViewState.State.HIDE_LOADING ->hideLoading()
-                }
+        mViewModel.viewState.onEach { state ->
+            when (state) {
+                is ViewState.Loading -> showLoading()
+                is ViewState.Error -> showError(state.msg)
+                is ViewState.Empty -> showEmpty()
+                is ViewState.NoLoading -> hideLoading()
             }
-        })
+        }.flowWithLifecycle(lifecycle)
+            .launchIn(lifecycleScope)
     }
 
 }

@@ -4,7 +4,6 @@ import com.wenjian.wanandroid.helper.UserHelper
 import com.wenjian.wanandroid.model.DataViewModel
 import com.wenjian.wanandroid.model.RxBus
 import com.wenjian.wanandroid.model.SkinChangeEvent
-import com.wenjian.wanandroid.model.view.ViewCallbackImpl
 import com.wenjian.wanandroid.utils.FileUtil
 import io.reactivex.disposables.Disposable
 
@@ -18,7 +17,7 @@ class SettingModel : DataViewModel() {
 
     private var disposable: Disposable? = null
 
-    fun logout() = getRepository().logout(ViewCallbackImpl(viewState)) {
+    fun logout() = getRepository().logout(this) {
         //退出登录后,清空本地用户信息
         UserHelper.logOut()
         RxBus.post(SkinChangeEvent())
@@ -33,7 +32,7 @@ class SettingModel : DataViewModel() {
     fun getCacheSize() = FileUtil.getFormatSize(getApp().externalCacheDir!!)
 
     fun modifyPass(curPass: String, newPass: String, rePass: String, handler: (Unit?) -> Unit) = getRepository()
-            .modifyPassword(curPass, newPass, rePass, ViewCallbackImpl(viewState), handler)
+            .modifyPassword(curPass, newPass, rePass, this, handler)
 
 
     override fun onCleared() {

@@ -1,15 +1,11 @@
 package com.wenjian.wanandroid.ui.knowledge
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.wenjian.wanandroid.entity.Article
-import com.wenjian.wanandroid.entity.Resource
-import com.wenjian.wanandroid.entity.TreeEntry
 import com.wenjian.wanandroid.model.DataViewModel
 import com.wenjian.wanandroid.model.SingleLiveEvent
 import com.wenjian.wanandroid.model.ViewState
-import com.wenjian.wanandroid.model.view.ViewCallbackImpl
 
 /**
  * Description TreeModel
@@ -25,10 +21,10 @@ class TreeModel : DataViewModel() {
 
     private val mPageLive: SingleLiveEvent<Int> = SingleLiveEvent()
 
-    fun loadTree() = getRepository().loadTree(ViewCallbackImpl(viewState))
+    fun loadTree() = getRepository().loadTree(this)
 
     fun loadData(): LiveData<List<Article>> = Transformations.switchMap(mPageLive) { page ->
-        getRepository().loadTreeArticles(page, cid, ViewCallbackImpl(viewState)) {
+        getRepository().loadTreeArticles(page, cid, this) {
             isOver = it.over
             pageCount = it.curPage
         }
@@ -41,7 +37,7 @@ class TreeModel : DataViewModel() {
 
     fun loadMore() {
         if (isOver) {
-            viewState.value = ViewState.empty()
+            updateViewState(ViewState.Empty)
             return
         }
         mPageLive.value = ++pageCount
