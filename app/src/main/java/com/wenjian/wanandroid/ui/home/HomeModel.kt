@@ -23,14 +23,14 @@ class HomeModel : DataViewModel() {
     private val _articles = MutableStateFlow<List<Article>>(emptyList())
     val articles = _articles.asStateFlow()
 
-    fun loadHomeData() = getRepository().loadHomeData()
+    fun loadHomeData() = repository.loadHomeData()
         .withLoading()
         .withErrorHandle()
         .mapNotNull { it.getOrNull() }
         .flowOn(Dispatchers.IO)
 
     private fun loadArticles() {
-        getRepository().loadArticles(++curPage)
+        repository.loadArticles(++curPage)
             .onSuccess {
                 isOver = it.over
                 curPage = it.curPage

@@ -15,12 +15,12 @@ import com.wenjian.wanandroid.model.UserInfoRefreshEvent
 
 class UserModel : DataViewModel() {
 
-    fun login(username: String, password: String) = getRepository()
+    fun login(username: String, password: String) = repository
             .login(username, password, this) {
                 handleUserInfo(it!!)
             }
 
-    fun register(username: String, password: String, repass: String) = getRepository()
+    fun register(username: String, password: String, repass: String) = repository
             .register(username, password, repass, this) {
                 handleUserInfo(it!!)
             }

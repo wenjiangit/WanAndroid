@@ -20,7 +20,7 @@ class CollectModel : DataViewModel() {
     private var isOver: Boolean = false
 
     fun loadCollects(): LiveData<List<Article>> = Transformations.switchMap(mPageLive) { page ->
-        getRepository().loadCollects(page, this) {
+        repository.loadCollects(page, this) {
             curPage = it.curPage
             isOver = it.curPage >= it.pageCount - 1
         }
@@ -39,8 +39,8 @@ class CollectModel : DataViewModel() {
         mPageLive.value = ++curPage
     }
 
-    fun collect(id: Int) = getRepository().collect(id, this)
+    fun collect(id: Int) = repository.collect(id, this)
 
-    fun uncollect(id: Int, originId: Int = -1) = getRepository().unCollect(id, originId, this)
+    fun uncollect(id: Int, originId: Int = -1) = repository.unCollect(id, originId, this)
 
 }

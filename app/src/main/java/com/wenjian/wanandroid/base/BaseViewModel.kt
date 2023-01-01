@@ -20,8 +20,7 @@ open class BaseViewModel : AndroidViewModel(WanAndroidApp.instance), ViewCallbac
 
     private val _viewState = MutableStateFlow<ViewState>(ViewState.NoLoading)
     val viewState = _viewState.asStateFlow()
-
-    private var repository: DataRepository? = null
+    val repository by lazy { DataRepository() }
 
     fun <T> Flow<WResult<T>>.withLoading(): Flow<WResult<T>> {
         return this.onStart {
@@ -41,19 +40,8 @@ open class BaseViewModel : AndroidViewModel(WanAndroidApp.instance), ViewCallbac
 
     override fun onCleared() {
         super.onCleared()
-        repository?.unSubscribe()
+        repository.unSubscribe()
     }
-
-    fun getRepository(): DataRepository {
-        if (!needRepository()) {
-            throw UnsupportedOperationException("you should set needRepository true")
-        }
-        return repository ?: DataRepository.getInstance().also {
-            repository = it
-        }
-    }
-
-    open fun needRepository() = false
 
     override fun showLoading() {
         _viewState.value = ViewState.Loading

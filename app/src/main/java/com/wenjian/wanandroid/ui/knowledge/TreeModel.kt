@@ -21,10 +21,10 @@ class TreeModel : DataViewModel() {
 
     private val mPageLive: SingleLiveEvent<Int> = SingleLiveEvent()
 
-    fun loadTree() = getRepository().loadTree(this)
+    fun loadTree() = repository.loadTree(this)
 
     fun loadData(): LiveData<List<Article>> = Transformations.switchMap(mPageLive) { page ->
-        getRepository().loadTreeArticles(page, cid, this) {
+        repository.loadTreeArticles(page, cid, this) {
             isOver = it.over
             pageCount = it.curPage
         }

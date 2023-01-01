@@ -11,7 +11,4 @@ import com.wenjian.wanandroid.base.BaseViewModel
 
 open class DataViewModel : BaseViewModel() {
 
-    override fun needRepository(): Boolean {
-        return true
-    }
 }

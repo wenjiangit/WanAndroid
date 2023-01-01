@@ -17,7 +17,7 @@ class SettingModel : DataViewModel() {
 
     private var disposable: Disposable? = null
 
-    fun logout() = getRepository().logout(this) {
+    fun logout() = repository.logout(this) {
         //退出登录后,清空本地用户信息
         UserHelper.logOut()
         RxBus.post(SkinChangeEvent())
@@ -31,7 +31,7 @@ class SettingModel : DataViewModel() {
 
     fun getCacheSize() = FileUtil.getFormatSize(getApp().externalCacheDir!!)
 
-    fun modifyPass(curPass: String, newPass: String, rePass: String, handler: (Unit?) -> Unit) = getRepository()
+    fun modifyPass(curPass: String, newPass: String, rePass: String, handler: (Unit?) -> Unit) = repository
             .modifyPassword(curPass, newPass, rePass, this, handler)
 
 

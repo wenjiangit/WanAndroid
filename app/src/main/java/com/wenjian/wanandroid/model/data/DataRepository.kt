@@ -7,9 +7,8 @@ import com.wenjian.wanandroid.model.WResult
 import com.wenjian.wanandroid.model.asWResultFlow
 import com.wenjian.wanandroid.model.view.ViewCallback
 import com.wenjian.wanandroid.net.Resp
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 
 /**
  * Description: DataRepository
@@ -17,8 +16,7 @@ import kotlinx.coroutines.flow.*
  *
  * @author jian.wen@ubtrobot.com
  */
-class DataRepository private constructor() :
-    BaseRepository() {
+class DataRepository : BaseRepository() {
 
     fun loadArticles(pager: Int): Flow<WResult<ListContract<List<Article>>>> {
         return mService.loadArticles(pager).asWResultFlow()
@@ -124,15 +122,4 @@ class DataRepository private constructor() :
             handle
         )
     }
-
-    companion object {
-        private var sInstance: DataRepository? = null
-
-        fun getInstance() = sInstance ?: synchronized(DataRepository::class.java) {
-            sInstance ?: DataRepository().also {
-                sInstance = it
-            }
-        }
-    }
-
 }
