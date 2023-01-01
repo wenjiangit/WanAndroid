@@ -60,6 +60,8 @@ class MainActivity : BaseSkinActivity() {
             }
         }
 
+        doTabSelect(0, navigation.menu.getItem(0).title)
+
         //导航栏随着appbar做相反运动
         app_bar.addOnOffsetChangedListener(object : AppBarStateChangeListener() {
             override fun onStateChange(appBarLayout: AppBarLayout, state: State) {
