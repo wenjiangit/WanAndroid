@@ -41,7 +41,7 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
         mBannerPager = LayoutInflater.from(context)
             .inflate(R.layout.lay_home_banner, mRecycler, false) as LoopBanner
         mBannerPager.adapter = mBannerAdapter
-        mBannerPager.openDebug()
+//        mBannerPager.openDebug()
         mBannerPager.bindLifecycle(this)
         mAdapter.addHeaderView(mBannerPager)
     }
