@@ -66,6 +66,10 @@ dependencies {
 
     // 协程
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
-    // 协程扩展库
+    // 协程扩展库 lifecyclescope
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    // viewmodelscope
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+
+    implementation 'com.github.zyj1609wz:RetrofitFlowCallAdapter:1.1.0'
 }

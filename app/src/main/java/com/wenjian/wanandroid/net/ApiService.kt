@@ -3,6 +3,7 @@ package com.wenjian.wanandroid.net
 import com.wenjian.wanandroid.entity.*
 import io.reactivex.Maybe
 import io.reactivex.Observable
+import kotlinx.coroutines.flow.Flow
 import retrofit2.http.*
 
 /**
@@ -17,13 +18,13 @@ interface ApiService {
      * 首页banner
      */
     @GET("/banner/json")
-    fun loadBanners(): Observable<Resp<List<Banner>>>
+    fun loadBanners(): Flow<Resp<List<Banner>>>
 
     /**
      * 首页文章
      */
     @GET("/article/list/{pager}/json")
-    fun loadArticles(@Path("pager") pager: Int): Observable<PagingResp<List<Article>>>
+    fun loadArticles(@Path("pager") pager: Int): Flow<PagingResp<List<Article>>>
 
     /**
      * 体系

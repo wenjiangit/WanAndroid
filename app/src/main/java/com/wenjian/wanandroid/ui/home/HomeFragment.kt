@@ -1,8 +1,10 @@
 package com.wenjian.wanandroid.ui.home
 
-import androidx.lifecycle.Observer
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.ImageView
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.wenjian.loopbanner.LoopAdapter
 import com.wenjian.loopbanner.LoopBanner
 import com.wenjian.wanandroid.R
@@ -15,6 +17,9 @@ import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.loadUrl
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
 import com.wenjian.wanandroid.ui.web.WebActivity
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 /**
  * Description: HomeFragment
@@ -40,14 +45,14 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
         mAdapter.addHeaderView(mBannerPager)
     }
 
-    override fun subscribeUi() {
-        super.subscribeUi()
-        mViewModel.loadArticles().observe(this, Observer { data ->
-            data?.let {
-                mAdapter.addData(it)
-                mAdapter.loadMoreComplete()
-            }
-        })
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mViewModel.articles.filter { it.isNotEmpty() }
+            .onEach {
+            mAdapter.addData(it)
+            mAdapter.loadMoreComplete()
+        }.flowWithLifecycle(lifecycle)
+            .launchIn(lifecycleScope)
     }
 
     override fun onLoadMore() {
@@ -56,14 +61,12 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
 
     override fun onLazyLoad() {
         super.onLazyLoad()
-        mViewModel.loadHomeData().observe(this, Observer { data ->
-            data?.let { pair ->
-                val (bannerData, second) = pair
-                println(bannerData.map { it.imagePath })
-                mBannerAdapter.setNewData(bannerData)
-                mAdapter.setNewData(second)
-            }
-        })
+        mViewModel.loadHomeData().onEach { pair ->
+            val (bannerData, second) = pair
+            println(bannerData.map { it.imagePath })
+            mBannerAdapter.setNewData(bannerData)
+            mAdapter.setNewData(second)
+        }.launchIn(lifecycleScope)
     }
 
     companion object {

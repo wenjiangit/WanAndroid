@@ -38,7 +38,7 @@ open class BaseRepository {
                         callback.showError(it.errorMsg)
                     }
                 }, {
-                    callback.showError(ExceptionHelper.getErrorMsg(it))
+                    callback.showError(ExceptionHelper.parseExceptionMsg(it))
                 },{
                     callback.hideLoading()
                 }))
@@ -59,7 +59,7 @@ open class BaseRepository {
                         callback.showError(it.errorMsg)
                     }
                 }, {
-                    callback.showError(ExceptionHelper.getErrorMsg(it))
+                    callback.showError(ExceptionHelper.parseExceptionMsg(it))
                 },{
                     callback.hideLoading()
                 }))

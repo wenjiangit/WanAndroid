@@ -14,7 +14,7 @@ import com.wenjian.wanandroid.net.ApiService
 class CommonApiModelFactory : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return modelClass.newInstance()
     }
 }

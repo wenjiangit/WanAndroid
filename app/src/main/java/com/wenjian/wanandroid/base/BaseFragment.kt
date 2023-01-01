@@ -54,6 +54,26 @@ abstract class BaseFragment : Fragment(){
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.i(TAG, "onStart: ")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.i(TAG, "onResume: ")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.i(TAG, "onPause: ")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.i(TAG, "onStop: ")
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.i(TAG, "onViewCreated")

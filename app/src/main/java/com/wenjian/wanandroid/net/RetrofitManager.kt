@@ -2,6 +2,7 @@ package com.wenjian.wanandroid.net
 
 import com.wenjian.wanandroid.BuildConfig
 import com.wenjian.wanandroid.WanAndroidApp
+import com.zyj.retrofit.adapter.FlowCallAdapterFactory
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -20,7 +21,7 @@ import java.util.concurrent.TimeUnit
  */
 object RetrofitManager {
 
-    private const val BASE_URL = "http://www.wanandroid.com"
+    private const val BASE_URL = "https://www.wanandroid.com"
     private const val TIME_OUT = 10L
     private const val MAX_CACHE_SIZE: Long = 50 * 1024 * 1024
 
@@ -64,6 +65,7 @@ object RetrofitManager {
         retrofit = Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(FlowCallAdapterFactory.createAsync())
                 .baseUrl(BASE_URL)
                 .client(okhttpBuilder.build())
                 .build()

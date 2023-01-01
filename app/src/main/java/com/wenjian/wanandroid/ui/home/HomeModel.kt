@@ -1,12 +1,13 @@
 package com.wenjian.wanandroid.ui.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.model.DataViewModel
-import com.wenjian.wanandroid.model.SingleLiveEvent
 import com.wenjian.wanandroid.model.ViewState
-import com.wenjian.wanandroid.model.view.ViewCallbackImpl
+import com.wenjian.wanandroid.model.getOrNull
+import com.wenjian.wanandroid.model.onSuccess
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 
 /**
  * Description: HomeModel
@@ -18,18 +19,24 @@ import com.wenjian.wanandroid.model.view.ViewCallbackImpl
 class HomeModel : DataViewModel() {
 
     private var curPage: Int = 0
-
     private var isOver: Boolean = false
+    private val _articles = MutableStateFlow<List<Article>>(emptyList())
+    val articles = _articles.asStateFlow()
 
-    private val mPageLive: SingleLiveEvent<Int> = SingleLiveEvent()
+    fun loadHomeData() = getRepository().loadHomeData()
+        .withLoading()
+        .withErrorHandle()
+        .mapNotNull { it.getOrNull() }
+        .flowOn(Dispatchers.IO)
 
-    fun loadHomeData() = getRepository().loadHomeData(ViewCallbackImpl(viewState))
-
-    fun loadArticles(): LiveData<List<Article>> = Transformations.switchMap(mPageLive) { page ->
-        getRepository().loadArticles(page, ViewCallbackImpl(viewState)) {
-            isOver = it.over
-            curPage = it.curPage
-        }
+    private fun loadArticles() {
+        getRepository().loadArticles(++curPage)
+            .onSuccess {
+                isOver = it.over
+                curPage = it.curPage
+                _articles.value = it.datas
+            }.withErrorHandle()
+            .launchIn(viewModelScope)
     }
 
     fun loadMore() {
@@ -37,6 +44,6 @@ class HomeModel : DataViewModel() {
             viewState.value = ViewState.empty()
             return
         }
-        mPageLive.value = ++curPage
+        loadArticles()
     }
 }
