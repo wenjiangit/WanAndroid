@@ -1,12 +1,14 @@
 package com.wenjian.wanandroid.ui.search
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.helper.UserHelper
 import com.wenjian.wanandroid.model.DataViewModel
-import com.wenjian.wanandroid.model.SingleLiveEvent
 import com.wenjian.wanandroid.model.ViewState
+import com.wenjian.wanandroid.model.onSuccess
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
 
 /**
  * Description ${name}
@@ -20,16 +22,18 @@ class SearchModel : DataViewModel() {
     private var curPage: Int = 0
     private var isOver: Boolean = false
 
-    private val mPageLive: SingleLiveEvent<Int> = SingleLiveEvent()
+    private val _articles = MutableStateFlow<List<Article>?>(null)
+    val articles : StateFlow<List<Article>?> = _articles
 
-    fun loadHotWords() = repository.loadHotWords(this)
+    fun loadHotWords() = repository.loadHotWords()
+        .withCommonHandler()
 
     fun loadMore() {
         if (isOver) {
             updateViewState(ViewState.Empty)
             return
         }
-        mPageLive.value = ++curPage
+        loadData(++curPage)
     }
 
     fun loadSearchHistory(): Set<String> = UserHelper.loadSearchHistory()
@@ -38,15 +42,16 @@ class SearchModel : DataViewModel() {
 
     fun saveHistory(history: Set<String>) = UserHelper.saveSearchHistory(history)
 
-    fun loadData(): LiveData<List<Article>> = Transformations.switchMap(mPageLive) { page ->
-        repository.search(lastQuery!!, page, this) {
+    private fun loadData(page: Int) = repository.search(lastQuery!!, page)
+        .withCommonHandler()
+        .onSuccess {
             curPage = it.curPage
             isOver = it.over
-        }
-    }
+            _articles.value = it.datas
+        }.launchIn(viewModelScope)
 
     fun doSearch(query: String) {
         lastQuery = query
-        mPageLive.value = 0
+        loadData(0)
     }
 }

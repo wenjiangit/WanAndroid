@@ -23,7 +23,7 @@ import org.jetbrains.anko.contentView
  */
 
 
-fun androidx.fragment.app.Fragment.setupToolBar(@StringRes resId: Int = -1, title: String = "") {
+fun Fragment.setupToolBar(@StringRes resId: Int = -1, title: String = "") {
     view?.findViewById<Toolbar>(R.id.toolBar)?.let {
         it.setLogo(R.drawable.ic_menu)
         if (resId != -1) {
@@ -53,19 +53,21 @@ fun AppCompatActivity.translucentStatusBar() {
     }
 }
 
-fun androidx.fragment.app.Fragment.snak(text: CharSequence) {
-    com.google.android.material.snackbar.Snackbar.make(this.view!!, text, com.google.android.material.snackbar.Snackbar.LENGTH_SHORT).show()
+fun Fragment.snak(text: CharSequence) {
+    Snackbar.make(requireView(), text, Snackbar.LENGTH_SHORT).show()
 }
 
 
 fun AppCompatActivity.snak(text: CharSequence) {
-    com.google.android.material.snackbar.Snackbar.make(this.contentView!!, text, com.google.android.material.snackbar.Snackbar.LENGTH_SHORT).show()
+    Snackbar.make(this.contentView!!, text, Snackbar.LENGTH_SHORT).show()
 }
 
-fun AppCompatActivity.setupActionBar(@DrawableRes resId: Int = -1,
-                                     title: String? = getString(R.string.app_name),
-                                     show: Boolean = true,
-                                     listener: () -> Unit = { finish() }) {
+fun AppCompatActivity.setupActionBar(
+    @DrawableRes resId: Int = -1,
+    title: String? = getString(R.string.app_name),
+    show: Boolean = true,
+    listener: () -> Unit = { finish() }
+) {
 
 
     findViewById<Toolbar>(R.id.toolBar)!!.let { it ->

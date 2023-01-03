@@ -1,20 +1,22 @@
 package com.wenjian.wanandroid.ui.search
 
-import androidx.lifecycle.Observer
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import androidx.appcompat.widget.SearchView
 import android.view.Menu
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.lifecycleScope
 import co.lujun.androidtagview.TagView
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMActivity
 import com.wenjian.wanandroid.extension.setupActionBar
+import com.wenjian.wanandroid.model.onSuccess
 import kotlinx.android.synthetic.main.activity_search.*
+import kotlinx.coroutines.flow.launchIn
 
 class SearchActivity : VMActivity<SearchModel>(SearchModel::class.java) {
 
@@ -67,11 +69,9 @@ class SearchActivity : VMActivity<SearchModel>(SearchModel::class.java) {
     }
 
     private fun subscribeUi() {
-        mViewModel.loadHotWords().observe(this, Observer { it ->
-            it?.apply {
-                hotwordsContainer.tags = this.map { it.name }
-            }
-        })
+        mViewModel.loadHotWords().onSuccess { list ->
+            hotwordsContainer.tags = list.map { it.name }
+        }.launchIn(lifecycleScope)
     }
 
     private fun addFragments() {
@@ -121,7 +121,7 @@ class SearchActivity : VMActivity<SearchModel>(SearchModel::class.java) {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (!query.isNullOrBlank()) {
-                    searchFragment.search(query!!)
+                    searchFragment.search(query)
                     addToHistory(query)
                     hideSoftKeyboard(searchView)
                     hotPanel.visibility = View.GONE

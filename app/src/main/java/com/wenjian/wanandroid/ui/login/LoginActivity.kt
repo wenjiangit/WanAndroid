@@ -1,12 +1,14 @@
 package com.wenjian.wanandroid.ui.login
 
-import androidx.lifecycle.Observer
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import com.wenjian.wanandroid.MainActivity
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMActivity
 import com.wenjian.wanandroid.extension.*
+import com.wenjian.wanandroid.model.onSuccess
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.coroutines.flow.launchIn
 
 /**
  * Description: LoginActivity
@@ -77,11 +79,11 @@ class LoginActivity : VMActivity<UserModel>(UserModel::class.java), View.OnClick
     }
 
     private fun login(user: String, pass: String) {
-        mViewModel.login(user,pass)
-                .observe(this, Observer {
-                    toastSuccess("登录成功")
-                    launch(MainActivity::class.java)
-                })
+        mViewModel.login(user, pass)
+            .onSuccess {
+                toastSuccess("登录成功")
+                launch(MainActivity::class.java)
+            }.launchIn(lifecycleScope)
     }
 
     private fun onRegister() {
@@ -101,9 +103,9 @@ class LoginActivity : VMActivity<UserModel>(UserModel::class.java), View.OnClick
 
     private fun register(user: String, pass: String, repass: String) {
         mViewModel.register(user, pass, repass)
-                .observe(this, Observer {
-                    toastSuccess("注册成功")
-                    launch(MainActivity::class.java)
-                })
+            .onSuccess {
+                toastSuccess("注册成功")
+                launch(MainActivity::class.java)
+            }.launchIn(lifecycleScope)
     }
 }

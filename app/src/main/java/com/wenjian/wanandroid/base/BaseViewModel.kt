@@ -44,12 +44,6 @@ open class BaseViewModel : AndroidViewModel(WanAndroidApp.instance), ViewCallbac
             .flowOn(Dispatchers.IO)
     }
 
-
-    override fun onCleared() {
-        super.onCleared()
-        repository.unSubscribe()
-    }
-
     override fun showLoading() {
         _viewState.value = ViewState.Loading
     }

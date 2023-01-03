@@ -1,13 +1,19 @@
 package com.wenjian.wanandroid.ui.project
 
-import androidx.lifecycle.Observer
 import android.os.Bundle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.wenjian.wanandroid.base.BaseListFragment
 import com.wenjian.wanandroid.base.BaseRecyclerAdapter
 import com.wenjian.wanandroid.entity.Project
 import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.extraDelegate
+import com.wenjian.wanandroid.extension.logE
 import com.wenjian.wanandroid.ui.adapter.ProjectListAdapter
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 /**
  * Description: ProjectListFragment
@@ -31,9 +37,12 @@ class ProjectListFragment : BaseListFragment<Project, ProjectModel>(ProjectModel
 
     override fun subscribeUi() {
         super.subscribeUi()
-        mViewModel.loadProjects().observe(this, Observer { data ->
-            showContent(data)
-        })
+        mViewModel.projects.filterNotNull()
+            .onEach { data ->
+                showContent(data)
+                logE("showContent")
+            }.flowWithLifecycle(lifecycle)
+            .launchIn(lifecycleScope)
     }
 
     override fun initViews() {

@@ -1,11 +1,13 @@
 package com.wenjian.wanandroid.ui.collect
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.model.DataViewModel
-import com.wenjian.wanandroid.model.SingleLiveEvent
 import com.wenjian.wanandroid.model.ViewState
+import com.wenjian.wanandroid.model.onSuccess
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
 
 /**
  * Description: CollectModel
@@ -15,28 +17,30 @@ import com.wenjian.wanandroid.model.ViewState
  */
 class CollectModel : DataViewModel() {
 
-    private val mPageLive: SingleLiveEvent<Int> = SingleLiveEvent()
     private var curPage: Int = 0
     private var isOver: Boolean = false
 
-    fun loadCollects(): LiveData<List<Article>> = Transformations.switchMap(mPageLive) { page ->
-        repository.loadCollects(page, this) {
+    private val _articles = MutableStateFlow<List<Article>>(emptyList())
+    val articles : StateFlow<List<Article>> = _articles
+
+    private fun loadCollects(page: Int) = repository.loadCollects(page)
+        .withCommonHandler()
+        .onSuccess {
             curPage = it.curPage
             isOver = it.curPage >= it.pageCount - 1
-        }
-    }
+            _articles.value = it.datas
+        }.launchIn(viewModelScope)
 
     fun refresh() {
-        mPageLive.value = 0
+        loadCollects(0)
     }
-
 
     fun loadMore() {
         if (isOver) {
             updateViewState(ViewState.Empty)
             return
         }
-        mPageLive.value = ++curPage
+        loadCollects(++curPage)
     }
 
     fun collect(id: Int) = repository.collect(id)

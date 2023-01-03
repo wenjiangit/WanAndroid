@@ -10,6 +10,7 @@ import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.extraDelegate
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -35,9 +36,11 @@ class ArticleListFragment : BaseListFragment<Article, TreeModel>(TreeModel::clas
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mViewModel.loadData().onEach {  data ->
-            showContent(data)
-        }.flowWithLifecycle(lifecycle)
+        mViewModel.articles
+            .filterNotNull()
+            .onEach { data ->
+                showContent(data)
+            }.flowWithLifecycle(lifecycle)
             .launchIn(lifecycleScope)
     }
 

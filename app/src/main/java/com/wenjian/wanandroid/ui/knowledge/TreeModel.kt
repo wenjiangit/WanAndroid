@@ -1,5 +1,6 @@
 package com.wenjian.wanandroid.ui.knowledge
 
+import androidx.lifecycle.viewModelScope
 import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.model.DataViewModel
 import com.wenjian.wanandroid.model.ViewState
@@ -23,20 +24,24 @@ class TreeModel : DataViewModel() {
         .withCommonHandler()
         .mapNotNull { it.getOrNull() }
 
-    private val mPageLive: MutableStateFlow<Int> = MutableStateFlow(0)
 
-    fun loadData(): Flow<List<Article>> {
-        return mPageLive.flatMapConcat { repository.loadTreeArticles(it, cid) }
+    private val _articles = MutableStateFlow<List<Article>?>(null)
+    val articles: StateFlow<List<Article>?> = _articles
+
+    private fun loadData(page: Int) {
+        repository.loadTreeArticles(page, cid)
             .withCommonHandler()
             .onSuccess {
                 isOver = it.over
                 pageCount = it.pageCount
-            }.mapNotNull { it.getOrNull()?.datas }
+                _articles.value = it.datas
+            }
+            .launchIn(viewModelScope)
     }
 
     fun refresh(cid: Int) {
         this.cid = cid
-        mPageLive.value = 0
+        loadData(0)
     }
 
     fun loadMore() {
@@ -44,7 +49,7 @@ class TreeModel : DataViewModel() {
             updateViewState(ViewState.Empty)
             return
         }
-        mPageLive.update { ++pageCount }
+        loadData(++pageCount)
     }
 
 }
