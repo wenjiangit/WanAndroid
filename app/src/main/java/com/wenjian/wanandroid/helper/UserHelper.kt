@@ -94,17 +94,17 @@ object UserHelper {
 
 
     fun autoLogin() {
-        if (isLogin()) {
-            val userInfo = getUserInfo()!!
-            RetrofitManager.service.login(userInfo.username, userInfo.password)
-                    .io2Main()
-                    .subscribe {
-                        if (it.success()) {
-                            saveUserInfo(it.data)
-                            Toast.makeText(WanAndroidApp.instance, "自动登录成功", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-        }
+//        if (isLogin()) {
+//            val userInfo = getUserInfo()!!
+//            RetrofitManager.service.login(userInfo.username, userInfo.password)
+//                    .io2Main()
+//                    .subscribe {
+//                        if (it.success()) {
+//                            saveUserInfo(it.data)
+//                            Toast.makeText(WanAndroidApp.instance, "自动登录成功", Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+//        }
     }
 
 }

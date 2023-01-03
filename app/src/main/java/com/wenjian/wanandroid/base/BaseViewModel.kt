@@ -8,6 +8,7 @@ import com.wenjian.wanandroid.model.WResult
 import com.wenjian.wanandroid.model.data.DataRepository
 import com.wenjian.wanandroid.model.onFail
 import com.wenjian.wanandroid.model.view.ViewCallback
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 
 /**
@@ -35,6 +36,12 @@ open class BaseViewModel : AndroidViewModel(WanAndroidApp.instance), ViewCallbac
             ExceptionHelper.handleFailure(it)
             showError(it.errorMsg)
         }
+    }
+
+    fun <T> Flow<WResult<T>>.withCommonHandler(): Flow<WResult<T>> {
+        return this.withLoading()
+            .withErrorHandle()
+            .flowOn(Dispatchers.IO)
     }
 
 

@@ -1,11 +1,9 @@
 package com.wenjian.wanandroid.model.data
 
-import androidx.lifecycle.LiveData
 import com.wenjian.wanandroid.entity.*
 import com.wenjian.wanandroid.model.BaseRepository
 import com.wenjian.wanandroid.model.WResult
 import com.wenjian.wanandroid.model.asWResultFlow
-import com.wenjian.wanandroid.model.view.ViewCallback
 import com.wenjian.wanandroid.net.Resp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -18,7 +16,7 @@ import kotlinx.coroutines.flow.combine
  */
 class DataRepository : BaseRepository() {
 
-    fun loadArticles(pager: Int): Flow<WResult<ListContract<List<Article>>>> {
+    fun loadArticles(pager: Int): Flow<WResult<ListContract<Article>>> {
         return mService.loadArticles(pager).asWResultFlow()
     }
 
@@ -34,92 +32,73 @@ class DataRepository : BaseRepository() {
         }.asWResultFlow()
     }
 
-    fun loadTree(callback: ViewCallback): LiveData<List<TreeEntry>> {
-        return doSimpleAction(mService.loadTree(), callback) {}
+    fun loadTree(): Flow<WResult<List<TreeEntry>>> {
+        return mService.loadTree().asWResultFlow()
     }
 
     fun search(
         k: String,
-        page: Int,
-        callback: ViewCallback,
-        handle: (ListContract<List<Article>>) -> Unit
-    ): LiveData<List<Article>> {
-        return doListAction(mService.search(k, page), callback, handle)
+        page: Int
+    ): Flow<WResult<ListContract<Article>>> {
+        return mService.search(k, page).asWResultFlow()
     }
 
     fun loadTreeArticles(
         pager: Int,
-        cid: Int,
-        callback: ViewCallback,
-        handle: (ListContract<List<Article>>) -> Unit
-    ): LiveData<List<Article>> {
-        return doListAction(mService.loadTreeArticles(pager, cid), callback, handle)
+        cid: Int
+    ): Flow<WResult<ListContract<Article>>> {
+        return mService.loadTreeArticles(pager, cid).asWResultFlow()
     }
 
-    fun loadHotWords(callback: ViewCallback): LiveData<List<HotWord>> {
-        return doSimpleAction(mService.loadHotWords(), callback) {}
+    fun loadHotWords(): Flow<WResult<List<HotWord>>> {
+        return mService.loadHotWords().asWResultFlow()
     }
 
-    fun loadProjectTree(callback: ViewCallback): LiveData<List<ProjectTree>> {
-        return doSimpleAction(mService.loadProjectTree(), callback) {}
+    fun loadProjectTree(): Flow<WResult<List<ProjectTree>>> {
+        return mService.loadProjectTree().asWResultFlow()
     }
 
     fun loadProjects(
-        pager: Int, cid: Int,
-        callback: ViewCallback,
-        handle: (ListContract<List<Project>>) -> Unit
-    ): LiveData<List<Project>> {
-        return doListAction(mService.loadProjects(pager, cid), callback, handle)
+        pager: Int, cid: Int
+    ): Flow<WResult<ListContract<Project>>> {
+        return mService.loadProjects(pager, cid).asWResultFlow()
     }
 
     fun login(
-        username: String, password: String,
-        callback: ViewCallback,
-        handle: (UserInfo?) -> Unit
-    ): LiveData<UserInfo> {
-        return doSimpleAction(mService.login(username, password), callback, handle)
+        username: String, password: String
+    ): Flow<WResult<UserInfo>> {
+        return mService.login(username, password).asWResultFlow()
     }
 
     fun register(
-        username: String, password: String, repassword: String,
-        callback: ViewCallback,
-        handle: (UserInfo?) -> Unit
-    ):
-            LiveData<UserInfo> {
-        return doSimpleAction(mService.register(username, password, repassword), callback, handle)
+        username: String, password: String, repassword: String
+    ): Flow<WResult<UserInfo>> {
+        return mService.register(username, password, repassword).asWResultFlow()
     }
 
-    fun logout(callback: ViewCallback, handle: (Unit?) -> Unit): LiveData<Unit> {
-        return doSimpleAction(mService.logout(), callback, handle)
+    fun logout(): Flow<WResult<Unit>> {
+        return mService.logout().asWResultFlow()
     }
 
     fun loadCollects(
-        pager: Int,
-        callback: ViewCallback,
-        handle: (ListContract<List<Article>>) -> Unit
-    ): LiveData<List<Article>> {
-        return doListAction(mService.loadCollects(pager), callback, handle)
+        pager: Int
+    ): Flow<WResult<ListContract<Article>>> {
+        return mService.loadCollects(pager).asWResultFlow()
     }
 
-    fun collect(id: Int, callback: ViewCallback): LiveData<Unit> {
-        return doSimpleAction(mService.collect(id), callback) {}
+    fun collect(id: Int): Flow<WResult<Unit>> {
+        return mService.collect(id).asWResultFlow()
     }
 
     fun unCollect(
-        id: Int, originId: Int,
-        callback: ViewCallback
-    ): LiveData<Unit> {
-        return doSimpleAction(mService.unCollect(id, originId), callback) {}
+        id: Int, originId: Int
+    ): Flow<WResult<Unit>> {
+        return mService.unCollect(id, originId).asWResultFlow()
     }
 
     fun modifyPassword(
-        curPass: String, password: String, repassword: String,
-        callback: ViewCallback, handle: (Unit?) -> Unit
-    ): LiveData<Unit> {
-        return doSimpleAction(
-            mService.modifyPassword(curPass, password, repassword),
-            callback,
-            handle
-        )
+        curPass: String, password: String, repassword: String
+    ): Flow<WResult<Unit>> {
+        return mService.modifyPassword(curPass, password, repassword).asWResultFlow()
     }
 }

@@ -39,8 +39,10 @@ class CollectModel : DataViewModel() {
         mPageLive.value = ++curPage
     }
 
-    fun collect(id: Int) = repository.collect(id, this)
+    fun collect(id: Int) = repository.collect(id)
+        .withCommonHandler()
 
-    fun uncollect(id: Int, originId: Int = -1) = repository.unCollect(id, originId, this)
+    fun uncollect(id: Int, originId: Int = -1) = repository.unCollect(id, originId)
+        .withCommonHandler()
 
 }

@@ -1,14 +1,17 @@
 package com.wenjian.wanandroid.ui.knowledge
 
 
-import androidx.lifecycle.Observer
 import android.os.Bundle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.wenjian.wanandroid.base.BaseListFragment
 import com.wenjian.wanandroid.base.BaseRecyclerAdapter
 import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.extension.addCustomDecoration
 import com.wenjian.wanandroid.extension.extraDelegate
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 /**
  * Description: ArticleListFragment
@@ -30,16 +33,17 @@ class ArticleListFragment : BaseListFragment<Article, TreeModel>(TreeModel::clas
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mViewModel.loadData().onEach {  data ->
+            showContent(data)
+        }.flowWithLifecycle(lifecycle)
+            .launchIn(lifecycleScope)
+    }
+
     override fun initViews() {
         super.initViews()
         mRecycler.addCustomDecoration()
-    }
-
-    override fun subscribeUi() {
-        super.subscribeUi()
-        mViewModel.loadData().observe(this, Observer { data ->
-            showContent(data)
-        })
     }
 
     override fun onLazyLoad() {

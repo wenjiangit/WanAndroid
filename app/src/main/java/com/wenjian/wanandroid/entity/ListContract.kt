@@ -7,7 +7,7 @@ package com.wenjian.wanandroid.entity
  * @author jian.wen@ubtrobot.com
  */
 class ListContract<T>(val curPage: Int,
-                      val datas: T,
+                      val datas: List<T>,
                       val offset: Int,
                       val over: Boolean,
                       val pageCount: Int,

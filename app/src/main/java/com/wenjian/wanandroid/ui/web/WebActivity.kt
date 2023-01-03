@@ -2,7 +2,6 @@ package com.wenjian.wanandroid.ui.web
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import androidx.lifecycle.Observer
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -10,12 +9,12 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
+import androidx.lifecycle.lifecycleScope
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMActivity
 import com.wenjian.wanandroid.entity.WebModel
@@ -23,6 +22,8 @@ import com.wenjian.wanandroid.extension.*
 import com.wenjian.wanandroid.ui.collect.CollectModel
 import com.wenjian.wanandroid.utils.NetUtil
 import kotlinx.android.synthetic.main.activity_web.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.jetbrains.anko.toast
 
 /**
@@ -106,20 +107,20 @@ class WebActivity : VMActivity<CollectModel>(CollectModel::class.java) {
 
     private fun unCollect() {
         mViewModel.collect(mWebModel?.id!!)
-                .observe(this, Observer {
+                .onEach {
                     toastSuccess("添加收藏成功")
                     btCollect.setImageResource(R.drawable.ic_favorite)
                     btCollect.tag = true
-                })
+                }.launchIn(lifecycleScope)
     }
 
     private fun collectPost() {
         mViewModel.uncollect(mWebModel?.id!!)
-                .observe(this, Observer {
+                .onEach {
                     toastInfo("已取消收藏")
                     btCollect.setImageResource(R.drawable.ic_favorite_border)
                     btCollect.tag = false
-                })
+                }.launchIn(lifecycleScope)
     }
 
 
