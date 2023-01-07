@@ -2,13 +2,10 @@ package com.wenjian.wanandroid.helper
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.wenjian.wanandroid.WanAndroidApp
 import com.wenjian.wanandroid.entity.UserInfo
-import com.wenjian.wanandroid.extension.io2Main
-import com.wenjian.wanandroid.net.RetrofitManager
 
 /**
  * Description: UserHelper

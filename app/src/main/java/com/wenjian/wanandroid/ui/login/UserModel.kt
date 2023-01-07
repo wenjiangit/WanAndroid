@@ -2,10 +2,7 @@ package com.wenjian.wanandroid.ui.login
 
 import com.wenjian.wanandroid.entity.UserInfo
 import com.wenjian.wanandroid.helper.UserHelper
-import com.wenjian.wanandroid.model.DataViewModel
-import com.wenjian.wanandroid.model.RxBus
-import com.wenjian.wanandroid.model.UserInfoRefreshEvent
-import com.wenjian.wanandroid.model.onSuccess
+import com.wenjian.wanandroid.model.*
 
 /**
  * Description: UserModel
@@ -32,6 +29,6 @@ class UserModel : DataViewModel() {
 
     private fun handleUserInfo(info: UserInfo) {
         UserHelper.saveUserInfo(info)
-        RxBus.post(UserInfoRefreshEvent())
+        FlowEventBus.post(Event.UserInfoRefresh)
     }
 }

@@ -9,15 +9,14 @@ import com.wenjian.wanandroid.base.BaseSkinActivity
 import com.wenjian.wanandroid.extension.launch
 import com.wenjian.wanandroid.extension.setupActionBar
 import com.wenjian.wanandroid.extension.toastWarning
-import com.wenjian.wanandroid.model.RxBus
-import com.wenjian.wanandroid.model.SkinChangeEvent
+import com.wenjian.wanandroid.model.Event
+import com.wenjian.wanandroid.model.FlowEventBus
 import com.wenjian.wanandroid.ui.home.HomeFragment
 import com.wenjian.wanandroid.ui.knowledge.TreeFragment
 import com.wenjian.wanandroid.ui.mine.MineFragment
 import com.wenjian.wanandroid.ui.project.ProjectFragment
 import com.wenjian.wanandroid.ui.search.SearchActivity
 import com.wenjian.wanandroid.widget.appbar.AppBarStateChangeListener
-import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.common_title_bar.*
 
@@ -25,15 +24,16 @@ class MainActivity : BaseSkinActivity() {
 
     private var lastBack: Long = 0
 
-    private var disposable: Disposable? = null
-
     override fun setup() {
         setContentView(R.layout.activity_main)
         setupActionBar(show = false)
         initFragments()
 
         navigation.apply {
-            val stateList = AppCompatResources.getColorStateList(this@MainActivity, R.color.navigation_menu_item_color)
+            val stateList = AppCompatResources.getColorStateList(
+                this@MainActivity,
+                R.color.navigation_menu_item_color
+            )
             itemTextColor = stateList
             itemIconTintList = stateList
             setOnItemSelectedListener {
@@ -75,37 +75,30 @@ class MainActivity : BaseSkinActivity() {
         })
 
         //注册皮肤变化的监听
-        disposable = RxBus.toObservable(SkinChangeEvent::class.java)
-                .subscribe {
-                    recreate()
-                }
-
+        FlowEventBus.observe<Event.SkinChange>(this) {
+            recreate()
+        }
     }
 
     private fun showNavigation() {
         navigation.animate().translationY(0f)
-                .setDuration(200L)
-                .start()
+            .setDuration(200L)
+            .start()
     }
 
     private fun hideNavigation() {
         navigation.animate().translationY(navigation.height.toFloat())
-                .setDuration(200L)
-                .start()
+            .setDuration(200L)
+            .start()
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        disposable?.dispose()
-    }
-
 
     private fun initFragments() {
         val mFragments = listOf(
-                HomeFragment.newInstance(),
-                TreeFragment.newInstance(),
-                ProjectFragment.newInstance(),
-                MineFragment.newInstance())
+            HomeFragment.newInstance(),
+            TreeFragment.newInstance(),
+            ProjectFragment.newInstance(),
+            MineFragment.newInstance()
+        )
         mainPager.adapter = MainPagerAdapter(supportFragmentManager, mFragments)
     }
 
@@ -139,7 +132,10 @@ class MainActivity : BaseSkinActivity() {
     }
 
 
-    class MainPagerAdapter(fm: androidx.fragment.app.FragmentManager, private val fragments: List<androidx.fragment.app.Fragment>) : FragmentPagerAdapter(fm) {
+    class MainPagerAdapter(
+        fm: androidx.fragment.app.FragmentManager,
+        private val fragments: List<androidx.fragment.app.Fragment>
+    ) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): androidx.fragment.app.Fragment = fragments[position]
         override fun getCount(): Int = fragments.size
     }

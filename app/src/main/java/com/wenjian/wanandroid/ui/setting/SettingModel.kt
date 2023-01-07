@@ -1,12 +1,8 @@
 package com.wenjian.wanandroid.ui.setting
 
 import com.wenjian.wanandroid.helper.UserHelper
-import com.wenjian.wanandroid.model.DataViewModel
-import com.wenjian.wanandroid.model.RxBus
-import com.wenjian.wanandroid.model.SkinChangeEvent
-import com.wenjian.wanandroid.model.onSuccess
+import com.wenjian.wanandroid.model.*
 import com.wenjian.wanandroid.utils.FileUtil
-import io.reactivex.disposables.Disposable
 
 /**
  * Description: SettingModel
@@ -16,14 +12,12 @@ import io.reactivex.disposables.Disposable
  */
 class SettingModel : DataViewModel() {
 
-    private var disposable: Disposable? = null
-
     fun logout() = repository.logout()
         .withCommonHandler()
         .onSuccess {
             //退出登录后,清空本地用户信息
             UserHelper.logOut()
-            RxBus.post(SkinChangeEvent())
+            FlowEventBus.post(Event.SkinChange)
         }
 
     fun isLogin() = UserHelper.isLogin()
@@ -39,9 +33,4 @@ class SettingModel : DataViewModel() {
             .modifyPassword(curPass, newPass, rePass)
             .withCommonHandler()
 
-
-    override fun onCleared() {
-        super.onCleared()
-        disposable?.dispose()
-    }
 }

@@ -7,6 +7,7 @@ import com.wenjian.wanandroid.extension.logI
 import com.wenjian.wanandroid.ui.web.WebClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.SupervisorJob
 import kotlin.properties.Delegates
 
@@ -22,7 +23,7 @@ class WanAndroidApp : Application() {
         var instance: WanAndroidApp by Delegates.notNull()
             private set
 
-        val appMainScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+        val appMainScope = MainScope()
     }
 
     override fun onCreate() {
