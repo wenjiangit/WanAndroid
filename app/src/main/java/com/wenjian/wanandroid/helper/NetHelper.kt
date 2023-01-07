@@ -4,10 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import com.wenjian.wanandroid.WanAndroidApp
 import com.wenjian.wanandroid.extension.toastError
-import com.wenjian.wanandroid.model.asWResultFlow
-import com.wenjian.wanandroid.model.onFail
 import com.wenjian.wanandroid.net.ApiService
 import com.wenjian.wanandroid.net.RetrofitManager
+import com.wenjian.wanandroid.net.onFail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -28,7 +27,6 @@ object NetHelper {
     @SuppressLint("CheckResult")
     fun collect(id: Int) {
         mService.collectPost(id)
-            .asWResultFlow()
             .onFail {
                 mAppContext.toastError(it.errorMsg)
             }.flowOn(Dispatchers.IO)
@@ -39,7 +37,6 @@ object NetHelper {
     @SuppressLint("CheckResult")
     fun unCollect(id: Int) {
         mService.unCollectPost(id, -1)
-            .asWResultFlow()
             .onFail {
                 mAppContext.toastError(it.errorMsg)
             }.flowOn(Dispatchers.IO)

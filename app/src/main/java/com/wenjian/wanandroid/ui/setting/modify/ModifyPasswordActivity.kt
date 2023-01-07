@@ -6,7 +6,7 @@ import com.wenjian.wanandroid.base.VMActivity
 import com.wenjian.wanandroid.extension.launch
 import com.wenjian.wanandroid.extension.setupActionBar
 import com.wenjian.wanandroid.extension.toastSuccess
-import com.wenjian.wanandroid.model.onSuccess
+import com.wenjian.wanandroid.net.onSuccess
 import com.wenjian.wanandroid.ui.login.LoginActivity
 import com.wenjian.wanandroid.ui.setting.SettingModel
 import kotlinx.android.synthetic.main.activity_modify_password.*

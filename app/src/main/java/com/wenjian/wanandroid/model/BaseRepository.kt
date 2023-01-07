@@ -1,8 +1,5 @@
 package com.wenjian.wanandroid.model
 
-import com.wenjian.wanandroid.net.ApiService
-import com.wenjian.wanandroid.net.RetrofitManager
-
 /**
  * Description ${name}
  *
@@ -10,7 +7,5 @@ import com.wenjian.wanandroid.net.RetrofitManager
  * @author wenjianes@163.com
  */
 open class BaseRepository {
-
-    open val mService: ApiService by lazy { RetrofitManager.service }
 
 }

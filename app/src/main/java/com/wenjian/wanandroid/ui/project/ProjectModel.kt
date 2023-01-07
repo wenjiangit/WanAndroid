@@ -5,8 +5,8 @@ import com.wenjian.wanandroid.entity.Project
 import com.wenjian.wanandroid.extension.logE
 import com.wenjian.wanandroid.model.DataViewModel
 import com.wenjian.wanandroid.model.ViewState
-import com.wenjian.wanandroid.model.getOrNull
-import com.wenjian.wanandroid.model.onSuccess
+import com.wenjian.wanandroid.net.getOrNull
+import com.wenjian.wanandroid.net.onSuccess
 import kotlinx.coroutines.flow.*
 
 /**

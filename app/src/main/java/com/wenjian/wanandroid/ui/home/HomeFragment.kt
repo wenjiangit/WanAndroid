@@ -54,6 +54,7 @@ class HomeFragment : BaseListFragment<Article, HomeModel>(HomeModel::class.java)
                 mAdapter.loadMoreComplete()
             }.flowWithLifecycle(lifecycle)
             .launchIn(lifecycleScope)
+
     }
 
     override fun onLoadMore() {

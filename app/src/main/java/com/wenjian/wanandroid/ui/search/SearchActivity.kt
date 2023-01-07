@@ -15,7 +15,7 @@ import co.lujun.androidtagview.TagView
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMActivity
 import com.wenjian.wanandroid.extension.setupActionBar
-import com.wenjian.wanandroid.model.onSuccess
+import com.wenjian.wanandroid.net.onSuccess
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.coroutines.flow.launchIn
 

@@ -5,7 +5,7 @@ import androidx.lifecycle.lifecycleScope
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMActivity
 import com.wenjian.wanandroid.extension.*
-import com.wenjian.wanandroid.model.onSuccess
+import com.wenjian.wanandroid.net.onSuccess
 import com.wenjian.wanandroid.ui.login.LoginActivity
 import com.wenjian.wanandroid.ui.setting.modify.ModifyPasswordActivity
 import kotlinx.android.synthetic.main.activity_setting.*

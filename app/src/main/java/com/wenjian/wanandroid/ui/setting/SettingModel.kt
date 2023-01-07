@@ -2,6 +2,7 @@ package com.wenjian.wanandroid.ui.setting
 
 import com.wenjian.wanandroid.helper.UserHelper
 import com.wenjian.wanandroid.model.*
+import com.wenjian.wanandroid.net.onSuccess
 import com.wenjian.wanandroid.utils.FileUtil
 
 /**

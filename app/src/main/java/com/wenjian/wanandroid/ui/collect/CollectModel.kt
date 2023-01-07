@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.model.DataViewModel
 import com.wenjian.wanandroid.model.ViewState
-import com.wenjian.wanandroid.model.onSuccess
+import com.wenjian.wanandroid.net.onSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn

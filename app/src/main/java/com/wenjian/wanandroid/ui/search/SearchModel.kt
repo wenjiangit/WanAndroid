@@ -5,7 +5,7 @@ import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.helper.UserHelper
 import com.wenjian.wanandroid.model.DataViewModel
 import com.wenjian.wanandroid.model.ViewState
-import com.wenjian.wanandroid.model.onSuccess
+import com.wenjian.wanandroid.net.onSuccess
 import kotlinx.coroutines.flow.*
 
 /**

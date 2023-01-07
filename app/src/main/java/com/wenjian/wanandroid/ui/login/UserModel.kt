@@ -3,6 +3,7 @@ package com.wenjian.wanandroid.ui.login
 import com.wenjian.wanandroid.entity.UserInfo
 import com.wenjian.wanandroid.helper.UserHelper
 import com.wenjian.wanandroid.model.*
+import com.wenjian.wanandroid.net.onSuccess
 
 /**
  * Description: UserModel

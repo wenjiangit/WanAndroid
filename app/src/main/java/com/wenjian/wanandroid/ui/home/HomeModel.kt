@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.model.DataViewModel
 import com.wenjian.wanandroid.model.ViewState
-import com.wenjian.wanandroid.model.getOrNull
-import com.wenjian.wanandroid.model.onSuccess
+import com.wenjian.wanandroid.net.getOrNull
+import com.wenjian.wanandroid.net.onSuccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 
@@ -25,7 +25,7 @@ class HomeModel : DataViewModel() {
 
     fun loadHomeData() = repository.loadHomeData()
         .withLoading()
-        .withErrorHandle()
+        .withErrorHandler()
         .mapNotNull { it.getOrNull() }
         .flowOn(Dispatchers.IO)
 
@@ -35,7 +35,7 @@ class HomeModel : DataViewModel() {
                 isOver = it.over
                 curPage = it.curPage
                 _articles.value = it.datas
-            }.withErrorHandle()
+            }.withErrorHandler()
             .launchIn(viewModelScope)
     }
 

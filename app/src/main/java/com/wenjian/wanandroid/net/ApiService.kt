@@ -25,6 +25,12 @@ interface ApiService {
     fun loadArticles(@Path("pager") pager: Int): Flow<PagingResp<Article>>
 
     /**
+     * 首页文章
+     */
+    @GET("/article/top/json")
+    fun topArticles(): Flow<Resp<List<Article>>>
+
+    /**
      * 体系
      */
     @GET("/tree/json")

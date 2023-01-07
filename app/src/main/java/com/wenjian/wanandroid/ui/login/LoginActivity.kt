@@ -6,7 +6,7 @@ import com.wenjian.wanandroid.MainActivity
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMActivity
 import com.wenjian.wanandroid.extension.*
-import com.wenjian.wanandroid.model.onSuccess
+import com.wenjian.wanandroid.net.onSuccess
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.flow.launchIn
 
