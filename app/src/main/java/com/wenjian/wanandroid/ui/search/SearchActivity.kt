@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import co.lujun.androidtagview.TagView
 import com.wenjian.wanandroid.R
@@ -130,7 +131,14 @@ class SearchActivity : VMActivity<SearchModel>(SearchModel::class.java) {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                return false
+                val query = newText ?: ""
+                if (query.isNotEmpty()) {
+                    searchFragment.search(query)
+                    hotPanel.isVisible = false
+                } else {
+                    hotPanel.isVisible = true
+                }
+                return true
             }
 
         })
