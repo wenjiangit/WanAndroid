@@ -4,10 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import com.google.android.material.tabs.TabLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.google.android.material.tabs.TabLayout
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseActivity
 import com.wenjian.wanandroid.entity.SubTree
@@ -61,7 +59,7 @@ class SubTreeActivity : BaseActivity() {
 
                 override fun onTabSelected(tab: TabLayout.Tab) {
                     //设置状态栏和appbar的背景颜色
-                    transformColor(tab.position)
+//                    transformColor(tab.position)
                 }
             })
         }

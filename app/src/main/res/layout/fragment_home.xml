@@ -1,20 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefresh"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/articleRecycler"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs_home"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabIndicatorFullWidth="false"
+            app:tabMode="auto" />
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/vp_home"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/shallow_bg" />
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabs_home" />
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

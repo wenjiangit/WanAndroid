@@ -31,6 +31,12 @@ interface ApiService {
     fun topArticles(): Flow<Resp<List<Article>>>
 
     /**
+     * 问答
+     */
+    @GET("/wenda/list/{pager}/json")
+    fun dailyQuestions(@Path("pager") pager: Int): Flow<PagingResp<Article>>
+
+    /**
      * 体系
      */
     @GET("/tree/json")
