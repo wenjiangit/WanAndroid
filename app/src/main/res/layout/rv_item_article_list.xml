@@ -9,31 +9,19 @@
     android:focusable="true"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tv_date"
-        android:drawableStart="@drawable/ic_access_time"
-        android:drawableTint="?attr/colorAccent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/second_text"
-        android:textSize="12sp"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="TextView" />
+
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
         android:lineSpacingExtra="4dp"
         android:textColor="@color/primary_text"
-        android:textSize="13sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_avatar"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="TextView" />
 
     <!--<ImageView-->
@@ -52,11 +40,33 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:textColor="@color/second_text"
         android:textSize="12sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tv_avatar"
-        app:layout_constraintStart_toEndOf="@id/tv_avatar"
+        android:layout_marginTop="6dp"
+        app:layout_constraintStart_toStartOf="@id/tv_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        tools:text="TextView" />
+
+    <View
+        app:layout_constraintStart_toEndOf="@id/tv_name"
+        app:layout_constraintTop_toTopOf="@id/tv_name"
+        app:layout_constraintBottom_toBottomOf="@id/tv_name"
+        android:layout_marginStart="8dp"
+        android:background="@color/overlay_dark_20"
+        android:layout_marginVertical="2dp"
+        android:layout_width="1dp"
+        android:layout_height="0dp"/>
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/second_text"
+        android:textSize="12sp"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@id/tv_name"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_name"
+        android:layout_marginStart="16dp"
         tools:text="TextView" />
 
     <TextView
@@ -72,7 +82,7 @@
         android:background="@drawable/bg_tag"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name"
         app:layout_constraintVertical_bias="1.0"
         tools:text="TextView" />
 
@@ -84,10 +94,10 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/ic_favorite"
-        android:tint="@color/selector_like_tint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        app:tint="@color/selector_like_tint" />
 
     <TextView
         android:id="@+id/tv_avatar"
@@ -98,6 +108,7 @@
         android:gravity="center"
         android:textSize="12sp"
         tools:text="T"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

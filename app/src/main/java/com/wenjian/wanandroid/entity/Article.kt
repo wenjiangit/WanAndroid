@@ -29,7 +29,9 @@ data class Article(
     val type: Int,
     val userId: Int,
     val visible: Int,
-    val zan: Int
+    val zan: Int,
+    val shareUser: String?,
+    val shareData: Long
 ){
 
     fun buildWebModel() = WebModel(id, link, collect)
