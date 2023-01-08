@@ -28,6 +28,12 @@ abstract class BaseFragment : Fragment(){
     private var dataInitiated: Boolean = false
     open var forceUpdate: Boolean = false
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // 提前订阅，利用 flowWithLifecycle 确定实际订阅时机
+        subscribeUi()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.i(TAG, "onCreateView")
         if (mRoot == null) {
@@ -78,7 +84,6 @@ abstract class BaseFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         Log.i(TAG, "onViewCreated")
         viewInitiated = true
-        subscribeUi()
         tryLoadData()
     }
 

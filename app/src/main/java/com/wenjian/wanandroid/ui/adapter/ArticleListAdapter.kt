@@ -20,11 +20,12 @@ import com.wenjian.wanandroid.ui.web.WebActivity
 class ArticleListAdapter : BaseRecyclerAdapter<Article>(R.layout.rv_item_article_list) {
     override fun convert(helper: BaseViewHolder?, item: Article?) {
         helper?.apply {
-
             with(item!!) {
-
                 setText(R.id.tv_title, Html.fromHtml(title?.trim()))
-                setText(R.id.tv_name, author?.trim())
+                setText(
+                    R.id.tv_name,
+                    firstText(author, shareUser)
+                )
                 setText(R.id.tv_date, niceDate?.trim())
                 setText(R.id.tv_avatar, author?.trim())
                 setText(R.id.tv_category, chapterName?.trim())
@@ -32,7 +33,7 @@ class ArticleListAdapter : BaseRecyclerAdapter<Article>(R.layout.rv_item_article
                 if (superChapterName?.trim().isNullOrBlank()) {
                     getView<TextView>(R.id.tv_chapter).gone()
                 } else {
-                    setText(R.id.tv_chapter,superChapterName?.trim())
+                    setText(R.id.tv_chapter, superChapterName?.trim())
                 }
 
                 itemView.setOnClickListener {
@@ -58,5 +59,9 @@ class ArticleListAdapter : BaseRecyclerAdapter<Article>(R.layout.rv_item_article
                 }
             }
         }
+    }
+
+    private fun firstText(vararg elements: String?): String {
+        return elements.firstOrNull { !it.isNullOrEmpty() } ?: ""
     }
 }

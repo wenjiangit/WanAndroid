@@ -1,11 +1,12 @@
 package com.wenjian.wanandroid.ui.knowledge
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.model.DataViewModel
-import com.wenjian.wanandroid.model.SingleLiveEvent
 import com.wenjian.wanandroid.model.ViewState
+import com.wenjian.wanandroid.net.getOrNull
+import com.wenjian.wanandroid.net.onSuccess
+import kotlinx.coroutines.flow.*
 
 /**
  * Description TreeModel
@@ -19,20 +20,28 @@ class TreeModel : DataViewModel() {
     private var pageCount: Int = 0
     private var cid: Int = -1
 
-    private val mPageLive: SingleLiveEvent<Int> = SingleLiveEvent()
+    fun loadTree() = repository.loadTree()
+        .withCommonHandler()
+        .mapNotNull { it.getOrNull() }
 
-    fun loadTree() = repository.loadTree(this)
 
-    fun loadData(): LiveData<List<Article>> = Transformations.switchMap(mPageLive) { page ->
-        repository.loadTreeArticles(page, cid, this) {
-            isOver = it.over
-            pageCount = it.curPage
-        }
+    private val _articles = MutableStateFlow<List<Article>?>(null)
+    val articles: StateFlow<List<Article>?> = _articles
+
+    private fun loadData(page: Int) {
+        repository.loadTreeArticles(page, cid)
+            .withCommonHandler()
+            .onSuccess {
+                isOver = it.over
+                pageCount = it.pageCount
+                _articles.value = it.datas
+            }
+            .launchIn(viewModelScope)
     }
 
     fun refresh(cid: Int) {
         this.cid = cid
-        mPageLive.value = 0
+        loadData(0)
     }
 
     fun loadMore() {
@@ -40,7 +49,7 @@ class TreeModel : DataViewModel() {
             updateViewState(ViewState.Empty)
             return
         }
-        mPageLive.value = ++pageCount
+        loadData(++pageCount)
     }
 
 }

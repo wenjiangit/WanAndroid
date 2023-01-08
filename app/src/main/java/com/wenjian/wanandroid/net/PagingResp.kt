@@ -8,6 +8,7 @@ import com.wenjian.wanandroid.entity.ListContract
  *
  * @author jian.wen@ubtrobot.com
  */
-class PagingResp<T>(data: ListContract<T>, errorCode: Int, msg: String) : Resp<ListContract<T>>(data, errorCode, msg) {
+class PagingResp<T>(data: ListContract<T>, errorCode: Int, msg: String) :
+    Resp<ListContract<T>>(data, errorCode, msg) {
 
 }

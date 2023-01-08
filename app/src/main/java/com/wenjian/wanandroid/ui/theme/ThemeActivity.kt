@@ -1,7 +1,6 @@
 package com.wenjian.wanandroid.ui.theme
 
 import android.graphics.Color
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseSkinActivity
 import com.wenjian.wanandroid.entity.Skin
@@ -11,8 +10,8 @@ import com.wenjian.wanandroid.extension.setSystemBarColor
 import com.wenjian.wanandroid.extension.setupActionBar
 import com.wenjian.wanandroid.helper.StatusBarHelper
 import com.wenjian.wanandroid.helper.ThemeHelper
-import com.wenjian.wanandroid.model.RxBus
-import com.wenjian.wanandroid.model.SkinChangeEvent
+import com.wenjian.wanandroid.model.Event
+import com.wenjian.wanandroid.model.FlowEventBus
 import com.wenjian.wanandroid.ui.adapter.ThemeAdapter
 import kotlinx.android.synthetic.main.activity_theme.*
 import kotlinx.android.synthetic.main.fix_title_bar.*
@@ -70,11 +69,11 @@ class ThemeActivity : BaseSkinActivity() {
     }
 
     override fun onPause() {
-        super.onPause()
         //通知主题发生改变,主界面重新启动
         if (ThemeHelper.hasChanged()) {
-            RxBus.post(SkinChangeEvent())
+            FlowEventBus.post(Event.SkinChange)
         }
+        super.onPause()
     }
 
 }

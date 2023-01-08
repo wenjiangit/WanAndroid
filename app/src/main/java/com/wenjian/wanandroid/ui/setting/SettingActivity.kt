@@ -1,15 +1,19 @@
 package com.wenjian.wanandroid.ui.setting
 
-import androidx.lifecycle.Observer
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMActivity
 import com.wenjian.wanandroid.extension.*
+import com.wenjian.wanandroid.net.onSuccess
 import com.wenjian.wanandroid.ui.login.LoginActivity
 import com.wenjian.wanandroid.ui.setting.modify.ModifyPasswordActivity
-import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_setting.*
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 
 class SettingActivity : VMActivity<SettingModel>(SettingModel::class.java) {
 
@@ -33,12 +37,13 @@ class SettingActivity : VMActivity<SettingModel>(SettingModel::class.java) {
 
         tv_check_update.setOnClickListener {
             showLoading()
-            Observable.timer(2, TimeUnit.SECONDS)
-                    .io2Main()
-                    .subscribe {
-                        hideLoading()
-                        toastInfo("已是最新版本了")
-                    }
+            flowOf(2000)
+                .onStart { showLoading() }
+                .onEach {
+                    delay(2000)
+                    hideLoading()
+                    toastInfo("已是最新版本了")
+                }.launchIn(lifecycleScope)
         }
 
         lay_clear_cache.setOnClickListener {
@@ -61,10 +66,10 @@ class SettingActivity : VMActivity<SettingModel>(SettingModel::class.java) {
     }
 
     private fun logout() {
-        mViewModel.logout().observe(this, Observer {
+        mViewModel.logout().onSuccess {
             toastSuccess("退出登录成功")
             finish()
-        })
+        }.launchIn(lifecycleScope)
     }
 
     private fun initView() {

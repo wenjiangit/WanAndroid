@@ -3,7 +3,8 @@ package com.wenjian.wanandroid.helper
 import com.google.gson.JsonParseException
 import com.google.gson.JsonSyntaxException
 import com.wenjian.wanandroid.extension.logE
-import com.wenjian.wanandroid.model.WResult
+import com.wenjian.wanandroid.net.ApiException
+import com.wenjian.wanandroid.net.Resp
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -21,8 +22,8 @@ object ExceptionHelper {
         if (e == null) {
             return "未知错误"
         }
-        logE("net request error: ", e)
         return when (e) {
+            is ApiException -> e.message
             is UnknownHostException, is ConnectException -> "网络连接不可用,请稍后重试"
             is TimeoutException, is SocketTimeoutException -> "连接超时,请稍后重试"
             is JsonParseException, is JsonSyntaxException -> "数据解析错误"
@@ -31,7 +32,7 @@ object ExceptionHelper {
     }
 
 
-    fun handleFailure(failure: WResult.Failure) {
+    fun handleFailure(failure: Resp.Failure) {
         val errorMsg = failure.msg ?: parseExceptionMsg(failure.e)
         logE("网络请求错误: $errorMsg")
     }

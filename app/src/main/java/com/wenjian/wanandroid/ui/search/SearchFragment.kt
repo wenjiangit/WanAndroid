@@ -1,14 +1,17 @@
 package com.wenjian.wanandroid.ui.search
 
 
-import androidx.lifecycle.Observer
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.wenjian.wanandroid.base.BaseListFragment
 import com.wenjian.wanandroid.base.BaseRecyclerAdapter
 import com.wenjian.wanandroid.entity.Article
 import com.wenjian.wanandroid.extension.addCustomDecoration
-import com.wenjian.wanandroid.extension.apiModelDelegate
 import com.wenjian.wanandroid.ui.adapter.ArticleListAdapter
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 
 /**
@@ -26,14 +29,16 @@ class SearchFragment : BaseListFragment<Article,SearchModel>(SearchModel::class.
 
     override fun subscribeUi() {
         super.subscribeUi()
-        mViewModel.loadData().observe(this, Observer { it ->
-           showContent(it)
-        })
+        mViewModel.articles
+            .filterNotNull()
+            .onEach { showContent(it) }
+            .flowWithLifecycle(lifecycle)
+            .launchIn(lifecycleScope)
     }
 
     fun search(input: String) {
         mAdapter.setNewData(null)
-        if (!input.isBlank()) {
+        if (input.isNotBlank()) {
             isLoadMore = false
             mViewModel.doSearch(input)
         }

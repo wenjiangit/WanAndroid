@@ -2,22 +2,21 @@ package com.wenjian.wanandroid.ui.mine
 
 
 import android.annotation.SuppressLint
-import androidx.constraintlayout.widget.ConstraintLayout
 import android.view.View
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.BaseFragment
 import com.wenjian.wanandroid.extension.*
 import com.wenjian.wanandroid.helper.UserHelper
-import com.wenjian.wanandroid.model.RxBus
-import com.wenjian.wanandroid.model.UserInfoRefreshEvent
+import com.wenjian.wanandroid.model.Event
+import com.wenjian.wanandroid.model.FlowEventBus
 import com.wenjian.wanandroid.ui.collect.CollectActivity
 import com.wenjian.wanandroid.ui.login.LoginActivity
 import com.wenjian.wanandroid.ui.profile.ProfileActivity
 import com.wenjian.wanandroid.ui.setting.SettingActivity
 import com.wenjian.wanandroid.ui.theme.ThemeActivity
 import de.hdodenhof.circleimageview.CircleImageView
-import io.reactivex.disposables.Disposable
 
 
 /**
@@ -32,7 +31,6 @@ class MineFragment : BaseFragment() {
     private lateinit var mIvAvatar: CircleImageView
     private lateinit var mTvUserId: TextView
     private lateinit var mTvLoginRegister: TextView
-    private var disposable: Disposable? = null
 
     override fun findViews(mRoot: View) {
         mTvUser = mRoot.findViewById(R.id.tv_username)
@@ -73,10 +71,9 @@ class MineFragment : BaseFragment() {
     override fun initViews() {
         super.initViews()
         updateUserInfo()
-        disposable = RxBus.toObservable(UserInfoRefreshEvent::class.java)
-                .subscribe {
-                    updateUserInfo()
-                }
+        FlowEventBus.observe<Event.UserInfoRefresh>(viewLifecycleOwner) {
+            updateUserInfo()
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -102,11 +99,5 @@ class MineFragment : BaseFragment() {
     companion object {
         fun newInstance() = MineFragment()
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        disposable?.dispose()
-    }
-
 
 }

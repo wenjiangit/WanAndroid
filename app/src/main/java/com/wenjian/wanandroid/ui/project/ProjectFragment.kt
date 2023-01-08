@@ -1,20 +1,20 @@
 package com.wenjian.wanandroid.ui.project
 
 
-import androidx.lifecycle.Observer
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.tabs.TabLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.ViewPager
 import android.view.View
 import android.widget.ProgressBar
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.lifecycle.lifecycleScope
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.tabs.TabLayout
 import com.wenjian.wanandroid.R
 import com.wenjian.wanandroid.base.VMFragment
 import com.wenjian.wanandroid.entity.ProjectTree
 import com.wenjian.wanandroid.extension.gone
 import com.wenjian.wanandroid.extension.visible
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 
 /**
@@ -38,19 +38,17 @@ class ProjectFragment : VMFragment<ProjectModel>(ProjectModel::class.java) {
         mTabLayout = mRoot.findViewById(R.id.tab_layout)
         mViewPager = mRoot.findViewById(R.id.project_pager)
         mPbLoading = mRoot.findViewById(R.id.pbLoading)
-        mAppBar = activity?.findViewById(R.id.app_bar)
+        mAppBar = activity?.findViewById(R.id.app_bar) as AppBarLayout?
     }
 
     override fun onLazyLoad() {
         super.onLazyLoad()
         mViewModel.loadProjectTree()
-                .observe(this, Observer {data->
-                    data?.let {
-                        mViewPager.adapter = ProjectPagerAdapter(childFragmentManager, it)
-                        mTabLayout?.setupWithViewPager(mViewPager)
-                        mTabLayout?.visible()
-                    }
-                })
+            .onEach { data ->
+                mViewPager.adapter = ProjectPagerAdapter(childFragmentManager, data)
+                mTabLayout?.setupWithViewPager(mViewPager)
+                mTabLayout?.visible()
+            }.launchIn(lifecycleScope)
     }
 
     override fun showLoading() {
@@ -70,13 +68,17 @@ class ProjectFragment : VMFragment<ProjectModel>(ProjectModel::class.java) {
         }
     }
 
-    class ProjectPagerAdapter(fm: androidx.fragment.app.FragmentManager, val data: List<ProjectTree>) : FragmentPagerAdapter(fm) {
+    class ProjectPagerAdapter(
+        fm: androidx.fragment.app.FragmentManager,
+        val data: List<ProjectTree>
+    ) : FragmentPagerAdapter(fm) {
 
-        override fun getItem(position: Int): androidx.fragment.app.Fragment = ProjectListFragment.newInstance(data[position].id)
+        override fun getItem(position: Int): Fragment =
+            ProjectListFragment.newInstance(data[position].id)
 
         override fun getCount(): Int = data.size
 
-        override fun getPageTitle(position: Int): CharSequence? {
+        override fun getPageTitle(position: Int): CharSequence {
             return data[position].name
         }
 

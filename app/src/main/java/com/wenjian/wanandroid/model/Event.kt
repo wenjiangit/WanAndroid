@@ -6,12 +6,18 @@ package com.wenjian.wanandroid.model
  *
  * @author jian.wen@ubtrobot.com
  */
-/**
- * 我的页面用户信息刷新事件
- */
-class UserInfoRefreshEvent
 
-/**
- * 皮肤改变事件
- */
-class SkinChangeEvent
+sealed class Event {
+
+    /**
+     * 我的页面用户信息刷新事件
+     */
+    object UserInfoRefresh : Event()
+
+    /**
+     * 皮肤改变事件
+     */
+    object SkinChange : Event()
+
+}
+

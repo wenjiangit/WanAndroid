@@ -4,10 +4,12 @@ import androidx.lifecycle.AndroidViewModel
 import com.wenjian.wanandroid.WanAndroidApp
 import com.wenjian.wanandroid.helper.ExceptionHelper
 import com.wenjian.wanandroid.model.ViewState
-import com.wenjian.wanandroid.model.WResult
 import com.wenjian.wanandroid.model.data.DataRepository
-import com.wenjian.wanandroid.model.onFail
 import com.wenjian.wanandroid.model.view.ViewCallback
+import com.wenjian.wanandroid.net.Resp
+import com.wenjian.wanandroid.net.getOrThrow
+import com.wenjian.wanandroid.net.onFail
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 
 /**
@@ -22,7 +24,7 @@ open class BaseViewModel : AndroidViewModel(WanAndroidApp.instance), ViewCallbac
     val viewState = _viewState.asStateFlow()
     val repository by lazy { DataRepository() }
 
-    fun <T> Flow<WResult<T>>.withLoading(): Flow<WResult<T>> {
+    fun <T> Flow<Resp<T>>.withLoading(): Flow<Resp<T>> {
         return this.onStart {
             showLoading()
         }.onCompletion {
@@ -30,17 +32,19 @@ open class BaseViewModel : AndroidViewModel(WanAndroidApp.instance), ViewCallbac
         }
     }
 
-    fun <T> Flow<WResult<T>>.withErrorHandle(): Flow<WResult<T>> {
-        return this.onFail {
-            ExceptionHelper.handleFailure(it)
-            showError(it.errorMsg)
-        }
+    fun <T> Flow<Resp<T>>.withErrorHandler(): Flow<Resp<T>> {
+        return this.map { Resp(it.getOrThrow()) }
+            .catch { emit(Resp.buildFailure(it)) }
+            .onFail {
+                ExceptionHelper.handleFailure(it)
+                showError(it.errorMsg)
+            }
     }
 
-
-    override fun onCleared() {
-        super.onCleared()
-        repository.unSubscribe()
+    fun <T> Flow<Resp<T>>.withCommonHandler(): Flow<Resp<T>> {
+        return this.withLoading()
+            .withErrorHandler()
+            .flowOn(Dispatchers.IO)
     }
 
     override fun showLoading() {

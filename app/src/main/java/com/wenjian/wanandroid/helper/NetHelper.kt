@@ -6,8 +6,10 @@ import com.wenjian.wanandroid.WanAndroidApp
 import com.wenjian.wanandroid.extension.toastError
 import com.wenjian.wanandroid.net.ApiService
 import com.wenjian.wanandroid.net.RetrofitManager
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.wenjian.wanandroid.net.onFail
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
 
 /**
  * Description: NetHelper
@@ -25,29 +27,19 @@ object NetHelper {
     @SuppressLint("CheckResult")
     fun collect(id: Int) {
         mService.collectPost(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    if (!it.success()) {
-                        mAppContext.toastError(it.errorMsg ?: "添加收藏失败")
-                    }
-                }, {
-                    mAppContext.toastError("添加收藏失败")
-                })
+            .onFail {
+                mAppContext.toastError(it.errorMsg)
+            }.flowOn(Dispatchers.IO)
+            .launchIn(WanAndroidApp.appMainScope)
     }
 
 
     @SuppressLint("CheckResult")
     fun unCollect(id: Int) {
         mService.unCollectPost(id, -1)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    if (!it.success()) {
-                        mAppContext.toastError(it.errorMsg ?: "取消收藏失败")
-                    }
-                }, {
-                    mAppContext.toastError("取消收藏失败")
-                })
+            .onFail {
+                mAppContext.toastError(it.errorMsg)
+            }.flowOn(Dispatchers.IO)
+            .launchIn(WanAndroidApp.appMainScope)
     }
 }
