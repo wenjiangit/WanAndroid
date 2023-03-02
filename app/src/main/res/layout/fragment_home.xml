@@ -7,23 +7,33 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        >
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs_home"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tabIndicatorFullWidth="false"
             app:tabMode="auto" />
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#F5F5F5"
+            app:layout_constraintTop_toBottomOf="@id/tabs_home" />
+
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/vp_home"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tabs_home" />
+            app:layout_constraintTop_toBottomOf="@id/line" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
